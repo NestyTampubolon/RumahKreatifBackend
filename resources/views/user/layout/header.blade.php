@@ -6,6 +6,32 @@
     .header-intro-clearance .header-bottom .container::after{
         visibility: hidden;
     }
+
+    .header-right .wishlist>a:hover{
+        color: #800000;
+    }
+
+    .header-right .cart-dropdown{
+        padding: 0;
+        margin-left: 1.5rem;
+    }
+
+    .header-right .cart-dropdown>a:hover{
+        color: #800000;
+    }
+
+    .header-right .account{
+        padding: 0;
+        margin-left: 1.5rem;
+    }
+    
+    .header-right .account>a:hover{
+        color: #800000;
+    }
+
+    /* .icon:hover{
+        color: #800000;
+    } */
 </style>
 
 <header class="header header-2 header-intro-clearance">
@@ -16,10 +42,11 @@
                     <span class="sr-only">Toggle mobile menu</span>
                     <i class="icon-bars"></i>
                 </button>
-                
-                <a href="index.html" class="logo">
-                    <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/logo.png') }}" alt="Molla Logo" width="105" height="25">
+
+                <a href="index.html" class="logo" style="margin:0">
+                    <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="Molla Logo" width="65">
                 </a>
+                <!-- <h5 class="logo" style="color: #800000;">Rumah Kreatif Toba</h5> -->
             </div><!-- End .header-left -->
 
             <div class="header-center">
@@ -42,75 +69,35 @@
                             <i class="icon-heart-o"></i>
                             <!-- <span class="wishlist-count badge">3</span> -->
                         </div>
-                        <p>Daftar Keinginan</p>
+                        <p>Keinginan</p>
                     </a>
                 </div><!-- End .compare-dropdown -->
 
-                <div class="dropdown cart-dropdown">
-                    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                <div class="cart-dropdown">
+                    <a href="#" class="dropdown-toggle">
                         <div class="icon">
                             <i class="icon-shopping-cart"></i>
                             <!-- <span class="cart-count">2</span> -->
                         </div>
                         <p>Keranjang</p>
                     </a>
-
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-cart-products">
-                            <div class="product">
-                                <div class="product-cart-details">
-                                    <h4 class="product-title">
-                                        <a href="product.html">Beige knitted elastic runner shoes</a>
-                                    </h4>
-
-                                    <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $84.00
-                                    </span>
-                                </div><!-- End .product-cart-details -->
-
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="{{ URL::asset('asset/Molla/assets/images/products/cart/product-1.jpg') }}" alt="product">
-                                    </a>
-                                </figure>
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                            </div><!-- End .product -->
-
-                            <div class="product">
-                                <div class="product-cart-details">
-                                    <h4 class="product-title">
-                                        <a href="product.html">Blue utility pinafore denim dress</a>
-                                    </h4>
-
-                                    <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $76.00
-                                    </span>
-                                </div><!-- End .product-cart-details -->
-
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="{{ URL::asset('asset/Molla/assets/images/products/cart/product-2.jpg') }}" alt="product">
-                                    </a>
-                                </figure>
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                            </div><!-- End .product -->
-                        </div><!-- End .cart-product -->
-
-                        <div class="dropdown-cart-total">
-                            <span>Total</span>
-
-                            <span class="cart-total-price">$160.00</span>
-                        </div><!-- End .dropdown-cart-total -->
-
-                        <div class="dropdown-cart-action">
-                            <a href="cart.html" class="btn btn-primary">View Cart</a>
-                            <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                        </div><!-- End .dropdown-cart-total -->
-                    </div><!-- End .dropdown-menu -->
                 </div><!-- End .cart-dropdown -->
-                <div class="account">
+
+                <!-- <div style="margin-left: 1.5rem;">
+                    <p style="font-size: 3rem;">|</p>
+                </div> -->
+                @if(Session::get('username')||Session::get('email'))
+                <div class="wishlist">
+                    <a href="./logout">
+                        <div class="icon">
+                            <i class="icon-user"></i>
+                        </div>
+                        <p>Akun</p>
+                    </a>
+                </div><!-- End .compare-dropdown -->
+                
+                @else
+                <div class="wishlist">
                     <a href="#signin-modal" data-toggle="modal" title="My account">
                         <div class="icon">
                             <i class="icon-user"></i>
@@ -118,6 +105,8 @@
                         <p>Akun</p>
                     </a>
                 </div><!-- End .compare-dropdown -->
+                @endif
+                
             </div><!-- End .header-right -->
         </div><!-- End .container -->
     </div><!-- End .header-middle -->
