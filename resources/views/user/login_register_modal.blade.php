@@ -1,12 +1,4 @@
 <style>
-    .menu li:hover>a, .menu li.show>a, .menu li.active>a{
-        color: #800000;
-    }
-
-    .header-bottom .menu>li>a:before{
-        background-color: #800000;
-    }
-
     .form-tab .nav.nav-pills .nav-link:hover{
         color: #800000;
     }
@@ -33,7 +25,7 @@
                                 <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Masuk</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Daftar</a>
+                                <a class="nav-link" id="tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Daftar</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="tab-content-5">
@@ -41,13 +33,13 @@
                                 <form action="./login" method="post">
                                 @csrf
                                     <div class="form-group">
-                                        <label for="singin-email">Username atau E-mail *</label>
-                                        <input type="text" name="username_email" class="form-control" id="singin-email" name="singin-email" required>
+                                        <label for="username_email">Username atau E-mail *</label>
+                                        <input type="text" class="form-control" id="username_email" name="username_email" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
-                                        <label for="singin-password">Password *</label>
-                                        <input type="password" name="password" class="form-control" id="singin-password" name="singin-password" required>
+                                        <label for="password">Password *</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-footer">
@@ -76,37 +68,48 @@
                                     </div><!-- End .row -->
                                 </div><!-- End .form-choice -->
                             </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab">
                                 <form action="./registrasi" method="post" enctype="multipart/form-data">
                                 @csrf
                                     <div class="form-group">
-                                        <label for="register-nama">Nama</label>
-                                        <input type="text" name="name" class="form-control" id="register-nama" name="register-nama" required>
+                                        <label for="name">Nama</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
-                                        <label for="register-username">Username</label>
-                                        <input type="text" name="username" class="form-control" id="register-username" name="register-username" required>
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
-                                        <label for="register-email">E-Mail</label>
-                                        <input type="email" name="email" class="form-control" id="register-password" name="register-password" required>
+                                        <label for="email">E-Mail</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
-                                        <label for="register-password">Password</label>
-                                        <input type="password" name="password" class="form-control" id="register-password" name="register-password" required>
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
-                                        <label for="register-no_WA">Nomor Whatsapp</label>
-                                        <input type="text" name="no_WA" class="form-control" id="register-no_WA" name="register-no_WA" maxlength="13" onkeypress="return hanyaAngka(event)" required>
+                                        <label for="gender">Jenis Kelamin</label>
+                                        <select class="form-control" id="gender" name="gender" required>
+                                            <option selected disabled value="">Pilih Jenis Kelamin</option>
+                                            <option value="L">Laki Laki</option>
+                                            <option value="P">Perempuan</option>
+                                        </select>
                                     </div><!-- End .form-group -->
+
                                     <div class="form-group">
-                                        <label for="register-no_HP">Nomor Handphone</label>
-                                        <input type="text" name="no_HP" class="form-control" id="register-no_HP" name="register-no_HP" maxlength="13" onkeypress="return hanyaAngka(event)" required>
+                                        <label for="birthday">Tanggal Lahir</label>
+                                        <input type="date" class="form-control" id="birthday" name="birthday" max="<?php echo date('Y-m-d')?>" required>
                                     </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="no_hp">Nomor Handphone</label>
+                                        <input type="text" class="form-control" id="no_hp" name="no_hp" maxlength="13" onkeypress="return hanyaAngka(event)" required>
+                                    </div><!-- End .form-group -->
+
                                     <script>
                                         function hanyaAngka(event) {
                                             var angka = (event.which) ? event.which : event.keyCode
@@ -124,13 +127,13 @@
                                         </button>
 
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="register-policy" onClick="toggle(this)">
-                                            <label class="custom-control-label" for="register-policy">Saya setuju dengan <a href="#">kebijakan privasi</a> *</label>
+                                            <input type="checkbox" class="custom-control-input" id="policy" onClick="toggle(this)">
+                                            <label class="custom-control-label" for="policy">Saya setuju dengan <a href="#">kebijakan privasi</a> *</label>
                                         </div><!-- End .custom-checkbox -->
                                     </div><!-- End .form-footer -->
                                     <script>
                                         var button = document.getElementById('daftar')
-                                        var checkbox = document.getElementById('register-policy')
+                                        var checkbox = document.getElementById('policy')
                                         function toggle(source) {
                                             if(checkbox.checked = true){
                                                 button.disabled = false;

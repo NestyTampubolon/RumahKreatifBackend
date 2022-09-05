@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
+Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
+
 Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegister');
 Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
 Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');

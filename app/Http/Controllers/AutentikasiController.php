@@ -14,32 +14,49 @@ class AutentikasiController extends Controller
         $username = $request -> username;
         $email = $request -> email;
         $password = $request -> password;
+
         $name = $request -> name;
-        $no_WA = $request -> no_WA;
-        $no_HP = $request -> no_HP;
+        $no_hp = $request -> no_hp;
+        $birthday = $request -> birthday;
+        $gender = $request -> gender;
 
-        DB::table('users')->insert([
-            'username' => $username,
-            'email' => $email,
-            // 'password' => $password,
-            'password' => Hash::make($password),
-            'name' => $name,
-            'no_WA' => $no_WA,
-            'no_HP' => $no_HP,
-        ]);
+        $cek_username = DB::table('users')->where('username',$username)->first();
+        $cek_email = DB::table('users')->where('email',$email)->first();
 
-        $user_id = DB::table('users')->orderBy('id', 'desc')->first();
+        if($cek_username && $cek_email){
+            return redirect('./');
+        }
 
-        DB::table('profiles')->insert([
-            'user_id' => $user_id->id,
-            'name' => $name,
-            'phone' => $no_HP,
-        ]);
+        if($cek_username){
+            return redirect('./');
+        }
 
-        Session::put('username',$username);
-        Session::put('email',$email);
+        if($cek_email){
+            return redirect('./');
+        }
 
-        return redirect('./');
+        if(!$cek_username && !$cek_email){
+            DB::table('users')->insert([
+                'username' => $username,
+                'email' => $email,
+                'password' => Hash::make($password),
+            ]);
+
+            $user_id = DB::table('users')->orderBy('id', 'desc')->first();
+
+            DB::table('profiles')->insert([
+                'user_id' => $user_id->id,
+                'name' => $name,
+                'no_hp' => $no_hp,
+                'birthday' => $birthday,
+                'gender' => $gender,
+            ]);
+
+            Session::put('username',$username);
+            Session::put('email',$email);
+
+            return redirect('./');
+        }
     }
 
     public function PostLogin(Request $request){
@@ -55,7 +72,7 @@ class AutentikasiController extends Controller
         }
 
         if($cek_email){
-            $cek_login = DB::table('users')->where('email',$username_email)->where('password',$password)->first();
+            $cek_login = DB::table('users')->where('email',$username_email)->where('password', Hash::check('plain-text', $password))->first();
         }
 
         if($cek_login){

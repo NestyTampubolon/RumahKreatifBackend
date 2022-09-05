@@ -7,43 +7,12 @@
         background-color: #800000;
     }
 
-    .header-intro-clearance .header-bottom .container::before{
-        visibility: hidden;
-    }
-
-    .header-intro-clearance .header-bottom .container::after{
-        visibility: hidden;
-    }
-
-    .header-right .wishlist>a:hover{
-        color: #800000;
-    }
-
-    .header-right .cart-dropdown{
-        padding: 0;
-        margin-left: 1.5rem;
-    }
-
-    .header-right .cart-dropdown>a:hover{
-        color: #800000;
-    }
-
-    .header-right .account{
-        padding: 0;
-        margin-left: 1.5rem;
-    }
-    
-    .header-right .account>a:hover{
-        color: #800000;
-    }
-
     /* .icon:hover{
         color: #800000;
     } */
 </style>
-
-<header class="header header-2 header-intro-clearance">
-    <div class="header-middle">
+<header class="header">
+    <div class="header-middle sticky-header">
         <div class="container">
             <div class="header-left">
                 <button class="mobile-menu-toggler">
@@ -54,84 +23,10 @@
                 <a href="./" class="logo" style="margin:0">
                     <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="65">
                 </a>
-                <!-- <h5 class="logo" style="color: #800000;">Rumah Kreatif Toba</h5> -->
-            </div><!-- End .header-left -->
 
-            <div class="header-center">
-                <div class="header-search header-search-extended header-search-visible header-search-no-radius d-none d-lg-block">
-                    <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                    <form action="#" method="get">
-                        <div class="header-search-wrapper search-wrapper-wide">
-                            <label for="q" class="sr-only">Search</label>
-                            <input type="search" class="form-control" name="q" id="q" placeholder="Cari Produk ..." required>
-                            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
-                        </div><!-- End .header-search-wrapper -->
-                    </form>
-                </div><!-- End .header-search -->
-            </div>
-
-            <div class="header-right">
-                <div class="wishlist">
-                    <a href="wishlist.html" title="Wishlist">
-                        <div class="icon">
-                            <i class="icon-heart-o"></i>
-                            <!-- <span class="wishlist-count badge">3</span> -->
-                        </div>
-                        <p>Keinginan</p>
-                    </a>
-                </div><!-- End .compare-dropdown -->
-
-                <div class="cart-dropdown">
-                    <a href="#" class="dropdown-toggle">
-                        <div class="icon">
-                            <i class="icon-shopping-cart"></i>
-                            <!-- <span class="cart-count">2</span> -->
-                        </div>
-                        <p>Keranjang</p>
-                    </a>
-                </div><!-- End .cart-dropdown -->
-
-                <!-- <div style="margin-left: 1.5rem;">
-                    <p style="font-size: 3rem;">|</p>
-                </div> -->
-                @if(Session::get('username')||Session::get('email'))
-                <div class="wishlist">
-                    <a href="./dashboard">
-                        <div class="icon">
-                            <i class="icon-user"></i>
-                        </div>
-                        <p>Akun</p>
-                    </a>
-                </div><!-- End .compare-dropdown -->
-                
-                @else
-                <div class="wishlist">
-                    <a href="#signin-modal" data-toggle="modal" title="My account">
-                        <div class="icon">
-                            <i class="icon-user"></i>
-                        </div>
-                        <p>Akun</p>
-                    </a>
-                </div><!-- End .compare-dropdown -->
-                @endif
-                
-            </div><!-- End .header-right -->
-        </div><!-- End .container -->
-    </div><!-- End .header-middle -->
-
-    <div class="header-bottom sticky-header">
-        <div class="container">
-            <!-- <div class="header-left">
-                
-            </div> -->
-
-            <div class="header-center">
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <!-- <li class="megamenu-container active">
-                            <a href="index.html">Home</a>
-                        </li> -->
-                        <li class="megamenu-container">
+                        <li class="megamenu-container active">
                             <a href="./">Home</a>
                         </li>
                         <li>
@@ -220,11 +115,19 @@
                         </li>
                     </ul><!-- End .menu -->
                 </nav><!-- End .main-nav -->
-            </div><!-- End .header-center -->
+            </div><!-- End .header-left -->
 
-            <!-- <div class="header-right">
-                
-            </div> -->
+            <div class="header-right">
+                <div class="header-search">
+                    <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                    <form action="#" method="get">
+                        <div class="header-search-wrapper">
+                            <label for="q" class="sr-only">Search</label>
+                            <input type="search" class="form-control" name="q" id="q" placeholder="Cari Produk ..." required>
+                        </div><!-- End .header-search-wrapper -->
+                    </form>
+                </div><!-- End .header-search -->
+            </div><!-- End .header-right -->
         </div><!-- End .container -->
-    </div><!-- End .header-bottom -->
+    </div><!-- End .header-middle -->
 </header><!-- End .header -->

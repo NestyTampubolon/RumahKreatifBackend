@@ -19,12 +19,14 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->text('name')->nullable();
-            $table->string('no_WA')->nullable();
-            $table->string('no_HP')->nullable();
-            $table->string('status')->nullable();
-            $table->rememberToken('token')->nullable();
-            $table->timestamps();
+            // $table->text('name')->nullable();
+            // $table->string('no_WA')->nullable();
+            // $table->string('no_HP')->nullable();
+            $table->boolean('is_admin')->nullable();
+            $table->boolean('is_banned')->nullable();
+            $table->boolean('is_verified')->nullable();
+            $table->rememberToken();
+            $table->timestampsTz($precision = 0);
         });
     }
 
