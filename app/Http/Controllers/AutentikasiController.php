@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Session;
-
 use DB;
+use Illuminate\Support\Facades\Hash;
 
 class AutentikasiController extends Controller
 {
@@ -22,7 +21,8 @@ class AutentikasiController extends Controller
         DB::table('users')->insert([
             'username' => $username,
             'email' => $email,
-            'password' => $password,
+            // 'password' => $password,
+            'password' => Hash::make($password),
             'name' => $name,
             'no_WA' => $no_WA,
             'no_HP' => $no_HP,
@@ -51,7 +51,7 @@ class AutentikasiController extends Controller
         $cek_email = DB::table('users')->where('email',$username_email)->first();
 
         if($cek_username){
-            $cek_login = DB::table('users')->where('username',$username_email)->where('password',$password)->first();
+            $cek_login = DB::table('users')->where('username',$username_email)->where('password', Hash::check('plain-text', $password))->first();
         }
 
         if($cek_email){
