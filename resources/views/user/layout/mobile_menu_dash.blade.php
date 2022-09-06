@@ -13,7 +13,10 @@
         
         <nav class="mobile-nav">
             <ul class="mobile-menu">
-                <li class="active">
+                <!-- <li class="active">
+                    <a href="index.html">Home</a>
+                </li> -->
+                <li>
                     <a href="index.html">Home</a>
                 </li>
                 <li>

@@ -67,6 +67,8 @@ class AutentikasiController extends Controller
         $cek_username = DB::table('users')->where('username',$username_email)->first();
         $cek_email = DB::table('users')->where('email',$username_email)->first();
 
+        $cek_admin = DB::table('users')->where('is_admin',"1")->first();
+
         if($cek_username){
             $cek_login = DB::table('users')->where('username',$username_email)->where('password', Hash::check('plain-text', $password))->first();
         }
@@ -76,6 +78,12 @@ class AutentikasiController extends Controller
         }
 
         if($cek_login){
+            Session::put('username',$cek_login->username);
+            Session::put('email',$cek_login->email);
+            return redirect('./');
+        }
+
+        if($cek_login ){
             Session::put('username',$cek_login->username);
             Session::put('email',$cek_login->email);
             return redirect('./');

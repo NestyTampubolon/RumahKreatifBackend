@@ -26,7 +26,10 @@
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="megamenu-container active">
+                        <!-- <li class="megamenu-container active">
+                            <a href="./">Home</a>
+                        </li> -->
+                        <li class="megamenu-container">
                             <a href="./">Home</a>
                         </li>
                         <li>
