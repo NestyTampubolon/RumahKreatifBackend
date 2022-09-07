@@ -21,6 +21,13 @@ Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
 
+Route::get('/toko', 'App\Http\Controllers\TokoController@toko');
+
+Route::get('/verifikasi', function () {
+    return view('user.verifikasi');
+});
+Route::post('/PostVerifikasi', 'App\Http\Controllers\VerifikasiController@PostVerifikasi');
+
 Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegister');
 Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
 Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');

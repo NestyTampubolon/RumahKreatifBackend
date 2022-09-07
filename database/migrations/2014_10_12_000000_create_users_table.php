@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             // $table->string('no_HP')->nullable();
             $table->boolean('is_admin')->nullable();
             $table->boolean('is_banned')->nullable();
-            $table->boolean('is_verified')->nullable();
             $table->rememberToken();
             $table->timestampsTz($precision = 0);
         });

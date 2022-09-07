@@ -51,9 +51,10 @@ class AutentikasiController extends Controller
                 'birthday' => $birthday,
                 'gender' => $gender,
             ]);
-
+            
             Session::put('username',$username);
             Session::put('email',$email);
+            Session::put('id',$user_id);
 
             return redirect('./');
         }
@@ -78,12 +79,14 @@ class AutentikasiController extends Controller
         }
 
         if($cek_login){
+            Session::put('id',$cek_login->id);
             Session::put('username',$cek_login->username);
             Session::put('email',$cek_login->email);
             return redirect('./');
         }
 
         if($cek_login ){
+            Session::put('id',$cek_login->id);
             Session::put('username',$cek_login->username);
             Session::put('email',$cek_login->email);
             return redirect('./');

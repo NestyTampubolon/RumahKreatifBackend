@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVerifyUsersTable extends Migration
+class CreateRekeningsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateVerifyUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('verify_users', function (Blueprint $table) {
+        Schema::create('rekenings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            // $table->tinyInteger('verified');
-            $table->string('foto_ktp');
-            $table->string('ktp_dan_selfie');
-            $table->boolean('is_verified')->nullable();
-            // $table->rememberToken();
-            $table->timestampsTz($precision = 0);
+            $table->string('nama_bank');
+            $table->string('nomor_rekening');
+            $table->string('atas_nama');
+            // $table->string('gambar');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
         });
@@ -34,6 +33,6 @@ class CreateVerifyUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('verify_users');
+        Schema::dropIfExists('rekenings');
     }
 }

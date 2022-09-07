@@ -53,6 +53,9 @@
                                         <a class="nav-link" href="#">Dashboard</a>
 								    </li>
 								    <li class="nav-item">
+								        <a class="nav-link" href="./toko">Toko</a>
+								    </li>
+								    <li class="nav-item">
 								        <a class="nav-link" href="./logout">Keluar</a>
 								    </li>
 								</ul>
