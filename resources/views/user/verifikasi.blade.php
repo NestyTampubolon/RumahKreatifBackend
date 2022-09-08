@@ -54,7 +54,7 @@
         </script>
 
         <button type="submit" class="btn btn-primary btn-round">
-            <span>SAVE CHANGES</span>
+            <span>KIRIM</span>
         </button>
     </form>
 </div><!-- .End .tab-pane -->

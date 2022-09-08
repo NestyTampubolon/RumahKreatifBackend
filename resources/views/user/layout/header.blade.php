@@ -94,7 +94,7 @@
                 <!-- <div style="margin-left: 1.5rem;">
                     <p style="font-size: 3rem;">|</p>
                 </div> -->
-                @if(Session::get('id')||Session::get('username')||Session::get('email') )
+                @if(Auth::check())
                 <div class="wishlist">
                     <a href="./dashboard">
                         <div class="icon">

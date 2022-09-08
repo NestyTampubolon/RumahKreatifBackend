@@ -50,7 +50,7 @@
 								    <li class="nav-item">
 								        <!-- <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a> -->
 								        <!-- <a class="nav-link" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Dashboard</a> -->
-                                        <a class="nav-link" href="#">Dashboard</a>
+                                        <a class="nav-link" href="./dashboard">Dashboard</a>
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" href="./toko">Toko</a>

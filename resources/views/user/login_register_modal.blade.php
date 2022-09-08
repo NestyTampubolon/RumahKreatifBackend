@@ -30,6 +30,11 @@
                         </ul>
                         <div class="tab-content" id="tab-content-5">
                             <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                            @if (\Session::has('error'))
+                            <div class="alert alert-danger">
+                                Cek kembali akun anda.
+                            </div><br>
+                            @endif
                                 <form action="./login" method="post">
                                 @csrf
                                     <div class="form-group">
@@ -37,6 +42,7 @@
                                         <input type="text" class="form-control" id="username_email" name="username_email" required>
                                     </div><!-- End .form-group -->
 
+                                    
                                     <div class="form-group">
                                         <label for="password">Password *</label>
                                         <input type="password" class="form-control" id="password" name="password" required>
@@ -80,11 +86,17 @@
                                         <label for="username">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" required>
                                     </div><!-- End .form-group -->
-
+                                    @error('username')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                    
                                     <div class="form-group">
                                         <label for="email">E-Mail</label>
                                         <input type="email" class="form-control" id="email" name="email" required>
                                     </div><!-- End .form-group -->
+                                    @error('email')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
 
                                     <div class="form-group">
                                         <label for="password">Password</label>

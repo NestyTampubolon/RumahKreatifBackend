@@ -3,103 +3,78 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Session;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Profile;
 
 class AutentikasiController extends Controller
 {
     public function PostRegister(Request $request)
     {
-        $username = $request -> username;
-        $email = $request -> email;
-        $password = $request -> password;
+        $request -> validate([
+            'username' => 'required|unique:users',    
+            'email' => 'required|email|unique:users',
+            'password' => 'required',    
 
-        $name = $request -> name;
-        $no_hp = $request -> no_hp;
-        $birthday = $request -> birthday;
-        $gender = $request -> gender;
+            'name' => 'required',    
+            'no_hp' => 'required',    
+            'birthday' => 'required',    
+            'gender' => 'required',    
+        ]);
 
-        $cek_username = DB::table('users')->where('username',$username)->first();
-        $cek_email = DB::table('users')->where('email',$email)->first();
+        $data_users = $request->only(['username', 'password', 'email']);
+        $data_profiles = $request->only(['name', 'no_hp', 'birthday', 'gender']);
+        
+        $username = $request->username;
+        $email = $request->email;
+        $password = $request->password;
 
-        if($cek_username && $cek_email){
-            return redirect('./');
+        $users  = User::create($data_users);
+        $user = User::where('username', $data_users['username'])->pluck('id');
+        $id_user = $user[0];
+        $data_profiles += ['user_id' => $id_user];
+
+        $profiles  = Profile::create($data_profiles);
+        if(Auth::attempt(['username' => $username, 'password' => $password]) || Auth::attempt(['email' => $email, 'password' => $password])){
+            $user = Auth::user();
+            return redirect()->back();
         }
-
-        if($cek_username){
-            return redirect('./');
-        }
-
-        if($cek_email){
-            return redirect('./');
-        }
-
-        if(!$cek_username && !$cek_email){
-            DB::table('users')->insert([
-                'username' => $username,
-                'email' => $email,
-                'password' => Hash::make($password),
-            ]);
-
-            $user_id = DB::table('users')->orderBy('id', 'desc')->first();
-
-            DB::table('profiles')->insert([
-                'user_id' => $user_id->id,
-                'name' => $name,
-                'no_hp' => $no_hp,
-                'birthday' => $birthday,
-                'gender' => $gender,
-            ]);
-            
-            Session::put('username',$username);
-            Session::put('email',$email);
-            Session::put('id',$user_id);
-
-            return redirect('./');
-        }
+        
+        else{
+            return redirect()->back()->with('error', '');
+        }    
+         
+        return redirect('./')->withSuccess('Great! You have Successfully loggedin');
     }
 
     public function PostLogin(Request $request){
 
+        request()->validate(
+            [
+                'username_email' => 'required',
+                'password' => 'required',
+            ]);
+
         $username_email = $request->username_email;
         $password = $request->password;
 
-        $cek_username = DB::table('users')->where('username',$username_email)->first();
-        $cek_email = DB::table('users')->where('email',$username_email)->first();
-
-        $cek_admin = DB::table('users')->where('is_admin',"1")->first();
-
-        if($cek_username){
-            $cek_login = DB::table('users')->where('username',$username_email)->where('password', Hash::check('plain-text', $password))->first();
+        if(Auth::attempt(['username' => $username_email, 'password' => $password]) || Auth::attempt(['email' => $username_email, 'password' => $password])){
+            $user = Auth::user();
+            return redirect()->back();
         }
-
-        if($cek_email){
-            $cek_login = DB::table('users')->where('email',$username_email)->where('password', Hash::check('plain-text', $password))->first();
-        }
-
-        if($cek_login){
-            Session::put('id',$cek_login->id);
-            Session::put('username',$cek_login->username);
-            Session::put('email',$cek_login->email);
-            return redirect('./');
-        }
-
-        if($cek_login ){
-            Session::put('id',$cek_login->id);
-            Session::put('username',$cek_login->username);
-            Session::put('email',$cek_login->email);
-            return redirect('./');
-        }
-
+        
         else{
-            return redirect('./')->with('alert','');
-        }
+            return redirect()->back()->with('error', '');
+        }          
     }
 
     public function Logout()
     {
-        Session::flush();
+        // $request->session()->flush();
+        Auth::logout();
         return redirect('./');
     }
 }
