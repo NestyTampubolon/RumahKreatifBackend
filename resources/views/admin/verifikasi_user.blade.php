@@ -52,6 +52,7 @@
                         <td>{{$verify_users->email}}</td>
                         @if($verify_users->is_verified==1)
                             <td align="center"><small class="badge badge-success">Verified</small></td>
+                            <td align="center"></td>
                         @else
                             <td align="center"><small class="badge badge-danger">No Verified</small></td>
                             <td align="center">

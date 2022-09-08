@@ -42,7 +42,7 @@ class VerifikasiController extends Controller
             'is_verified' => 1,
         ]);
 
-        return redirect('./admin.verifikasi_user');
+        return redirect('./verifikasi_user');
     }
 
 }

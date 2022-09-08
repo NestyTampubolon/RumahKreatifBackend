@@ -7,8 +7,27 @@
 @endsection
 
 @section('container')
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 5px;
+    }
+    
+    .fileUpload input.upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        width:200%;
+    }
+</style>
 
-@if($cek_verified && $cek_rekening)
+@if($cek_verified && $cek_rekening && $cek_merchant)
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
 <form action="./MasukToko" method="post" enctype="multipart/form-data">
     @csrf
@@ -18,6 +37,35 @@
 
         <button type="submit" class="btn btn-primary btn-round">
             <span>MASUK</span>
+        </button>
+    </form>
+</div><!-- .End .tab-pane -->
+
+@elseif($cek_verified && $cek_rekening)
+<div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
+<form action="./PostTambahToko" method="post" enctype="multipart/form-data">
+    @csrf
+        <label>Nama Toko *</label>
+        <input type="text" name="nama_merchant" class="form-control" required>
+
+        <label>Deskripsi Toko *</label>
+        <input type="text" name="deskripsi" class="form-control" required>
+        
+        <label>Foto Toko *</label>
+        <div class="fileUpload">
+            <input id="uploadBtn1" type="file" name="foto_merchant" class="upload" accept="image/*" required/>
+            <input class="form-control" id="uploadFile1" placeholder="Pilih Foto..." disabled="disabled"/>
+            <small class="form-text">Pastikan gambar yang anda masukkan dapat dilihat dengan jelas.</small>
+        </div>
+        
+        <script>
+            document.getElementById("uploadBtn1").onchange = function () {
+                document.getElementById("uploadFile1").value = this.value;
+            };
+        </script>
+
+        <button type="submit" class="btn btn-primary btn-round">
+            <span>TAMBAH</span>
         </button>
     </form>
 </div><!-- .End .tab-pane -->

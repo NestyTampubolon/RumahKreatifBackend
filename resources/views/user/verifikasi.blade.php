@@ -33,14 +33,14 @@
         <label>Foto KTP *</label>
         <div class="fileUpload">
             <input id="uploadBtn1" type="file" name="foto_ktp" class="upload" accept="image/*" required/>
-            <input class="form-control" id="uploadFile1" placeholder="Pilih File..." disabled="disabled"/>
+            <input class="form-control" id="uploadFile1" placeholder="Pilih Foto..." disabled="disabled"/>
             <small class="form-text">Pastikan gambar yang anda masukkan dapat dilihat dengan jelas.</small>
         </div>
 
         <label>Foto Selfie bersama KTP *</label>
         <div class="fileUpload">
             <input id="uploadBtn2" type="file" name="ktp_dan_selfie" class="upload" accept="image/*" required/>
-            <input class="form-control" id="uploadFile2" placeholder="Pilih File..." disabled="disabled"/>
+            <input class="form-control" id="uploadFile2" placeholder="Pilih Foto..." disabled="disabled"/>
             <small class="form-text">Pastikan gambar yang anda masukkan dapat dilihat dengan jelas.</small>
         </div>
 

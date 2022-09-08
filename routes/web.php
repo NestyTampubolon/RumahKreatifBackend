@@ -23,6 +23,10 @@ Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
 
 Route::get('/toko', 'App\Http\Controllers\TokoController@toko');
 
+Route::post('/MasukToko', 'App\Http\Controllers\TokoController@MasukToko');
+Route::get('/keluar_toko', 'App\Http\Controllers\TokoController@keluar_toko');
+Route::post('/PostTambahToko', 'App\Http\Controllers\TokoController@PostTambahToko');
+
 Route::get('/verifikasi', function () {
     return view('user.verifikasi');
 });
