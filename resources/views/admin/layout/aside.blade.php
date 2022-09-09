@@ -56,7 +56,13 @@
                 <p>Verifikasi User</p>
             </a>
         </li>
-        
+        <li class="nav-header">TOKO</li>
+        <li class="nav-item">
+            <a href="./toko_user" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Toko User</p>
+            </a>
+        </li>
         <li class="nav-header">BANK</li>
         <li class="nav-item">
             <a href="./bank" class="nav-link">

@@ -1,6 +1,6 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Verifikasi User')
+@section('title', 'Admin - Toko User')
 
 @section('container')
 
@@ -11,12 +11,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tabel Verifikasi User</h1>
+            <h1>Tabel Toko User</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item active">Tabel Verifikasi User</li>
+              <li class="breadcrumb-item active">Tabel Toko User</li>
             </ol>
           </div>
         </div>
@@ -45,23 +45,23 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($verify_users as $verify_users)
+                    @foreach($merchants as $merchants)
                     <tr>
-                        <td>{{$verify_users->user_id}}</td>
-                        <td>{{$verify_users->username}}</td>
-                        <td>{{$verify_users->email}}</td>
-                        @if($verify_users->is_verified==1)
+                        <td>{{$merchants->user_id}}</td>
+                        <td>{{$merchants->username}}</td>
+                        <td>{{$merchants->email}}</td>
+                        @if($merchants->is_verified==1)
                             <td align="center"><small class="badge badge-success">Verified</small></td>
                             <td align="center"></td>
                         @else
                             <td align="center"><small class="badge badge-danger">No Verified</small></td>
                             <td align="center">
-                              <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
+                              <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$merchants->user_id}}">Cek</button>
                             </td>
                         @endif
                     </tr>
                     
-                    <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">
+                    <div class="modal fade" id="modal-cek-{{$merchants->user_id}}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -71,16 +71,13 @@
                                   </button>
                               </div>
                               <div class="modal-body">
-                                  <center><a href="./asset/u_file/foto_ktp/{{$verify_users->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
-                                  <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_users->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
-                                  <center><a>{{$verify_users->name}}</a></center>
-                                  <center><a>{{$verify_users->no_hp}}</a></center>
-                                  <center><a>{{$verify_users->birthday}}</a></center>
-                                  <center><a>{{$verify_users->gender}}</a></center>
+                                  <center><a>{{$merchants->nama_merchant}}</a></center>
+                                  <center><a>{{$merchants->deskripsi}}</a></center>
+                                  <center><a href="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" target="_blank">Lihat Foto Toko</a></center>
                               </div>
                               <div class="modal-footer justify-content-between">
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                  <a href="./verify_user/{{$verify_users->id}}" class="btn btn-primary">Verify</a>
+                                  <a href="./verify_toko/{{$merchants->id}}" class="btn btn-primary">Verify</a>
                               </div>
                             </div>
                             <!-- /.modal-content -->

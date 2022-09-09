@@ -16,6 +16,7 @@ class TokoController extends Controller
         $cek_verified = DB::table('verify_users')->where('user_id', $user_id)->where('is_verified', 1)->first();
         $cek_rekening = DB::table('rekenings')->where('user_id', $user_id)->first();
         $cek_merchant = DB::table('merchants')->where('user_id', $user_id)->first();
+        $cek_merchant_verified = DB::table('merchants')->where('user_id', $user_id)->where('is_verified', 1)->first();
         
         if(Session::get('masuk_toko')){
             return view('user.toko.toko');
@@ -23,10 +24,30 @@ class TokoController extends Controller
 
         else{
             return view('user.toko.toko_dash')->with('cek_verifikasi', $cek_verifikasi)->with('cek_verified', $cek_verified)->with('cek_rekening', $cek_rekening)
-            ->with('cek_merchant', $cek_merchant);
+            ->with('cek_merchant', $cek_merchant) ->with('cek_merchant_verified', $cek_merchant_verified);
         }
     }
 
+    public function PostTambahToko(Request $request) {
+        $id = Auth::user()->id;
+        $nama_merchant = $request -> nama_merchant;
+        $deskripsi = $request -> deskripsi;
+        $foto_merchant = $request -> file('foto_merchant');
+
+        $nama_foto_merchant = time().'_'.$foto_merchant->getClientOriginalName();
+        $tujuan_upload = './asset/u_file/foto_merchant';
+        $foto_merchant->move($tujuan_upload,$nama_foto_merchant);
+
+        DB::table('merchants')->insert([
+            'user_id' => $id,
+            'nama_merchant' => $nama_merchant,
+            'deskripsi' => $deskripsi,
+            'foto_merchant' => $nama_foto_merchant,
+        ]);
+
+        return redirect('./toko');
+    }
+    
     public function MasukToko(Request $request){
         request()->validate(
             [
@@ -51,23 +72,18 @@ class TokoController extends Controller
         return redirect('./dashboard');     
     }
 
-    public function PostTambahToko(Request $request) {
-        $id = Auth::user()->id;
-        $nama_merchant = $request -> nama_merchant;
-        $deskripsi = $request -> deskripsi;
-        $foto_merchant = $request -> file('foto_merchant');
+    public function TokoUser(Request $request) {
+        $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
+        ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->orderBy('merchants.user_id', 'asc')->get();
 
-        $nama_foto_merchant = time().'_'.$foto_merchant->getClientOriginalName();
-        $tujuan_upload = './asset/u_file/foto_merchant';
-        $foto_merchant->move($tujuan_upload,$nama_foto_merchant);
+        return view('admin.toko_user')->with('merchants', $merchants);
+    }
 
-        DB::table('merchants')->insert([
-            'user_id' => $id,
-            'nama_merchant' => $nama_merchant,
-            'deskripsi' => $deskripsi,
-            'foto_merchant' => $nama_foto_merchant,
+    public function VerifyToko($id) {
+        DB::table('merchants')->where('id', $id)->update([
+            'is_verified' => 1,
         ]);
 
-        return redirect('./toko');
+        return redirect('./toko_user');
     }
 }

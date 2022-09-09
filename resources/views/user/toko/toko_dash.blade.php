@@ -27,9 +27,9 @@
     }
 </style>
 
-@if($cek_verified && $cek_rekening && $cek_merchant)
+@if($cek_verified && $cek_rekening && $cek_merchant_verified)
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
-<form action="./MasukToko" method="post" enctype="multipart/form-data">
+    <form action="./MasukToko" method="post" enctype="multipart/form-data">
     @csrf
         <label>Password *</label>
         <input type="password" name="password" class="form-control" required>
@@ -39,6 +39,11 @@
             <span>MASUK</span>
         </button>
     </form>
+</div><!-- .End .tab-pane -->
+
+@elseif($cek_verified && $cek_rekening && $cek_merchant)
+<div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
+    <p>Menunggu toko anda diverifikasi.</p>
 </div><!-- .End .tab-pane -->
 
 @elseif($cek_verified && $cek_rekening)

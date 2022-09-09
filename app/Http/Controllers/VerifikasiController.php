@@ -31,14 +31,14 @@ class VerifikasiController extends Controller
     }
 
     public function VerifikasiUser(Request $request) {
-        $verify_users = DB::table('verify_users')->join('users', 'verify_users.user_id', '=', 'users.id')->orderBy('verify_users.user_id', 'asc')
+        $verify_users = DB::table('verify_users')->join('users', 'verify_users.user_id', '=', 'users.id')
         ->join('profiles', 'verify_users.user_id', '=', 'profiles.user_id')->orderBy('verify_users.user_id', 'asc')->get();
 
         return view('admin.verifikasi_user')->with('verify_users', $verify_users);
     }
 
-    public function VerifyUser($user_id) {
-        DB::table('verify_users')->where('user_id', $user_id)->update([
+    public function VerifyUser($id) {
+        DB::table('verify_users')->where('id', $id)->update([
             'is_verified' => 1,
         ]);
 

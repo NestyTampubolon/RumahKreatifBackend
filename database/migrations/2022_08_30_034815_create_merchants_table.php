@@ -19,6 +19,7 @@ class CreateMerchantsTable extends Migration
             $table->string('nama_merchant');
             $table->text('deskripsi');
             $table->string('foto_merchant');
+            $table->boolean('is_verified')->nullable();
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');

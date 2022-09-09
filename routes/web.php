@@ -27,13 +27,16 @@ Route::post('/MasukToko', 'App\Http\Controllers\TokoController@MasukToko');
 Route::get('/keluar_toko', 'App\Http\Controllers\TokoController@keluar_toko');
 Route::post('/PostTambahToko', 'App\Http\Controllers\TokoController@PostTambahToko');
 
+Route::get('/toko_user', 'App\Http\Controllers\TokoController@TokoUser');
+Route::get('/verify_toko/{id}', 'App\Http\Controllers\TokoController@VerifyToko');
+
 Route::get('/verifikasi', function () {
     return view('user.verifikasi');
 });
 Route::post('/PostVerifikasi', 'App\Http\Controllers\VerifikasiController@PostVerifikasi');
 
 Route::get('/verifikasi_user', 'App\Http\Controllers\VerifikasiController@VerifikasiUser');
-Route::get('/verify_user/{user_id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
+Route::get('/verify_user/{id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
 
 Route::get('/bank', 'App\Http\Controllers\BankController@bank');
 Route::post('/PostTambahBank', 'App\Http\Controllers\BankController@PostTambahBank');

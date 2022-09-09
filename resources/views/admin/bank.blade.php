@@ -1,6 +1,6 @@
 @extends('admin/layout/main')
 
-@section('title', 'Rumah Kreatif Toba - Admin')
+@section('title', 'Admin - Bank')
 
 @section('container')
 
