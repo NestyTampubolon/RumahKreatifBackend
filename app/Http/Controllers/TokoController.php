@@ -19,7 +19,10 @@ class TokoController extends Controller
         $cek_merchant_verified = DB::table('merchants')->where('user_id', $user_id)->where('is_verified', 1)->first();
         
         if(Session::get('masuk_toko')){
-            return view('user.toko.toko');
+            $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
+            ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->where('merchants.user_id', $user_id)->get();
+
+            return view('user.toko.toko')->with('merchants', $merchants);
         }
 
         else{

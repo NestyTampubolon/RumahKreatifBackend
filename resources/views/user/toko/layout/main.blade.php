@@ -46,12 +46,10 @@
 	                		<aside class="col-md-4 col-lg-3">
 	                			<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
 								    <li class="nav-item">
-								        <!-- <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a> -->
-								        <!-- <a class="nav-link" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Dashboard</a> -->
-                                        <a class="nav-link" href="./dashboard">Dashboard</a>
+								        <a class="nav-link" href="./toko">Toko</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="./toko">Toko</a>
+								        <a class="nav-link" href="./produk">Produk</a>
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" href="./keluar_toko">Keluar</a>
