@@ -1,9 +1,8 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Bank')
+@section('title', 'Admin - Kategori Produk')
 
 @section('container')
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -30,36 +29,36 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Bank</button>
+                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Kategori Produk</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID Bank</th>
-                        <th align="center">Nama Bank</th>
-                        <th align="center" colspan="2">Action</th>
+                        <th align="center">ID Kategori Produk</th>
+                        <th align="center">Nama Kategori Produk</th>
+                        <th align="center" colspan="1">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($banks as $banks)
+                    @foreach($product_categories as $product_categories)
                     <tr>
-                        <td>{{$banks->id}}</td>
-                        <td>{{$banks->nama_bank}}</td>
+                        <td>{{$product_categories->category_id}}</td>
+                        <td>{{$product_categories->nama_kategori}}</td>
                         <td align="center" width="150px">
-                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$banks->id}}">Edit</button>
+                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$product_categories->category_id}}">Edit</button>
                         </td>
-                        <td align="center" width="100px">
-                            <a href="./hapus_bank/{{$banks->id}}" class="btn btn-block btn-danger">Hapus</a>
-                        </td>
+                        <!-- <td align="center" width="100px">
+                            <a href="./hapus_kategori_produk/{{$product_categories->category_id}}" class="btn btn-block btn-danger">Hapus</a>
+                        </td> -->
                     </tr>
 
-                    <div class="modal fade" id="modal-edit-{{$banks->id}}">
+                    <div class="modal fade" id="modal-edit-{{$product_categories->category_id}}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Edit Bank</h4>
+                                    <h4 class="modal-title">Edit Kategori</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -67,12 +66,12 @@
                                 <div class="modal-body">
                                     <div class="card card-primary">
                                     <!-- form start -->
-                                    <form action="./PostEditBank/{{$banks->id}}" method="post" enctype="multipart/form-data">
+                                    <form action="./PostEditKategoriProduk/{{$product_categories->category_id}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="nama_bank">Nama Bank</label>
-                                                <input type="text" class="form-control" name="nama_bank" id="nama_bank" placeholder="Masukkan nama bank." value="{{$banks->nama_bank}}" required>
+                                                <label for="nama_kategori">Nama Kategori</label>
+                                                <input type="text" class="form-control" name="nama_kategori" id="nama_kategori" placeholder="Masukkan nama kategori." value="{{$product_categories->nama_kategori}}" required>
                                             </div>
                                         </div>
                                         <!-- /.card-body -->
@@ -107,11 +106,12 @@
 </div>
 <!-- /.content-wrapper -->
 
+
 <div class="modal fade" id="modal-tambah_bank">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Bank</h4>
+                <h4 class="modal-title">Tambah Kategori</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -119,12 +119,12 @@
             <div class="modal-body">
                 <div class="card card-primary">
                 <!-- form start -->
-                <form action="./PostTambahBank" method="post" enctype="multipart/form-data">
+                <form action="./PostTambahKategoriProduk" method="post" enctype="multipart/form-data">
                 @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="nama_bank">Nama Bank</label>
-                            <input type="text" class="form-control" name="nama_bank" id="nama_bank" placeholder="Masukkan nama bank." required>
+                            <label for="nama_kategori">Nama Kategori</label>
+                            <input type="text" class="form-control" name="nama_kategori" id="nama_kategori" placeholder="Masukkan nama kategori." required>
                         </div>
                     </div>
                     <!-- /.card-body -->

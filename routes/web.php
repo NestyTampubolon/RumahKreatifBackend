@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+
+
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
@@ -29,6 +31,26 @@ Route::post('/PostTambahToko', 'App\Http\Controllers\TokoController@PostTambahTo
 
 Route::get('/toko_user', 'App\Http\Controllers\TokoController@TokoUser');
 Route::get('/verify_toko/{id}', 'App\Http\Controllers\TokoController@VerifyToko');
+
+Route::get('/tipe_spesifikasi', 'App\Http\Controllers\SpesifikasiController@tipe_spesifikasi');
+Route::post('/PostTambahTipeSpesifikasi', 'App\Http\Controllers\SpesifikasiController@PostTambahTipeSpesifikasi');
+Route::post('/PostEditTipeSpesifikasi/{specification_type_id}', 'App\Http\Controllers\SpesifikasiController@PostEditTipeSpesifikasi');
+// Route::get('/hapus_tipe_spesifikasi/{specification_type_id}', 'App\Http\Controllers\SpesifikasiController@HapusTipeSpesifikasi');
+
+Route::get('/spesifikasi', 'App\Http\Controllers\SpesifikasiController@spesifikasi');
+Route::post('/PostTambahSpesifikasi', 'App\Http\Controllers\SpesifikasiController@PostTambahSpesifikasi');
+Route::post('/PostEditSpesifikasi/{specification_id}', 'App\Http\Controllers\SpesifikasiController@PostEditSpesifikasi');
+// Route::get('/hapus_spesifikasi/{specification_id}', 'App\Http\Controllers\SpesifikasiController@HapusSpesifikasi');
+
+Route::get('/kategori_produk', 'App\Http\Controllers\KategoriController@kategori_produk');
+Route::post('/PostTambahKategoriProduk', 'App\Http\Controllers\KategoriController@PostTambahKategoriProduk');
+Route::post('/PostEditKategoriProduk/{kategori_produk_id}', 'App\Http\Controllers\KategoriController@PostEditKategoriProduk');
+// Route::get('/hapus_kategori_produk/{kategori_produk_id}', 'App\Http\Controllers\KategoriController@HapusKategoriProduk');
+
+Route::get('/kategori_tipe_spesifikasi', 'App\Http\Controllers\KategoriController@kategori_tipe_spesifikasi');
+Route::post('/PostTambahKategoriTipeSpesifikasi', 'App\Http\Controllers\KategoriController@PostTambahKategoriTipeSpesifikasi');
+Route::post('/PostEditSpesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@PostEditKategoriTipeSpesifikasi');
+// Route::get('/hapus_spesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@HapusKategoriTipeSpesifikasi');
 
 Route::get('/verifikasi', function () {
     return view('user.verifikasi');

@@ -22,7 +22,7 @@ class CreateCommentsTable extends Migration
             $table->bigInteger('paket_id');
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
+            // $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

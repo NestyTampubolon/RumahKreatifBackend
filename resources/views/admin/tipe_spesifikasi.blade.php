@@ -1,9 +1,8 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Bank')
+@section('title', 'Admin - Jenis Spesifikasi')
 
 @section('container')
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -30,36 +29,36 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Bank</button>
+                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Jenis Spesifikasi</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID Bank</th>
-                        <th align="center">Nama Bank</th>
-                        <th align="center" colspan="2">Action</th>
+                        <th align="center">ID Jenis Spesifikasi</th>
+                        <th align="center">Nama Jenis Spesifikasi</th>
+                        <th align="center" colspan="1">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($banks as $banks)
+                    @foreach($specification_types as $specification_types)
                     <tr>
-                        <td>{{$banks->id}}</td>
-                        <td>{{$banks->nama_bank}}</td>
+                        <td>{{$specification_types->specification_type_id}}</td>
+                        <td>{{$specification_types->nama_jenis_spesifikasi}}</td>
                         <td align="center" width="150px">
-                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$banks->id}}">Edit</button>
+                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$specification_types->specification_type_id}}">Edit</button>
                         </td>
-                        <td align="center" width="100px">
-                            <a href="./hapus_bank/{{$banks->id}}" class="btn btn-block btn-danger">Hapus</a>
-                        </td>
+                        <!-- <td align="center" width="100px">
+                            <a href="./hapus_tipe_spesifikasi/{{$specification_types->specification_type_id}}" class="btn btn-block btn-danger">Hapus</a>
+                        </td> -->
                     </tr>
 
-                    <div class="modal fade" id="modal-edit-{{$banks->id}}">
+                    <div class="modal fade" id="modal-edit-{{$specification_types->specification_type_id}}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Edit Bank</h4>
+                                    <h4 class="modal-title">Edit Kategori</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -67,12 +66,12 @@
                                 <div class="modal-body">
                                     <div class="card card-primary">
                                     <!-- form start -->
-                                    <form action="./PostEditBank/{{$banks->id}}" method="post" enctype="multipart/form-data">
+                                    <form action="./PostEditTipeSpesifikasi/{{$specification_types->specification_type_id}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="nama_bank">Nama Bank</label>
-                                                <input type="text" class="form-control" name="nama_bank" id="nama_bank" placeholder="Masukkan nama bank." value="{{$banks->nama_bank}}" required>
+                                                <label for="nama_jenis_spesifikasi">Nama Jenis Spesifikasi</label>
+                                                <input type="text" class="form-control" name="nama_jenis_spesifikasi" id="nama_jenis_spesifikasi" placeholder="Masukkan nama jenis spesifikasi." value="{{$specification_types->nama_jenis_spesifikasi}}" required>
                                             </div>
                                         </div>
                                         <!-- /.card-body -->
@@ -107,11 +106,12 @@
 </div>
 <!-- /.content-wrapper -->
 
+
 <div class="modal fade" id="modal-tambah_bank">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Bank</h4>
+                <h4 class="modal-title">Tambah Jenis Spesifikasi</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -119,12 +119,12 @@
             <div class="modal-body">
                 <div class="card card-primary">
                 <!-- form start -->
-                <form action="./PostTambahBank" method="post" enctype="multipart/form-data">
+                <form action="./PostTambahTipeSpesifikasi" method="post" enctype="multipart/form-data">
                 @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="nama_bank">Nama Bank</label>
-                            <input type="text" class="form-control" name="nama_bank" id="nama_bank" placeholder="Masukkan nama bank." required>
+                            <label for="nama_jenis_spesifikasi">Nama Jenis Spesifikasi</label>
+                            <input type="text" class="form-control" name="nama_jenis_spesifikasi" id="nama_jenis_spesifikasi" placeholder="Masukkan nama jenis spesifikasi." required>
                         </div>
                     </div>
                     <!-- /.card-body -->

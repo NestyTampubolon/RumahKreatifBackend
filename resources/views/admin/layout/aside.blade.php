@@ -63,6 +63,39 @@
                 <p>Toko User</p>
             </a>
         </li>
+        <li class="nav-header">PRODUK</li>
+        <li class="nav-item">
+            <a href="./produk" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Produk</p>
+            </a>
+        </li>
+        <li class="nav-header">KATEGORI</li>
+        <li class="nav-item">
+            <a href="./kategori_produk" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Kategori</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="./kategori_tipe_spesifikasi" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Kategori Tipe Spesifikasi</p>
+            </a>
+        </li>
+        <li class="nav-header">SPESIFIKASI</li>
+        <li class="nav-item">
+            <a href="./tipe_spesifikasi" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Tipe Spesifikasi</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="./spesifikasi" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Spesifikasi</p>
+            </a>
+        </li>
         <li class="nav-header">BANK</li>
         <li class="nav-item">
             <a href="./bank" class="nav-link">

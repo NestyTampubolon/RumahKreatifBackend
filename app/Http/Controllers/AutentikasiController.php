@@ -73,7 +73,7 @@ class AutentikasiController extends Controller
 
     public function Logout()
     {
-        // $request->session()->flush();
+        Session::flush();
         Auth::logout();
         return redirect('./');
     }

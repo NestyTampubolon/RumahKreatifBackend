@@ -20,7 +20,7 @@ class CreateProductHistoriesTable extends Migration
             $table->string('information');
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
+            // $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

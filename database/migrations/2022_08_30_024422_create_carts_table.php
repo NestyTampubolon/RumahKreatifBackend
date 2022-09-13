@@ -20,7 +20,7 @@ class CreateCartsTable extends Migration
             $table->integer('total');
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
+            // $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
