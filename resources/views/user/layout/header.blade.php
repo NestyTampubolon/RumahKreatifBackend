@@ -51,7 +51,7 @@
                     <i class="icon-bars"></i>
                 </button>
 
-                <a href="./" class="logo" style="margin:0">
+                <a href="{{ url('/') }}" class="logo" style="margin:0">
                     <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="65">
                 </a>
                 <!-- <h5 class="logo" style="color: #800000;">Rumah Kreatif Toba</h5> -->
@@ -96,7 +96,7 @@
                 </div> -->
                 @if(Auth::check())
                 <div class="wishlist">
-                    <a href="./dashboard">
+                    <a href="{{ url('/dashboard') }}">
                         <div class="icon">
                             <i class="icon-user"></i>
                         </div>
@@ -132,7 +132,7 @@
                             <a href="index.html">Home</a>
                         </li> -->
                         <li class="megamenu-container">
-                            <a href="./">Home</a>
+                            <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li>
                             <a href="category.html" class="sf-with-ul">Shop</a>

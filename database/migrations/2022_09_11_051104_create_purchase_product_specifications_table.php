@@ -16,10 +16,10 @@ class CreatePurchaseProductSpecificationsTable extends Migration
         Schema::create('purchase_product_specifications', function (Blueprint $table) {
             $table->id('purchase_product_specification_id');
             $table->unsignedBigInteger('product_purchase_id');
-            $table->unsignedBigInteger('product_specification_id');
+            $table->unsignedBigInteger('specification_id');
             
             $table->foreign('product_purchase_id')->references('product_purchase_id')->on('product_purchases');
-            $table->foreign('product_specification_id')->references('product_specification_id')->on('product_specifications');
+            $table->foreign('specification_id')->references('specification_id')->on('specifications');
         });
     }
 

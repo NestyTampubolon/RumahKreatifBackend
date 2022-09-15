@@ -26,7 +26,9 @@ class ProdukController extends Controller
         ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
         ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
         ->where('category_type_specifications.category_id', $kategori_produk_id)->orderBy('category_type_specification_id', 'asc')->get();
+
         $specifications = DB::table('specifications')->orderBy('nama_spesifikasi', 'asc')->get();
+
         return view('user.toko.tambah_produk')->with('category_type_specifications', $category_type_specifications)->with('specifications', $specifications)
         ->with('kategori_produk_id', $kategori_produk_id);
     }
@@ -76,5 +78,28 @@ class ProdukController extends Controller
         }
 
         return redirect('./toko');
+    }
+
+    public function lihat_produk($product_id) {
+        $product = DB::table('products')->where('product_id', $product_id)->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')
+        ->orderBy('product_id', 'desc')->get();
+
+        $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
+        
+        $product_specifications = DB::table('product_specifications')
+        ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
+        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
+        ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')
+        ->where('product_specifications.product_id', $product_id)->get();
+        
+        $category_type_specifications = DB::table('category_type_specifications')
+        ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
+        ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
+        ->where('category_type_specifications.category_id', $product_category_id->category_id)->orderBy('category_type_specification_id', 'asc')->get();
+
+        $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
+
+        return view('user.lihat_produk')->with('product', $product)->with('product_specifications', $product_specifications)
+        ->with('category_type_specifications', $category_type_specifications)->with('specification_types', $specification_types);
     }
 }

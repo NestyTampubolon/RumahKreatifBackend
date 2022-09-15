@@ -17,6 +17,7 @@ class CreateProductPurchasesTable extends Migration
             $table->id('product_purchase_id');
             $table->unsignedBigInteger('purchase_id');
             $table->unsignedBigInteger('product_id');
+            $table->integer('jumlah_pembelian_produk');
             
             $table->foreign('purchase_id')->references('purchase_id')->on('purchases');
             $table->foreign('product_id')->references('product_id')->on('products');

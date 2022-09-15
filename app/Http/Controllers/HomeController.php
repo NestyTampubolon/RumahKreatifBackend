@@ -24,8 +24,8 @@ class HomeController extends Controller
         }
 
         else{
-            $products = DB::table('products')->orderBy('product_id', 'desc')
-            ->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')->get();
+            $products = DB::table('products')->orderBy('product_id', 'desc')->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
 
             return view('user.index')->with('products', $products);
         }

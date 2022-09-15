@@ -367,7 +367,7 @@
                     <div class="row justify-content-center">
 
                         @foreach($products as $products)
-                        <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
+                        <div class="col-12 col-md-4 col-lg-3 col-xl-5col">
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
                                     <a href="./lihat_produk/{{$products->product_id}}">
@@ -384,7 +384,23 @@
                                     <div class="product-cat">
                                         <a href="#">{{$products->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
+                                    
+                                    <div class="mb-1"></div>
+                                    
+                                    <hr style="margin:0px; border-top:1px solid grant; ">
+                                    
+                                    <div class="mb-1"></div>
+
+                                    <div class="product-cat">
+                                        <a href="#">{{$products->nama_merchant}}</a>
+                                    </div><!-- End .product-cat -->
+                                    
+                                    <div class="mb-1"></div>
+
                                     <h3 class="product-title"><a href="./lihat_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
+                                    
+                                    <div class="mb-1"></div>
+
                                     <div class="product-price">
                                         <?php
                                             $harga_produk = "Rp " . number_format($products->price,2,',','.');     

@@ -16,6 +16,7 @@ class CreatePurchasesTable extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id('purchase_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('status_pembelian');
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');
