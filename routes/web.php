@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
+Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegister');
+Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
+Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');
 
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
@@ -30,7 +33,7 @@ Route::get('/keluar_toko', 'App\Http\Controllers\TokoController@keluar_toko');
 Route::post('/PostTambahToko', 'App\Http\Controllers\TokoController@PostTambahToko');
 
 Route::get('/toko_user', 'App\Http\Controllers\TokoController@TokoUser');
-Route::get('/verify_toko/{id}', 'App\Http\Controllers\TokoController@VerifyToko');
+Route::get('/verify_toko/{merchant_id}', 'App\Http\Controllers\TokoController@VerifyToko');
 
 Route::get('/tipe_spesifikasi', 'App\Http\Controllers\SpesifikasiController@tipe_spesifikasi');
 Route::post('/PostTambahTipeSpesifikasi', 'App\Http\Controllers\SpesifikasiController@PostTambahTipeSpesifikasi');
@@ -49,8 +52,8 @@ Route::post('/PostEditKategoriProduk/{kategori_produk_id}', 'App\Http\Controller
 
 Route::get('/kategori_tipe_spesifikasi', 'App\Http\Controllers\KategoriController@kategori_tipe_spesifikasi');
 Route::post('/PostTambahKategoriTipeSpesifikasi', 'App\Http\Controllers\KategoriController@PostTambahKategoriTipeSpesifikasi');
-Route::post('/PostEditSpesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@PostEditKategoriTipeSpesifikasi');
-// Route::get('/hapus_spesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@HapusKategoriTipeSpesifikasi');
+Route::post('/PostEditKategoriTipeSpesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@PostEditKategoriTipeSpesifikasi');
+// Route::get('/hapus_kategori_tipe_spesifikasi/{category_type_specification_id}', 'App\Http\Controllers\KategoriController@HapusKategoriTipeSpesifikasi');
 
 Route::get('/verifikasi', function () {
     return view('user.verifikasi');
@@ -58,7 +61,7 @@ Route::get('/verifikasi', function () {
 Route::post('/PostVerifikasi', 'App\Http\Controllers\VerifikasiController@PostVerifikasi');
 
 Route::get('/verifikasi_user', 'App\Http\Controllers\VerifikasiController@VerifikasiUser');
-Route::get('/verify_user/{id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
+Route::get('/verify_user/{verify_id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
 
 Route::get('/bank', 'App\Http\Controllers\BankController@bank');
 Route::post('/PostTambahBank', 'App\Http\Controllers\BankController@PostTambahBank');
@@ -68,6 +71,7 @@ Route::get('/hapus_bank/{bank_id}', 'App\Http\Controllers\BankController@HapusBa
 Route::get('/rekening', 'App\Http\Controllers\RekeningController@rekening');
 Route::post('/PostRekening', 'App\Http\Controllers\RekeningController@PostRekening');
 
-Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegister');
-Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
-Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');
+Route::get('/produk', 'App\Http\Controllers\ProdukController@produk');
+Route::get('/tambah_produk/pilih_kategori', 'App\Http\Controllers\ProdukController@pilih_kategori');
+Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@tambah_produk');
+Route::post('/PostTambahProduk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@PostTambahProduk');

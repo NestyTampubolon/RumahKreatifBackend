@@ -130,7 +130,6 @@
                                             return true;
                                         }
                                     </script>
-                                    
 
                                     <div class="form-footer">
                                         <button id="daftar" type="submit" class="btn btn-outline-primary-2" disabled>

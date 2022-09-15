@@ -80,7 +80,7 @@
                               </div>
                               <div class="modal-footer justify-content-between">
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                  <a href="./verify_user/{{$verify_users->id}}" class="btn btn-primary">Verify</a>
+                                  <a href="./verify_user/{{$verify_users->verify_id}}" class="btn btn-primary">Verify</a>
                               </div>
                             </div>
                             <!-- /.modal-content -->

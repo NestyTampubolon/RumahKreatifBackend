@@ -2,8 +2,6 @@
 
 @section('title', 'Admin - Spesifikasi')
 
-@section('container')
-
 <style>
   .checkbox_specification_types {
     border: 1px solid rgba(0,0,0,.2);
@@ -15,6 +13,8 @@
     padding: 2px;
   }
 </style>
+
+@section('container')
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -58,19 +58,20 @@
                     </tr>
                   </thead>
                   <tbody>
+                  
                     @foreach($category_type_specifications as $category_type_specifications)
                     <tr>
                         <td>{{$category_type_specifications->category_type_specification_id}}</td>
+                        
                         <td>{{$category_type_specifications->category_id}}</td>
                         <td>{{$category_type_specifications->specification_type_id}}</td>
                         <td>{{$category_type_specifications->nama_kategori}}</td>
-                        <td>
-                        </td>
+                        <td>{{$category_type_specifications->nama_jenis_spesifikasi}}</td>
                         <td align="center" width="150px">
                             <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$category_type_specifications->category_type_specification_id}}">Edit</button>
                         </td>
                         <!-- <td align="center" width="100px">
-                            <a href="./hapus_tipe_spesifikasi/{{$category_type_specifications->category_type_specification_id}}" class="btn btn-block btn-danger">Hapus</a>
+                            <a href="./hapus_kategori_tipe_spesifikasi/{{$category_type_specifications->category_type_specification_id}}" class="btn btn-block btn-danger">Hapus</a>
                         </td> -->
                     </tr>
 
@@ -86,23 +87,20 @@
                                 <div class="modal-body">
                                     <div class="card card-primary">
                                     <!-- form start -->
-                                    <form action="./PostEditSpesifikasi/{{$category_type_specifications->category_type_specification_id}}" method="post" enctype="multipart/form-data">
+                                    <form action="./PostEditKategoriTipeSpesifikasi/{{$category_type_specifications->category_type_specification_id}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                         <div class="card-body">
-                                            <div class="form-group">
-                                                <label for="nama_jenis_spesifikasi">Nama Jenis Spesifikasi</label>
-                                                <select class="form-control" id="specification_type_id" name="specification_type_id" required>
-                                                    <option disabled value=""></option>
-                                                    <option selected value="" hidden></option>
-                                                    
-                                                        <option value=""></option>
-                                                        
-                                                </select>
+                                        <div class="form-group">
+                                            <label for="nama_spesifikasi">Jenis Spesifikasi</label>
+                                            <div class="checkbox_specification_types col-md-12">
+                                              @foreach($specification_types as $specification_types2)
+                                              <div>
+                                                <input class="" type="radio" name="specification_type_id[]" id="divisi[{{$specification_types2->specification_type_id}}]" value="{{$specification_types2->specification_type_id}}">
+                                                <label class="form-check-label" for="divisi[{{$specification_types2->specification_type_id}}]">{{$specification_types2->nama_jenis_spesifikasi}}</label>
+                                              </div>
+                                              @endforeach
                                             </div>
-                                            <div class="form-group">
-                                                <label for="nama_spesifikasi">Nama Spesifikasi</label>
-                                                <input type="text" class="form-control" name="nama_spesifikasi" id="nama_spesifikasi" placeholder="Masukkan nama jenis spesifikasi." value="" required>
-                                            </div>
+                                        </div>
                                         </div>
                                         <!-- /.card-body -->
 

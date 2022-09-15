@@ -77,7 +77,7 @@
                               </div>
                               <div class="modal-footer justify-content-between">
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                  <a href="./verify_toko/{{$merchants->id}}" class="btn btn-primary">Verify</a>
+                                  <a href="./verify_toko/{{$merchants->merchant_id}}" class="btn btn-primary">Verify</a>
                               </div>
                             </div>
                             <!-- /.modal-content -->

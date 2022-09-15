@@ -18,7 +18,7 @@ class TokoController extends Controller
         $cek_merchant = DB::table('merchants')->where('user_id', $user_id)->first();
         $cek_merchant_verified = DB::table('merchants')->where('user_id', $user_id)->where('is_verified', 1)->first();
         
-        if(Session::get('masuk_toko')){
+        if(Session::get('toko')){
             $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
             ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->where('merchants.user_id', $user_id)->get();
 
@@ -50,7 +50,15 @@ class TokoController extends Controller
 
         return redirect('./toko');
     }
-    
+
+    public function VerifyToko($merchant_id) {
+        DB::table('merchants')->where('merchant_id', $merchant_id)->update([
+            'is_verified' => 1,
+        ]);
+
+        return redirect('./toko_user');
+    }
+
     public function MasukToko(Request $request){
         request()->validate(
             [
@@ -60,8 +68,10 @@ class TokoController extends Controller
         $user_id = Auth::user()->id;
         $password = $request->password;
 
+        $toko = DB::table('merchants')->where('user_id', $user_id)->first();
+
         if(Auth::attempt(['id' => $user_id, 'password' => $password])){
-            Session::put('masuk_toko', 'Y');
+            Session::put('toko', $toko->merchant_id);
             return redirect('./toko');
         }
         
@@ -71,7 +81,7 @@ class TokoController extends Controller
     }
 
     public function keluar_toko(Request $request){
-        $request->session()->forget('masuk_toko');
+        $request->session()->forget('toko');
         return redirect('./dashboard');     
     }
 
@@ -80,13 +90,5 @@ class TokoController extends Controller
         ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->orderBy('merchants.user_id', 'asc')->get();
 
         return view('admin.toko_user')->with('merchants', $merchants);
-    }
-
-    public function VerifyToko($id) {
-        DB::table('merchants')->where('id', $id)->update([
-            'is_verified' => 1,
-        ]);
-
-        return redirect('./toko_user');
     }
 }

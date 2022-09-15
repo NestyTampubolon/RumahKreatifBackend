@@ -37,8 +37,8 @@ class VerifikasiController extends Controller
         return view('admin.verifikasi_user')->with('verify_users', $verify_users);
     }
 
-    public function VerifyUser($id) {
-        DB::table('verify_users')->where('id', $id)->update([
+    public function VerifyUser($verify_id) {
+        DB::table('verify_users')->where('verify_id', $verify_id)->update([
             'is_verified' => 1,
         ]);
 

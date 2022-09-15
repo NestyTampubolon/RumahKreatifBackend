@@ -26,7 +26,7 @@ class KategoriController extends Controller
     public function PostEditKategoriProduk(Request $request, $kategori_produk_id) {
         $nama_kategori = $request -> nama_kategori;
 
-        DB::table('product_categories')->where('id', $kategori_produk_id)->update([
+        DB::table('product_categories')->where('category_id', $kategori_produk_id)->update([
             'nama_kategori' => $nama_kategori,
         ]);
 
@@ -35,7 +35,7 @@ class KategoriController extends Controller
     
     public function HapusKategoriProduk($kategori_produk_id)
     {
-        DB::table('product_categories')->where('id', $kategori_produk_id)->delete();
+        DB::table('product_categories')->where('category_id', $kategori_produk_id)->delete();
         
         return redirect('./kategori_produk');
     }
@@ -43,6 +43,7 @@ class KategoriController extends Controller
     public function kategori_tipe_spesifikasi() {
         $category_type_specifications = DB::table('category_type_specifications')
         ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
+        ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
         ->orderBy('category_type_specification_id', 'asc')->get();
 
         $product_categories = DB::table('product_categories')->orderBy('nama_kategori', 'asc')->get();
@@ -55,15 +56,13 @@ class KategoriController extends Controller
         $specification_type_id = DB::table('category_type_specifications')->select('specification_type_id')->get();
 
         // tipe data arr
-        foreach($specification_type_id as $specification_type_id) {
-            $specification_type_id_arr = explode(",", $specification_type_id->specification_type_id);
-            
-            $nama_jenis_spesifikasi = DB::table('category_type_specifications')->select('nama_jenis_spesifikasi')
-            ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
-            ->where('category_type_specifications.specification_type_id', $specification_type_id->specification_type_id)->get();
-        }
+        $specification_type_id_arr = explode(",", $specification_type_id);
 
-        dd($specification_type_id_arr);
+        $nama_jenis_spesifikasi = explode(",", DB::table('category_type_specifications')->select('nama_jenis_spesifikasi')
+        ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get());
+        
+        
+        // dd($specification_type_id_arr);
 
 
         return view('admin.kategori_tipe_spesifikasi')->with('category_type_specifications', $category_type_specifications)->with('product_categories', $product_categories)
@@ -79,20 +78,37 @@ class KategoriController extends Controller
         $category_id = $request -> category_id;
         $specification_type_id = $request -> specification_type_id;
 
-        DB::table('category_type_specifications')->insert([
-            'category_id' => $category_id,
-            'specification_type_id' => implode(",", $specification_type_id),
-        ]);
-
-        // $category_type_specification_id = DB::table('category_type_specifications')->select('category_type_specification_id')->pluck('category_type_specification_id');
-        
-        // $category_type_specification_id = DB::table('category_type_specifications')->select('category_type_specification_id')->orderBy('category_type_specification_id', 'desc')->limit(1)->first();
-
-        // DB::table('category_type_specifications')->where('category_type_specification_id', $category_type_specification_id->category_type_specification_id)->update([
+        // DB::table('category_type_specifications')->insert([
+        //     'category_id' => $category_id,
         //     'specification_type_id' => implode(",", $specification_type_id),
         // ]);
+
+        $jumlah_specification_type_id_dipilih = count($specification_type_id);
+ 
+        for($x=0;$x<$jumlah_specification_type_id_dipilih;$x++){
+            DB::table('category_type_specifications')->insert([
+                'category_id' => $category_id,
+                'specification_type_id' => $specification_type_id[$x],
+            ]);
+        }
 
         return redirect('./kategori_tipe_spesifikasi');
     }
 
+    public function PostEditKategoriTipeSpesifikasi(Request $request, $category_type_specification_id) {
+        $specification_type_id = $request -> specification_type_id;
+
+        DB::table('category_type_specifications')->where('category_type_specification_id', $category_type_specification_id)->update([
+            'specification_type_id' => implode("", $specification_type_id),
+        ]);
+
+        return redirect('./kategori_tipe_spesifikasi');
+    }
+
+    public function HapusKategoriTipeSpesifikasi($category_type_specification_id)
+    {
+        DB::table('category_type_specifications')->where('category_type_specification_id', $category_type_specification_id)->delete();
+        
+        return redirect('./kategori_tipe_spesifikasi');
+    }
 }

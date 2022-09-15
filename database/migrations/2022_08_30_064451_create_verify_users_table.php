@@ -14,7 +14,7 @@ class CreateVerifyUsersTable extends Migration
     public function up()
     {
         Schema::create('verify_users', function (Blueprint $table) {
-            $table->id();
+            $table->id('verify_id');
             $table->unsignedBigInteger('user_id');
             // $table->tinyInteger('verified');
             $table->string('foto_ktp');

@@ -6,7 +6,6 @@
 <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
 @endsection
 
-@section('container')
 <style>
     .fileUpload {
         position: relative;
@@ -26,6 +25,8 @@
         width:200%;
     }
 </style>
+
+@section('container')
 
 @if($cek_verified && $cek_rekening && $cek_merchant_verified)
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">

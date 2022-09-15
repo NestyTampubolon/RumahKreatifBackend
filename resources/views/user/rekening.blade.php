@@ -7,9 +7,6 @@
 @endsection
 
 @section('container')
-<style>
-    
-</style>
 
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
     <form action="./PostRekening" method="post" enctype="multipart/form-data">

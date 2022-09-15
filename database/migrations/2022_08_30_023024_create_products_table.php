@@ -16,9 +16,10 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id');
             $table->unsignedBigInteger('merchant_id');
-            $table->string('name');
+            $table->unsignedBigInteger('category_id');
+            $table->string('product_name');
             $table->string('price');
-            $table->text('images');
+            $table->string('product_image');
             // $table->string('category');
             // $table->integer('stock');
             // $table->integer('sold');
@@ -29,7 +30,8 @@ class CreateProductsTable extends Migration
             // $table->string('asal');
             $table->timestamps();
 
-            $table->foreign('merchant_id')->references('id')->on('merchants');
+            $table->foreign('merchant_id')->references('merchant_id')->on('merchants');
+            $table->foreign('category_id')->references('category_id')->on('product_categories');
         });
     }
 

@@ -65,9 +65,9 @@
         </li>
         <li class="nav-header">PRODUK</li>
         <li class="nav-item">
-            <a href="./produk" class="nav-link">
+            <a href="./produk_toko" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
-                <p>Produk</p>
+                <p>Produk Toko</p>
             </a>
         </li>
         <li class="nav-header">KATEGORI</li>

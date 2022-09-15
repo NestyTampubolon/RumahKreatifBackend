@@ -25,7 +25,7 @@ class CreateTransactionsTable extends Migration
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('users');
-            $table->foreign('merchant_id')->references('id')->on('merchants');
+            $table->foreign('merchant_id')->references('merchant_id')->on('merchants');
         });
     }
 
