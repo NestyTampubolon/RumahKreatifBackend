@@ -9,9 +9,10 @@ use Session;
 class ProdukController extends Controller
 {
     public function produk() {
-        
+        $products = DB::table('products')->orderBy('product_id', 'desc')
+        ->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')->get();
 
-        return view('user.toko.produk');
+        return view('user.toko.produk')->with('products', $products);
     }
 
     public function pilih_kategori() {
@@ -41,6 +42,7 @@ class ProdukController extends Controller
 
         $toko = Session::get('toko');
         $product_name = $request -> product_name;
+        $product_description = $request -> product_description;
         $price = $request -> price;
         $product_image = $request -> file('product_image');
 
@@ -56,6 +58,7 @@ class ProdukController extends Controller
             'merchant_id' => $toko,
             'category_id' => $kategori_produk_id,
             'product_name' => $product_name,
+            'product_description' => $product_description,
             'price' => $price,
             'product_image' => $nama_product_image,
         ]);

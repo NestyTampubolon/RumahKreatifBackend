@@ -370,7 +370,7 @@
                         <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
-                                    <a href="product.html">
+                                    <a href="./lihat_produk/{{$products->product_id}}">
                                         <img src="./asset/u_file/product_image/{{$products->product_image}}" alt="Product image" class="product-image">
                                         <!-- <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/products/product-7-2.jpg') }}" alt="Product image" class="product-image-hover"> -->
                                     </a>
@@ -384,7 +384,7 @@
                                     <div class="product-cat">
                                         <a href="#">{{$products->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">{{$products->product_name}}</a></h3><!-- End .product-title -->
+                                    <h3 class="product-title"><a href="./lihat_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
                                     <div class="product-price">
                                         <?php
                                             $harga_produk = "Rp " . number_format($products->price,2,',','.');     

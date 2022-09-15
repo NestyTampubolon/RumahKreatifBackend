@@ -55,7 +55,7 @@
         <input type="text" name="nama_merchant" class="form-control" required>
 
         <label>Deskripsi Toko *</label>
-        <input type="text" name="deskripsi" class="form-control" required>
+        <input type="text" name="deskripsi_toko" class="form-control" required>
         
         <label>Foto Toko *</label>
         <div class="fileUpload">

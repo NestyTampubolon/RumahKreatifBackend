@@ -34,7 +34,7 @@ class TokoController extends Controller
     public function PostTambahToko(Request $request) {
         $id = Auth::user()->id;
         $nama_merchant = $request -> nama_merchant;
-        $deskripsi = $request -> deskripsi;
+        $deskripsi_toko = $request -> deskripsi_toko;
         $foto_merchant = $request -> file('foto_merchant');
 
         $nama_foto_merchant = time().'_'.$foto_merchant->getClientOriginalName();
@@ -44,7 +44,7 @@ class TokoController extends Controller
         DB::table('merchants')->insert([
             'user_id' => $id,
             'nama_merchant' => $nama_merchant,
-            'deskripsi' => $deskripsi,
+            'deskripsi_toko' => $deskripsi_toko,
             'foto_merchant' => $nama_foto_merchant,
         ]);
 

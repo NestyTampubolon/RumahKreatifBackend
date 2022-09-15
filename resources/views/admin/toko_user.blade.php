@@ -72,7 +72,7 @@
                               </div>
                               <div class="modal-body">
                                   <center><a>{{$merchants->nama_merchant}}</a></center>
-                                  <center><a>{{$merchants->deskripsi}}</a></center>
+                                  <center><a>{{$merchants->deskripsi_toko}}</a></center>
                                   <center><a href="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" target="_blank">Lihat Foto Toko</a></center>
                               </div>
                               <div class="modal-footer justify-content-between">

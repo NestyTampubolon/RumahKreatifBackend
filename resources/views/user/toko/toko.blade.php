@@ -18,7 +18,7 @@
                     <h3 class="card-title">Profil Toko</h3><!-- End .card-title -->
 
                     <p>{{$merchants->nama_merchant}}<br>
-                    {{$merchants->deskripsi}}<br>
+                    {{$merchants->deskripsi_toko}}<br>
                     <a href="#">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->

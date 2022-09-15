@@ -44,7 +44,9 @@
     @csrf
         <label>Nama Produk *</label>
         <input type="text" name="product_name" class="form-control" required>
-
+        
+        <label>Deskripsi Produk *</label>
+        <input type="text" name="product_description" class="form-control" required>
         
         <label>Harga *</label>
         <input type="text" name="price" class="form-control" onkeypress="return hanyaAngka(event)" required>

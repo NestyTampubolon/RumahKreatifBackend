@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('merchant_id');
             $table->unsignedBigInteger('category_id');
             $table->string('product_name');
+            $table->text('product_description');
             $table->string('price');
             $table->string('product_image');
             // $table->string('category');
