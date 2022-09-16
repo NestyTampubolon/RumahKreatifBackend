@@ -42,7 +42,7 @@
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">
                         <?php
-                            $harga_produk = "Rp " . number_format($product_purchase->price,2,',','.');     
+                            $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,2,',','.');     
                             echo $harga_produk
                         ?>
                         </p>

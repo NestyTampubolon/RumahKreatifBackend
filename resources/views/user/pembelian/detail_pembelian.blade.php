@@ -26,7 +26,7 @@
                     <p>Hrg: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>
                         <?php
-                            $harga_produk = "Rp " . number_format($product_purchases->price,2,',','.');     
+                            $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,2,',','.');     
                             echo $harga_produk
                         ?>
                     </p>
