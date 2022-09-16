@@ -1,4 +1,4 @@
-@extends('user/layout/main_dash')
+@extends('user/toko/layout/main')
 
 @section('title', 'Rumah Kreatif Toba - Dashboard')
 

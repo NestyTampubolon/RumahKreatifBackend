@@ -96,6 +96,13 @@
                 <p>Spesifikasi</p>
             </a>
         </li>
+        <li class="nav-header">REKENING</li>
+        <li class="nav-item">
+            <a href="./daftar_rekening" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Rekening</p>
+            </a>
+        </li>
         <li class="nav-header">BANK</li>
         <li class="nav-item">
             <a href="./bank" class="nav-link">

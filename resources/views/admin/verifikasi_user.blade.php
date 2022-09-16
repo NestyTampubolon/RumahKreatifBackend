@@ -52,13 +52,12 @@
                         <td>{{$verify_users->email}}</td>
                         @if($verify_users->is_verified==1)
                             <td align="center"><small class="badge badge-success">Verified</small></td>
-                            <td align="center"></td>
                         @else
                             <td align="center"><small class="badge badge-danger">No Verified</small></td>
+                        @endif
                             <td align="center">
                               <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
                             </td>
-                        @endif
                     </tr>
                     
                     <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">
@@ -80,7 +79,11 @@
                               </div>
                               <div class="modal-footer justify-content-between">
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  @if($verify_users->is_verified==1)
+
+                                  @else
                                   <a href="./verify_user/{{$verify_users->verify_id}}" class="btn btn-primary">Verify</a>
+                                  @endif
                               </div>
                             </div>
                             <!-- /.modal-content -->

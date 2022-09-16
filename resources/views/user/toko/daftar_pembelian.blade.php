@@ -1,9 +1,9 @@
-@extends('user/layout/main_dash')
+@extends('user/toko/layout/main')
 
 @section('title', 'Rumah Kreatif Toba - Dashboard')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+<li class="breadcrumb-item active" aria-current="page">Toko</li>
 @endsection
 
 <link rel="stylesheet" href="../bootstrap/pesananku_all.css">

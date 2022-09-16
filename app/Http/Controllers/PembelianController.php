@@ -51,7 +51,8 @@ class PembelianController extends Controller
         ->orderBy('purchase_product_specification_id', 'desc')->get();
 
         if(Session::get('toko')){
-            $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+            $toko = Session::get('toko');
+            $product_purchases = DB::table('product_purchases')->where('merchant_id', $toko)->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
 
             return view('user.toko.daftar_pembelian')->with('product_purchases', $product_purchases)
@@ -79,7 +80,8 @@ class PembelianController extends Controller
         ->orderBy('purchase_product_specification_id', 'desc')->get();
 
         if(Session::get('toko')){
-            $product_purchases = DB::table('product_purchases')->where('product_purchase_id', $product_purchase_id)
+            $toko = Session::get('toko');
+            $product_purchases = DB::table('product_purchases')->where('merchant_id', $toko)->where('product_purchase_id', $product_purchase_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
 

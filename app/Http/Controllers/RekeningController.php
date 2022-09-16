@@ -29,4 +29,29 @@ class RekeningController extends Controller
 
         return redirect('./toko');
     }
+
+    public function daftar_rekening() {
+        $is_admin = Auth::user()->is_admin;
+
+        if($is_admin == 1){
+            $rekenings = DB::table('rekenings')->join('users', 'rekenings.user_id', '=', 'users.id')->orderBy('rekenings.user_id', 'desc')->orderBy('rekening_id', 'asc')->get();
+            $profiles = DB::table('profiles')->orderBy('profile_id', 'asc')->get();
+
+            return view('admin.daftar_rekening')->with('rekenings', $rekenings)->with('profiles', $profiles);
+        }
+
+        else{
+            $user_id = Auth::user()->id;
+            $rekenings = DB::table('rekenings')->where('user_id', $user_id)->orderBy('rekening_id', 'asc')->get();
+
+            return view('user.toko.daftar_rekening')->with('rekenings', $rekenings);
+        }   
+    }
+
+    public function HapusRekening($rekening_id)
+    {
+        DB::table('rekenings')->where('rekening_id', $rekening_id)->delete();
+        
+        return redirect('./daftar_rekenings');
+    }
 }
