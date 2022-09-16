@@ -68,9 +68,9 @@ class ProdukController extends Controller
         // $product_id = DB::table('products')->select('product_id')->pluck('product_id');
         $product_id = DB::table('products')->select('product_id')->orderBy('product_id', 'desc')->first();
 
-        $jumlah_specification_type_id_id_dipilih = count($specification_id);
+        $jumlah_specification_id_dipilih = count($specification_id);
  
-        for($x=0;$x<$jumlah_specification_type_id_id_dipilih;$x++){
+        for($x=0;$x<$jumlah_specification_id_dipilih;$x++){
             DB::table('product_specifications')->insert([
                 'product_id' => $product_id->product_id,
                 'specification_id' => $specification_id[$x],

@@ -50,84 +50,98 @@
                 </div>
             </div>
 
-            <div class="product-details product-details-centered product-details-separator">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h1 class="product-title">{{$product->product_name}}</h1>
+            <form action="../PostBeliProduk/{{$product->product_id}}" method="post" enctype="multipart/form-data">
+            @csrf
+                <div class="product-details product-details-centered product-details-separator">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="product-title">{{$product->product_name}}</h1>
 
-                            <!-- <div class="ratings-container">
-                                <div class="ratings">
-                                    <div class="ratings-val" style="width: 80%;"></div>
+                                <!-- <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val" style="width: 80%;"></div>
+                                    </div>
+                                    <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                </div> -->
+
+                                <div class="product-price">
+                                    <?php
+                                        $harga_produk = "Rp " . number_format($product->price,2,',','.');     
+                                        echo $harga_produk
+                                    ?>
                                 </div>
-                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
-                            </div> -->
 
-                            <div class="product-price">
-                                <?php
-                                    $harga_produk = "Rp " . number_format($product->price,2,',','.');     
-                                    echo $harga_produk
-                                ?>
+                                <!-- <div class="product-content">
+                                    <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero.</p>
+                                </div> -->
+                                
+                                @foreach($category_type_specifications as $category_type_specification)
+                                <div class="details-filter-row details-row-size">
+                                    
+                                    <label>{{$category_type_specification->nama_jenis_spesifikasi}}</label>
+                                    
+                                    <select class="form-control" id="specification_id" name="specification_id[]" required>
+                                        <option selected disabled value="">Pilih {{$category_type_specification->nama_jenis_spesifikasi}}</option>
+                                        @foreach($product_specifications as $product_specification)
+                                            @if($product_specification->specification_type_id == $category_type_specification->specification_type_id)
+                                                <option value="{{$product_specification->specification_id}}">{{$product_specification->nama_spesifikasi}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                @endforeach
                             </div>
 
-                            <!-- <div class="product-content">
-                                <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero.</p>
-                            </div> -->
-                            
-                            @foreach($category_type_specifications as $category_type_specification)
-                            <div class="details-filter-row details-row-size">
-                                
-                                <label>{{$category_type_specification->nama_jenis_spesifikasi}}</label>
-                                
-                                <select class="form-control" id="specification_id" name="specification_id" required>
-                                    <option selected disabled value="">Pilih {{$category_type_specification->nama_jenis_spesifikasi}}</option>
-                                    @foreach($product_specifications as $product_specification)
-                                        @if($product_specification->specification_type_id == $category_type_specification->specification_type_id)
-                                            <option value="{{$product_specification->specification_id}}">{{$product_specification->nama_spesifikasi}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                            <div class="col-md-6">
+                                <div class="product-details-action">
+                                    <div class="details-action-col">
+                                        <div class="product-details-quantity">
+                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                        </div>
 
-                            </div>
-                            @endforeach
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="product-details-action">
-                                <div class="details-action-col">
-                                    <div class="product-details-quantity">
-                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                        <a href="#" class="btn btn-product btn-cart"><span>add to cart</span></a>
                                     </div>
 
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <div class="details-action-wrapper">
+                                        <!-- <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a> -->
+                                        <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> -->
+                                    </div>
                                 </div>
 
-                                <div class="details-action-wrapper">
-                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
-                                </div>
-                            </div>
-
-                            <div class="product-details-footer details-footer-col">
-                                <div class="product-cat">
-                                    <span>Category:</span>
-                                    <a href="#">Women</a>,
-                                    <a href="#">Dresses</a>,
-                                    <a href="#">Yellow</a>
+                                <div class="product-details-action">
+                                    <div class="details-action-col">
+                                        @if(Auth::check())
+                                            <button type="submit" class="btn btn-primary"><span>BELI</span></button>
+                                        @else
+                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI</span></a>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <!-- <div class="social-icons social-icons-sm">
-                                    <span class="social-label">Share:</span>
-                                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                                </div> -->
+                                <div class="product-details-footer details-footer-col">
+                                    
+                                    <!-- <div class="product-cat">
+                                        <span>Category:</span>
+                                        <a href="#">Women</a>,
+                                        <a href="#">Dresses</a>,
+                                        <a href="#">Yellow</a>
+                                    </div> -->
+
+                                    <!-- <div class="social-icons social-icons-sm">
+                                        <span class="social-label">Share:</span>
+                                        <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                        <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                        <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                        <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                                    </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="container">

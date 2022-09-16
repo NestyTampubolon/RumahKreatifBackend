@@ -17,15 +17,14 @@
                 <div class="card-body">
                     <h3 class="card-title">Profil Toko</h3><!-- End .card-title -->
 
-                    <p>{{$merchants->nama_merchant}}<br>
-                    {{$merchants->deskripsi_toko}}<br>
+                    <p>{{$merchants->nama_merchant}}</p>
+                    <p>{{$merchants->deskripsi_toko}}</p>
                     <a href="#">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->
-        @endforeach
-
     </div><!-- End .row -->
+    @endforeach
 </div><!-- .End .tab-pane -->
 
 @endsection

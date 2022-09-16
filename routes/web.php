@@ -77,3 +77,7 @@ Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukCo
 Route::post('/PostTambahProduk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@PostTambahProduk');
 
 Route::get('/lihat_produk/{product_id}', 'App\Http\Controllers\ProdukController@lihat_produk');
+
+Route::post('/PostBeliProduk/{product_id}', 'App\Http\Controllers\PembelianController@PostBeliProduk');
+Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
+Route::get('/detail_pembelian/{product_purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');

@@ -19,6 +19,7 @@
     <meta name="theme-color" content="#ffffff">
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/plugins/owl-carousel/owl.carousel.css') }}">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/style.css') }}">
 </head>
@@ -50,6 +51,9 @@
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/produk') }}">Produk</a>
+								    </li>
+								    <li class="nav-item">
+								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pembelian</a>
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/keluar_toko') }}">Keluar</a>

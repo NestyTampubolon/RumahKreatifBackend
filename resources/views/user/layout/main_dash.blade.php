@@ -50,13 +50,16 @@
 								    <li class="nav-item">
 								        <!-- <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a> -->
 								        <!-- <a class="nav-link" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Dashboard</a> -->
-                                        <a class="nav-link" href="./dashboard">Dashboard</a>
+                                        <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="./toko">Toko</a>
+								        <a class="nav-link" href="{{ url('/toko') }}">Toko</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="./logout">Keluar</a>
+								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pesananku</a>
+								    </li>
+								    <li class="nav-item">
+								        <a class="nav-link" href="{{ url('/logout') }}">Keluar</a>
 								    </li>
 								</ul>
 	                		</aside><!-- End .col-lg-3 -->

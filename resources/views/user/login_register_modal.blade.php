@@ -35,7 +35,7 @@
                                 Cek kembali akun anda.
                             </div><br>
                             @endif
-                                <form action="./login" method="post">
+                                <form action="{{ url('/login') }}" method="post">
                                 @csrf
                                     <div class="form-group">
                                         <label for="username_email">Username atau E-mail *</label>
@@ -75,7 +75,7 @@
                                 </div><!-- End .form-choice -->
                             </div><!-- .End .tab-pane -->
                             <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab">
-                                <form action="./registrasi" method="post" enctype="multipart/form-data">
+                                <form action="{{ url('/registrasi') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                     <div class="form-group">
                                         <label for="name">Nama</label>
