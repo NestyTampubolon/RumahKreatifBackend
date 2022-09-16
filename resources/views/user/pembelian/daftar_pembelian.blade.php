@@ -37,7 +37,7 @@
                     @endforeach
 
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Hrg: {{$product_purchase->jumlah_pembelian_produk}}</p>
+                        <p class="text-muted mb-0 small">Jmlh: {{$product_purchase->jumlah_pembelian_produk}}</p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">
