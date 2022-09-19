@@ -94,6 +94,7 @@
     <!-- Main JS File -->
     <script src="{{ URL::asset('asset/Molla/assets/js/main.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/demos/demo-2.js') }}"></script>
+    
 </body>
 
 

@@ -9,7 +9,8 @@ use Session;
 class ProdukController extends Controller
 {
     public function produk() {
-        $products = DB::table('products')->orderBy('product_id', 'desc')
+        $toko = Session::get('toko');
+        $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
         ->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')->get();
 
         return view('user.toko.produk')->with('products', $products);
