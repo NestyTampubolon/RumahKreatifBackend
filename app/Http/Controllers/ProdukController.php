@@ -99,8 +99,7 @@ class ProdukController extends Controller
         ->where('category_type_specifications.category_id', $product_category_id->category_id)->orderBy('category_type_specification_id', 'asc')->get();
 
         $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
-
-        return view('user.lihat_produk')->with('product', $product)->with('product_specifications', $product_specifications)
-        ->with('category_type_specifications', $category_type_specifications)->with('specification_types', $specification_types);
+        
+        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types']));
     }
 }
