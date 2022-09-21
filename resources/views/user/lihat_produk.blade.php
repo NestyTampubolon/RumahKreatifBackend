@@ -72,36 +72,30 @@
                                     ?>
                                 </div>
 
-                                <!-- <div class="product-content">
-                                    <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero.</p>
-                                </div> -->
-                                
-                                @foreach($category_type_specifications as $category_type_specification)
-                                <div class="details-filter-row details-row-size">
-                                    
-                                    <label>{{$category_type_specification->nama_jenis_spesifikasi}}</label>
-                                    
-                                    <select class="form-control" id="specification_id" name="specification_id[]" required>
-                                        <option selected disabled value="">Pilih {{$category_type_specification->nama_jenis_spesifikasi}}</option>
+                                <div class="details-filter-row details-row-size mb-md-1">
+                                    @foreach($category_type_specifications as $category_type_specification)
                                         @foreach($product_specifications as $product_specification)
                                             @if($product_specification->specification_type_id == $category_type_specification->specification_type_id)
-                                                <option value="{{$product_specification->specification_id}}">{{$product_specification->nama_spesifikasi}}</option>
+                                                <a>{{$product_specification->nama_spesifikasi}}</a>
+                                                <span class="meta-separator">|</span>
                                             @endif
                                         @endforeach
-                                    </select>
-
-                                </div>
-                                @endforeach
+                                    @endforeach
+                                    <a>Sisa: {{$stocks->stok}}</a>
+                                </div><!-- End .entry-meta -->
                             </div>
 
                             <div class="col-md-6">
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         <div class="product-details-quantity">
-                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" min="1" step="1" data-decimals="0" required>
                                         </div>
-
-                                        <a href="#" class="btn btn-product btn-cart"><span>add to cart</span></a>
+                                        @if(Auth::check())
+                                            <button type="submit" class="btn btn-primary"><span>BELI</span></button>
+                                        @else
+                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI</span></a>
+                                        @endif
                                     </div>
 
                                     <div class="details-action-wrapper">
@@ -113,9 +107,9 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         @if(Auth::check())
-                                            <button type="submit" class="btn btn-primary"><span>BELI</span></button>
+                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>add to cart</span></a>
                                         @else
-                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI</span></a>
+                                            <a href="#signin-modal" class="btn btn-product btn-cart" data-toggle="modal" title="My account"><span>add to cart</span></a>
                                         @endif
                                     </div>
                                 </div>

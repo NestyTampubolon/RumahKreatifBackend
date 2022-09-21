@@ -18,7 +18,7 @@ class CreateCategoryTypeSpecificationsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('specification_type_id');
             
-            $table->foreign('category_id')->references('category_id')->on('product_categories');
+            $table->foreign('category_id')->references('category_id')->on('categories');
             $table->foreign('specification_type_id')->references('specification_type_id')->on('specification_types');
         });
     }

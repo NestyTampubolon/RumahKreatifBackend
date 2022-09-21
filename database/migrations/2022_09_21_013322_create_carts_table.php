@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePemesananTable extends Migration
+class CreateCartsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreatePemesananTable extends Migration
      */
     public function up()
     {
-        Schema::create('pemesanan', function (Blueprint $table) {
-            $table->id();
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id('cart_id');
             $table->unsignedBigInteger('user_id');
-            $table->bigInteger('sesi_id');
-            $table->integer('status');
-            $table->string('pesan');
-            $table->integer('jumlah_peserta');
-            $table->timestamps();
+            $table->unsignedBigInteger('product_id');
+            $table->integer('jumlah_masuk_keranjang');
+            $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('product_id')->references('product_id')->on('products');
         });
     }
 
@@ -33,6 +32,6 @@ class CreatePemesananTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pemesanan');
+        Schema::dropIfExists('carts');
     }
 }

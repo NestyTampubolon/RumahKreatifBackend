@@ -8,15 +8,15 @@ use DB;
 class KategoriController extends Controller
 {
     public function kategori_produk() {
-        $product_categories = DB::table('product_categories')->orderBy('nama_kategori', 'asc')->get();
+        $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
-        return view('admin.kategori_produk')->with('product_categories', $product_categories);
+        return view('admin.kategori_produk')->with('categories', $categories);
     }
 
     public function PostTambahKategoriProduk(Request $request) {
         $nama_kategori = $request -> nama_kategori;
 
-        DB::table('product_categories')->insert([
+        DB::table('categories')->insert([
             'nama_kategori' => $nama_kategori,
         ]);
 
@@ -26,7 +26,7 @@ class KategoriController extends Controller
     public function PostEditKategoriProduk(Request $request, $kategori_produk_id) {
         $nama_kategori = $request -> nama_kategori;
 
-        DB::table('product_categories')->where('category_id', $kategori_produk_id)->update([
+        DB::table('categories')->where('category_id', $kategori_produk_id)->update([
             'nama_kategori' => $nama_kategori,
         ]);
 
@@ -35,18 +35,18 @@ class KategoriController extends Controller
     
     public function HapusKategoriProduk($kategori_produk_id)
     {
-        DB::table('product_categories')->where('category_id', $kategori_produk_id)->delete();
+        DB::table('categories')->where('category_id', $kategori_produk_id)->delete();
         
         return redirect('./kategori_produk');
     }
 
     public function kategori_tipe_spesifikasi() {
         $category_type_specifications = DB::table('category_type_specifications')
-        ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
+        ->join('categories', 'category_type_specifications.category_id', '=', 'categories.category_id')
         ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
         ->orderBy('category_type_specification_id', 'asc')->get();
 
-        $product_categories = DB::table('product_categories')->orderBy('nama_kategori', 'asc')->get();
+        $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
         $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
         
         // $cek_category = DB::table('category_type_specifications')->select('category_id')->first();
@@ -65,7 +65,7 @@ class KategoriController extends Controller
         // dd($specification_type_id_arr);
 
 
-        return view('admin.kategori_tipe_spesifikasi')->with('category_type_specifications', $category_type_specifications)->with('product_categories', $product_categories)
+        return view('admin.kategori_tipe_spesifikasi')->with('category_type_specifications', $category_type_specifications)->with('categories', $categories)
         ->with('specification_types', $specification_types)->with('nama_jenis_spesifikasi', $nama_jenis_spesifikasi);
     }
     

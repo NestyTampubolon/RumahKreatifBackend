@@ -87,9 +87,8 @@
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.countdown.min.js') }}"></script>
 
-    <script src="{{ URL::asset('asset/Molla/assets/js/bootstrap-input-spinner.js') }}"></script>
+    <!-- <script src="{{ URL::asset('asset/Molla/assets/js/bootstrap-input-spinner.js') }}"></script> -->
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.elevateZoom.min.js') }}"></script>
-    <script src="{{ URL::asset('asset/Molla/assets/js/bootstrap-input-spinner.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- Main JS File -->
     <script src="{{ URL::asset('asset/Molla/assets/js/main.js') }}"></script>

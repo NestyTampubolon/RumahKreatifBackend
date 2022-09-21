@@ -32,7 +32,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             $table->foreign('merchant_id')->references('merchant_id')->on('merchants');
-            $table->foreign('category_id')->references('category_id')->on('product_categories');
+            $table->foreign('category_id')->references('category_id')->on('categories');
         });
     }
 

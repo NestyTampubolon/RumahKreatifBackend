@@ -154,8 +154,8 @@
                             <label for="nama_kategori_produk">Nama Kategori Produk</label>
                             <select class="form-control select2bs4" id="nama_kategori_produk" name="category_id" required>
                                 <option selected disabled value="">Pilih Kategori Produk</option>
-                                @foreach($product_categories as $product_categories)
-                                  <option value="{{$product_categories->category_id}}">{{$product_categories->nama_kategori}}</option>
+                                @foreach($categories as $categories)
+                                  <option value="{{$categories->category_id}}">{{$categories->nama_kategori}}</option>
                                 @endforeach
                             </select>
                         </div>

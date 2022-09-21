@@ -17,11 +17,11 @@
                 <div class="card-body">
                     <h3 class="card-title">{{$product_purchases->product_name}}</h3><!-- End .card-title -->
                     <p>
-                        @foreach($purchase_product_specifications as $purchase_product_specification)
-                            @if($purchase_product_specification->product_purchase_id == $product_purchases->product_purchase_id)
-                                <a>{{$purchase_product_specification->nama_spesifikasi}},</a>&nbsp;
-                            @endif
-                        @endforeach
+                    @foreach($product_specifications as $product_specifications)
+                        @if($product_specifications->product_id == $product_purchases->product_id)
+                            <a>{{$product_specifications->nama_spesifikasi}},</a>&nbsp;
+                        @endif
+                    @endforeach
                     </p>
                     <p>Hrg: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>

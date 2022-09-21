@@ -71,18 +71,20 @@
             </div>
 
             <div class="header-right">
-                <div class="wishlist">
+                
+            @if(Auth::check())
+                <!-- <div class="wishlist">
                     <a href="wishlist.html" title="Wishlist">
                         <div class="icon">
                             <i class="icon-heart-o"></i>
-                            <!-- <span class="wishlist-count badge">3</span> -->
+                            <span class="wishlist-count badge">3</span>
                         </div>
                         <p>Keinginan</p>
                     </a>
-                </div><!-- End .compare-dropdown -->
+                </div> -->
 
                 <div class="cart-dropdown">
-                    <a href="#" class="dropdown-toggle">
+                    <a href="../keranjang" class="dropdown-toggle">
                         <div class="icon">
                             <i class="icon-shopping-cart"></i>
                             <!-- <span class="cart-count">2</span> -->
@@ -94,7 +96,6 @@
                 <!-- <div style="margin-left: 1.5rem;">
                     <p style="font-size: 3rem;">|</p>
                 </div> -->
-                @if(Auth::check())
                 <div class="wishlist">
                     <a href="{{ url('/dashboard') }}">
                         <div class="icon">

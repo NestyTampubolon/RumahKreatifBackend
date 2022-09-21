@@ -24,18 +24,6 @@
         opacity: 0;
         width:200%;
     }
-    
-    .checkbox_specification_types {
-        border: 1px solid rgba(0,0,0,.2);
-        height: 150px;
-        overflow: scroll;
-        margin-bottom: 15px;
-    }
-    
-    .checkbox_specification_types div{
-        padding: 2px;
-        margin-left: 5px
-    }
 </style>
 
 @section('container')
@@ -50,15 +38,6 @@
         
         <label>Harga *</label>
         <input type="text" name="price" class="form-control" onkeypress="return hanyaAngka(event)" required>
-        
-        <script>
-            function hanyaAngka(event) {
-                var angka = (event.which) ? event.which : event.keyCode
-                if ((angka < 48 || angka > 57) )
-                    return false;
-                return true;
-            }
-        </script>
         
         <label>Gambar Produk *</label>
         <div class="fileUpload">
@@ -75,22 +54,36 @@
 
         @foreach($category_type_specifications as $category_type_specifications)
             <label>{{$category_type_specifications->nama_jenis_spesifikasi}} *</label>
-            <div class="checkbox_specification_types">
-            @foreach($specifications as $specification)
-                @if($specification->specification_type_id == $category_type_specifications->specification_type_id)
-                <div>
-                    <input type="checkbox" name="specification_id[]" id="divisi[{{$specification->specification_id}}]" value="{{$specification->specification_id}}">
-                    <label for="divisi[{{$specification->specification_id}}]">{{$specification->nama_spesifikasi}}</label>
-                </div>
-                @endif
-            @endforeach
+            <div class="fileUpload">
+                <select class="form-control" id="specification_id" name="specification_id[]" required>
+                    <option selected disabled value="">Pilih {{$category_type_specifications->nama_jenis_spesifikasi}}</option>
+                    @foreach($specifications as $specification)
+                        @if($specification->specification_type_id == $category_type_specifications->specification_type_id)
+                        <option value="{{$specification->specification_id}}">{{$specification->nama_spesifikasi}}</option>
+                        @endif
+                    @endforeach
+                </select>
             </div>
         @endforeach
+        
+        <label>Stok *</label>
+        <div class="product-details-quantity">
+            <input type="number" id="qty" name="stok" class="form-control" min="1" step="1" data-decimals="0" required>
+        </div>
 
         <button type="submit" class="btn btn-primary btn-round">
-            <span>KIRIM</span>
+            <span>TAMBAH</span>
         </button>
     </form>
+    
+    <script>
+            function hanyaAngka(event) {
+                var angka = (event.which) ? event.which : event.keyCode
+                if ((angka < 48 || angka > 57) )
+                    return false;
+                return true;
+            }
+        </script>
 </div><!-- .End .tab-pane -->
 
 @endsection

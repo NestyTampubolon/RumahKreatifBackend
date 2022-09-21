@@ -42,19 +42,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($product_categories as $product_categories)
+                    @foreach($categories as $categories)
                     <tr>
-                        <td>{{$product_categories->category_id}}</td>
-                        <td>{{$product_categories->nama_kategori}}</td>
+                        <td>{{$categories->category_id}}</td>
+                        <td>{{$categories->nama_kategori}}</td>
                         <td align="center" width="150px">
-                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$product_categories->category_id}}">Edit</button>
+                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$categories->category_id}}">Edit</button>
                         </td>
                         <!-- <td align="center" width="100px">
-                            <a href="./hapus_kategori_produk/{{$product_categories->category_id}}" class="btn btn-block btn-danger">Hapus</a>
+                            <a href="./hapus_kategori_produk/{{$categories->category_id}}" class="btn btn-block btn-danger">Hapus</a>
                         </td> -->
                     </tr>
 
-                    <div class="modal fade" id="modal-edit-{{$product_categories->category_id}}">
+                    <div class="modal fade" id="modal-edit-{{$categories->category_id}}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -66,12 +66,12 @@
                                 <div class="modal-body">
                                     <div class="card card-primary">
                                     <!-- form start -->
-                                    <form action="./PostEditKategoriProduk/{{$product_categories->category_id}}" method="post" enctype="multipart/form-data">
+                                    <form action="./PostEditKategoriProduk/{{$categories->category_id}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="nama_kategori">Nama Kategori</label>
-                                                <input type="text" class="form-control" name="nama_kategori" id="nama_kategori" placeholder="Masukkan nama kategori." value="{{$product_categories->nama_kategori}}" required>
+                                                <input type="text" class="form-control" name="nama_kategori" id="nama_kategori" placeholder="Masukkan nama kategori." value="{{$categories->nama_kategori}}" required>
                                             </div>
                                         </div>
                                         <!-- /.card-body -->

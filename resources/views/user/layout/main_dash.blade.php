@@ -59,6 +59,9 @@
 								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pesananku</a>
 								    </li>
 								    <li class="nav-item">
+								        <a class="nav-link" href="{{ url('/keranjang') }}">Keranjangku</a>
+								    </li>
+								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/logout') }}">Keluar</a>
 								    </li>
 								</ul>

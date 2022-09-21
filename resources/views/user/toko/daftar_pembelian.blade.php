@@ -29,10 +29,10 @@
                         <p class="text-muted mb-0">{{$product_purchase->product_name}}</p>
                     </div>
 
-                    @foreach($purchase_product_specifications as $purchase_product_specification)
-                        @if($purchase_product_specification->product_purchase_id == $product_purchase->product_purchase_id)
+                    @foreach($product_specifications as $product_specification)
+                        @if($product_specification->product_id == $product_purchase->product_id)
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                            <p class="text-muted mb-0 small">{{$purchase_product_specification->nama_spesifikasi}}</p>
+                            <p class="text-muted mb-0 small">{{$product_specification->nama_spesifikasi}}</p>
                         </div>
                         @endif
                     @endforeach

@@ -11,20 +11,20 @@ class ProdukController extends Controller
     public function produk() {
         $toko = Session::get('toko');
         $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
-        ->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')->get();
+        ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
 
         return view('user.toko.produk')->with('products', $products);
     }
 
     public function pilih_kategori() {
-        $product_categories = DB::table('product_categories')->orderBy('nama_kategori', 'asc')->get();
+        $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
-        return view('user.toko.pilih_kategori')->with('product_categories', $product_categories);
+        return view('user.toko.pilih_kategori')->with('categories', $categories);
     }
 
     public function tambah_produk($kategori_produk_id) {
         $category_type_specifications = DB::table('category_type_specifications')
-        ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
+        ->join('categories', 'category_type_specifications.category_id', '=', 'categories.category_id')
         ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
         ->where('category_type_specifications.category_id', $kategori_produk_id)->orderBy('category_type_specification_id', 'asc')->get();
 
@@ -54,6 +54,8 @@ class ProdukController extends Controller
         $product_image->move($tujuan_upload,$nama_product_image);
         
         $specification_id = $request -> specification_id;
+        
+        $stok = $request -> stok;
 
         // dd($toko, $product_name, $price, $nama_product_image, $specification_id);
 
@@ -68,7 +70,7 @@ class ProdukController extends Controller
         
         // $product_id = DB::table('products')->select('product_id')->pluck('product_id');
         $product_id = DB::table('products')->select('product_id')->orderBy('product_id', 'desc')->first();
-
+ 
         $jumlah_specification_id_dipilih = count($specification_id);
  
         for($x=0;$x<$jumlah_specification_id_dipilih;$x++){
@@ -78,11 +80,16 @@ class ProdukController extends Controller
             ]);
         }
 
-        return redirect('./toko');
+        DB::table('stocks')->insert([
+            'product_id' => $product_id->product_id,
+            'stok' => $stok,
+        ]);
+
+        return redirect('./produk');
     }
 
     public function lihat_produk($product_id) {
-        $product = DB::table('products')->where('product_id', $product_id)->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')
+        $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->orderBy('product_id', 'desc')->get();
 
         $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
@@ -94,12 +101,14 @@ class ProdukController extends Controller
         ->where('product_specifications.product_id', $product_id)->get();
         
         $category_type_specifications = DB::table('category_type_specifications')
-        ->join('product_categories', 'category_type_specifications.category_id', '=', 'product_categories.category_id')
+        ->join('categories', 'category_type_specifications.category_id', '=', 'categories.category_id')
         ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
         ->where('category_type_specifications.category_id', $product_category_id->category_id)->orderBy('category_type_specification_id', 'asc')->get();
 
         $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
+
+        $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
         
-        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types']));
+        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types', 'stocks']));
     }
 }

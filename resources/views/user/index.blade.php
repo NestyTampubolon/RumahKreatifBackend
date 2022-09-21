@@ -374,25 +374,23 @@
                                         <img src="./asset/u_file/product_image/{{$products->product_image}}" alt="Product image" class="product-image">
                                         <!-- <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/products/product-7-2.jpg') }}" alt="Product image" class="product-image-hover"> -->
                                     </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
                                 </figure><!-- End .product-media -->
 
-                                <div class="product-body">
+                                <div class="">
+                                    <div class="mb-1"></div>
+
                                     <div class="product-cat">
                                         <a href="#">{{$products->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
                                     
                                     <div class="mb-1"></div>
                                     
-                                    <hr style="margin:0px; border-top:1px solid grant; ">
+                                    <!-- <hr style="margin:0px; border-top:1px solid grant; "> -->
                                     
                                     <div class="mb-1"></div>
 
                                     <div class="product-cat">
-                                        <a href="#">{{$products->nama_merchant}}</a>
+                                        <a href="#"><b>{{$products->nama_merchant}}</b></a>
                                     </div><!-- End .product-cat -->
                                     
                                     <div class="mb-1"></div>
@@ -408,9 +406,6 @@
                                         ?>
                                     </div><!-- End .product-price -->
                                 </div><!-- End .product-body -->
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
                             </div><!-- End .product -->
                         </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
                         @endforeach
