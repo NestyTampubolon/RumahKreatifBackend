@@ -17,10 +17,10 @@
                         <table class="table table-cart table-mobile">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th>Produk</th>
+                                    <th>Harga</th>
+                                    <th>Jumlah</th>
+                                    <th>Total Harga</th>
                                     <th></th>
                                 </tr>
                             </thead>

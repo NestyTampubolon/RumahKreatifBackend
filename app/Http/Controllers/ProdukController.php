@@ -10,10 +10,43 @@ class ProdukController extends Controller
 {
     public function produk() {
         $toko = Session::get('toko');
-        $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
-        ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
 
-        return view('user.toko.produk')->with('products', $products);
+        if($toko){
+            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+
+            return view('user.toko.produk')->with('products', $products);
+        }
+
+        else{
+            $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            
+            $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+
+            return view('user.produk')->with('products', $products)->with('categories', $categories);
+        }
+    }
+
+    public function produk_kategori($kategori_produk_id) {
+        $toko = Session::get('toko');
+
+        if($toko){
+            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+
+            return view('user.toko.produk')->with('products', $products);
+        }
+
+        else{
+            $products = DB::table('products')->where('products.category_id', $kategori_produk_id)->orderBy('product_id', 'desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            
+            $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+
+            return view('user.produk')->with('products', $products)->with('categories', $categories);
+        }
     }
 
     public function pilih_kategori() {

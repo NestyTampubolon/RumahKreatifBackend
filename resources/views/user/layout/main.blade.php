@@ -27,6 +27,10 @@
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/skins/skin-demo-2.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/demos/demo-2.css') }}">
+    
+    <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/plugins/owl-carousel/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/plugins/magnific-popup/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/plugins/nouislider/nouislider.css') }}">
 </head>
 
 <body>
@@ -86,10 +90,14 @@
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.plugin.min.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.countdown.min.js') }}"></script>
+    
+    <script src="{{ URL::asset('asset/Molla/assets/js/wNumb.js') }}"></script>
+    <!-- <script src="{{ URL::asset('asset/Molla/assets/js/nouislider.min.js') }}"></script> -->
 
     <!-- <script src="{{ URL::asset('asset/Molla/assets/js/bootstrap-input-spinner.js') }}"></script> -->
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.elevateZoom.min.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/jquery.magnific-popup.min.js') }}"></script>
+
     <!-- Main JS File -->
     <script src="{{ URL::asset('asset/Molla/assets/js/main.js') }}"></script>
     <script src="{{ URL::asset('asset/Molla/assets/js/demos/demo-2.js') }}"></script>

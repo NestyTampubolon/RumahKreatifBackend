@@ -3,18 +3,22 @@
 @section('title', 'Rumah Kreatif Toba')
 
 <style>
+    /* .intro-slider-container{
+        width:80%;
+    }
     .intro-slider-container, .intro-slide{
         height:300px;
-    }
+    } */
 </style>
 
 @section('container')
 
 <main class="main">
-    <div class="intro-slider-container">
+    <center>
+    <div class="intro-slider-container" style=" width:92%; height:300px">
         <div class="owl-carousel owl-simple owl-light owl-nav-inside" data-toggle="owl" data-owl-options='{"nav": false}'>
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-1.jpg') }});">
-                <div class="container intro-content">
+            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-1.jpg') }}); height:300px">
+                <div class="container intro-content" align="left">
                     <h3 class="intro-subtitle">Bedroom Furniture</h3><!-- End .h3 intro-subtitle -->
                     <h1 class="intro-title">Find Comfort <br>That Suits You.</h1><!-- End .intro-title -->
 
@@ -25,7 +29,7 @@
                 </div><!-- End .container intro-content -->
             </div><!-- End .intro-slide -->
 
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-2.jpg') }});">
+            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-2.jpg') }}); height:300px">
                 <div class="container intro-content">
                     <h3 class="intro-subtitle">Deals and Promotions</h3><!-- End .h3 intro-subtitle -->
                     <h1 class="intro-title">Ypperlig <br>Coffee Table <br><span class="text-primary"><sup>$</sup>49,99</span></h1><!-- End .intro-title -->
@@ -37,8 +41,8 @@
                 </div><!-- End .container intro-content -->
             </div><!-- End .intro-slide -->
 
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-3.jpg') }});">
-                <div class="container intro-content">
+            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-3.jpg') }}); height:300px">
+                <div class="container intro-content" align="right">
                     <h3 class="intro-subtitle">Living Room</h3><!-- End .h3 intro-subtitle -->
                     <h1 class="intro-title">
                         Make Your Living Room <br>Work For You.<br>
@@ -57,6 +61,7 @@
 
         <span class="slider-loader text-white"></span><!-- End .slider-loader -->
     </div><!-- End .intro-slider-container -->
+</center>
 
     <!-- <div class="brands-border owl-carousel owl-simple" data-toggle="owl" 
         data-owl-options='{
@@ -349,12 +354,12 @@
 
     <div class="container">
         <div class="heading heading-center mb-3">
-            <h2 class="title">Top Selling Products</h2><!-- End .title -->
+            <h2 class="title">13 Newest Products</h2><!-- End .title -->
 
             <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link active" id="top-all-link" data-toggle="tab" href="#top-all-tab" role="tab" aria-controls="top-all-tab" aria-selected="true">All</a>
-                </li>
+                </li> -->
                 <!-- <li class="nav-item">
                     <a class="nav-link" id="top-fur-link" data-toggle="tab" href="#top-fur-tab" role="tab" aria-controls="top-fur-tab" aria-selected="false">Furniture</a>
                 </li> -->
@@ -380,10 +385,10 @@
                                     <div class="mb-1"></div>
 
                                     <div class="product-cat">
-                                        <a href="#">{{$products->nama_kategori}}</a>
+                                        <a href="./produk/kategori[{{$products->category_id}}]">{{$products->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
                                     
-                                    <div class="mb-1"></div>
+                                    <!-- <div class="mb-1"></div> -->
                                     
                                     <!-- <hr style="margin:0px; border-top:1px solid grant; "> -->
                                     

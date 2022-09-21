@@ -24,8 +24,8 @@ class HomeController extends Controller
         }
 
         else{
-            $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
-            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->paginate(13);
 
             return view('user.index')->with('products', $products);
         }
