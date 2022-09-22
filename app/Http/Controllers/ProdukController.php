@@ -19,12 +19,15 @@ class ProdukController extends Controller
         }
 
         else{
+            $kategori_produk_id = 0;
             $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+            
+            // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('categories', $categories);
+            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
         }
     }
 
@@ -32,10 +35,10 @@ class ProdukController extends Controller
         $toko = Session::get('toko');
 
         if($toko){
-            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
-            ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+            // $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            // ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
 
-            return view('user.toko.produk')->with('products', $products);
+            // return view('user.toko.produk')->with('products', $products);
         }
 
         else{
@@ -45,7 +48,10 @@ class ProdukController extends Controller
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
-            return view('user.produk')->with('products', $products)->with('categories', $categories);
+            $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
+
+            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id)
+            ->with('nama_kategori', $nama_kategori);
         }
     }
 
@@ -123,7 +129,7 @@ class ProdukController extends Controller
 
     public function lihat_produk($product_id) {
         $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->orderBy('product_id', 'desc')->get();
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
 
         $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
         

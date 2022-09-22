@@ -1,7 +1,7 @@
 <footer class="footer footer-2">
     <div class="icon-boxes-container">
         <div class="container">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="icon-box icon-box-side">
                         <span class="icon-box-icon text-dark">
@@ -52,11 +52,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
-    <div class="footer-newsletter bg-image" style="background-image: url({{ URL::asset('asset/Molla/assets/images/backgrounds/bg-2.jpg') }})">
+    <!-- <div class="footer-newsletter bg-image" style="background-image: url({{ URL::asset('asset/Molla/assets/images/backgrounds/bg-2.jpg') }})">
         <div class="container">
             <div class="heading text-center">
                 <h3 class="title">Get The Latest Deals</h3>
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="footer-middle">
         <div class="container">

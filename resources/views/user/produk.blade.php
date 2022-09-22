@@ -10,11 +10,25 @@
 
 @section('container')
 <main class="main">
-    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-        <div class="container">
-            <h1 class="page-title">Produk<span></span></h1>
-        </div><!-- End .container -->
-    </div><!-- End .page-header -->
+    <div class="bg-light ">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+            <div class="container d-flex align-items-center">
+                @if($kategori_produk_id > 0)
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('/produk') }}">Produk</a></li>
+                        <li class="breadcrumb-item">Kategori</li>
+                        <li class="breadcrumb-item active">{{$nama_kategori->nama_kategori}}</li>
+                    </ol>
+                @else
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Produk</a></li>
+                    </ol>
+                @endif
+            </div>
+        </nav>
+    </div>
 
     <div class="page-content">
         <div class="container">
@@ -85,12 +99,12 @@
                                                 echo $harga_produk
                                             ?>
                                         </div><!-- End .product-price -->
-                                        <div class="ratings-container">
+                                        <!-- <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
+                                                <div class="ratings-val" style="width: 0%;"></div>
+                                            </div>
                                             <span class="ratings-text">( 0 Reviews )</span>
-                                        </div><!-- End .rating-container -->
+                                        </div> -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
                             </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->

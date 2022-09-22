@@ -19,7 +19,7 @@
                     <div class="container d-flex align-items-center">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Lihat Produk</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/produk') }}">Produk</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{$product->product_name}}</li>
                         </ol>
 
@@ -56,6 +56,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">
+                                <div class="product-cat">
+                                    <a href="#"><b>{{$product->nama_merchant}}</b></a>
+                                </div><!-- End .product-cat -->
+                                
+                                <div class="mb-2"></div>
+                                
                                 <h1 class="product-title">{{$product->product_name}}</h1>
 
                                 <!-- <div class="ratings-container">
@@ -73,6 +79,11 @@
                                 </div>
 
                                 <div class="details-filter-row details-row-size mb-md-1">
+                                    <div class="product-cat">
+                                        <span>Kategori:</span>
+                                        <a href="../produk/kategori[{{$product->category_id}}]">{{$product->nama_kategori}}</a>
+                                    </div><!-- End .product-cat -->
+                                    <span class="meta-separator">|</span>
                                     @foreach($category_type_specifications as $category_type_specification)
                                         @foreach($product_specifications as $product_specification)
                                             @if($product_specification->specification_type_id == $category_type_specification->specification_type_id)
@@ -81,7 +92,10 @@
                                             @endif
                                         @endforeach
                                     @endforeach
-                                    <a>Sisa: {{$stocks->stok}}</a>
+                                    <div class="product-cat">
+                                        <span>Sisa:</span>
+                                        <a>{{$stocks->stok}}</a>
+                                    </div><!-- End .product-cat -->
                                 </div><!-- End .entry-meta -->
                             </div>
 
@@ -98,10 +112,10 @@
                                         @endif
                                     </div>
 
-                                    <div class="details-action-wrapper">
-                                        <!-- <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a> -->
-                                        <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> -->
-                                    </div>
+                                    <!-- <div class="details-action-wrapper">
+                                        <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                        <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
+                                    </div> -->
                                 </div>
 
                                 <div class="product-details-action">

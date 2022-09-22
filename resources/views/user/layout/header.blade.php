@@ -120,6 +120,8 @@
         </div><!-- End .container -->
     </div><!-- End .header-middle -->
 
+    <div class="mb-1"></div>
+    
     <div class="header-bottom sticky-header">
         <div class="container">
             <!-- <div class="header-left"></div> -->
@@ -229,4 +231,7 @@
             </div> -->
         </div><!-- End .container -->
     </div><!-- End .header-bottom -->
+    
+    <div class="mb-1"></div>
+    
 </header><!-- End .header -->
