@@ -157,8 +157,15 @@
 <script src="{{ URL::asset('asset/AdminLTE/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <!-- dropzonejs -->
 <script src="{{ URL::asset('asset/AdminLTE/plugins/dropzone/min/dropzone.min.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<!-- <script src="{{ URL::asset('asset/AdminLTE/dist/js/demo.js') }}"></script> -->
+
+<!-- bs-custom-file-input -->
+<script src="{{ URL::asset('asset/AdminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+
+<script>
+  $(function () {
+    bsCustomFileInput.init();
+  });
+</script>
 
 <script>
   $(function () {

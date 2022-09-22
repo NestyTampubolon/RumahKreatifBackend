@@ -11,10 +11,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-            <img src="{{ URL::asset('asset/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            <!-- <img src="{{ URL::asset('asset/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"> -->
         </div>
         <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="#" class="d-block"><b>ADMIN</b></a>
         </div>
     </div>
 
@@ -44,75 +44,82 @@
             </a>
         </li> -->
         <li class="nav-item">
-            <a href="./" class="nav-link">
+            <a href="{{ url('/') }}" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Dashboard</p>
             </a>
         </li>
         <li class="nav-header">USERS</li>
         <li class="nav-item">
-            <a href="./verifikasi_user" class="nav-link">
+            <a href="{{ url('/verifikasi_user') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Verifikasi User</p>
             </a>
         </li>
         <li class="nav-header">TOKO</li>
         <li class="nav-item">
-            <a href="./toko_user" class="nav-link">
+            <a href="{{ url('/toko_user') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Toko User</p>
             </a>
         </li>
         <li class="nav-header">PRODUK</li>
         <li class="nav-item">
-            <a href="./produk_toko" class="nav-link">
+            <a href="{{ url('/produk_toko') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Produk Toko</p>
             </a>
         </li>
         <li class="nav-header">KATEGORI</li>
         <li class="nav-item">
-            <a href="./kategori_produk" class="nav-link">
+            <a href="{{ url('/kategori_produk') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Kategori</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="./kategori_tipe_spesifikasi" class="nav-link">
+            <a href="{{ url('/kategori_tipe_spesifikasi') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Kategori Tipe Spesifikasi</p>
             </a>
         </li>
         <li class="nav-header">SPESIFIKASI</li>
         <li class="nav-item">
-            <a href="./tipe_spesifikasi" class="nav-link">
+            <a href="{{ url('/tipe_spesifikasi') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Tipe Spesifikasi</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="./spesifikasi" class="nav-link">
+            <a href="{{ url('/spesifikasi') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Spesifikasi</p>
             </a>
         </li>
         <li class="nav-header">REKENING</li>
         <li class="nav-item">
-            <a href="./daftar_rekening" class="nav-link">
+            <a href="{{ url('/daftar_rekening') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Rekening</p>
             </a>
         </li>
         <li class="nav-header">BANK</li>
         <li class="nav-item">
-            <a href="./bank" class="nav-link">
+            <a href="{{ url('/bank') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>Bank</p>
             </a>
         </li>
+        <li class="nav-header">CAROUSEL</li>
+        <li class="nav-item">
+            <a href="{{ url('/carousel') }}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Carousel</p>
+            </a>
+        </li>
         <li class="nav-header"></li>
         <li class="nav-item">
-            <a href="./logout" class="nav-link">
+            <a href="{{ url('/logout') }}" class="nav-link">
                 <i class="nav-icon far fa-circle text-danger"></i>
                 <p class="text">Keluar</p>
             </a>

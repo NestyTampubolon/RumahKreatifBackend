@@ -63,11 +63,11 @@ class AutentikasiController extends Controller
 
         if(Auth::attempt(['username' => $username_email, 'password' => $password]) || Auth::attempt(['email' => $username_email, 'password' => $password])){
             $user = Auth::user();
-            return redirect()->back();
+            return redirect('./');
         }
         
         else{
-            return redirect()->back()->with('error', '');
+            return redirect('./')->with('error', '');
         }          
     }
 

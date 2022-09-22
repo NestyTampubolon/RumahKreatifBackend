@@ -17,48 +17,22 @@
     <center>
     <div class="intro-slider-container" style=" width:92%; height:300px">
         <div class="owl-carousel owl-simple owl-light owl-nav-inside" data-toggle="owl" data-owl-options='{"nav": false}'>
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-1.jpg') }}); height:300px">
-                <div class="container intro-content" align="left">
-                    <h3 class="intro-subtitle">Bedroom Furniture</h3><!-- End .h3 intro-subtitle -->
-                    <h1 class="intro-title">Find Comfort <br>That Suits You.</h1><!-- End .intro-title -->
+            
+            <!-- <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-1.jpg') }}); height:300px">
+                <a href="./" class="container intro-content" style="height:100%"></a>
+            </div> -->
 
-                    <a href="category.html" class="btn btn-primary">
-                        <span>Shop Now</span>
-                        <i class="icon-long-arrow-right"></i>
-                    </a>
-                </div><!-- End .container intro-content -->
+            @foreach($carousels as $carousels)
+            <div class="intro-slide" style="background-image: url('./asset/u_file/carousel_image/{{$carousels->carousel_image}}'); height:300px">
+                @if($carousels->open_in_new_tab == 1)
+                <a href="{{$carousels->link_carousel}}" target="_blank" class="container intro-content" style="height:100%"></a>
+                @elseif($carousels->open_in_new_tab == 0)
+                <a href="{{$carousels->link_carousel}}" class="container intro-content" style="height:100%"></a>
+                @endif
             </div><!-- End .intro-slide -->
+            @endforeach
 
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-2.jpg') }}); height:300px">
-                <div class="container intro-content">
-                    <h3 class="intro-subtitle">Deals and Promotions</h3><!-- End .h3 intro-subtitle -->
-                    <h1 class="intro-title">Ypperlig <br>Coffee Table <br><span class="text-primary"><sup>$</sup>49,99</span></h1><!-- End .intro-title -->
-
-                    <a href="category.html" class="btn btn-primary">
-                        <span>Shop Now</span>
-                        <i class="icon-long-arrow-right"></i>
-                    </a>
-                </div><!-- End .container intro-content -->
-            </div><!-- End .intro-slide -->
-
-            <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-3.jpg') }}); height:300px">
-                <div class="container intro-content" align="right">
-                    <h3 class="intro-subtitle">Living Room</h3><!-- End .h3 intro-subtitle -->
-                    <h1 class="intro-title">
-                        Make Your Living Room <br>Work For You.<br>
-                        <span class="text-primary">
-                            <sup class="text-white font-weight-light">from</sup><sup>$</sup>9,99
-                        </span>
-                    </h1><!-- End .intro-title -->
-
-                    <a href="category.html" class="btn btn-primary">
-                        <span>Shop Now</span>
-                        <i class="icon-long-arrow-right"></i>
-                    </a>
-                </div><!-- End .container intro-content -->
-            </div><!-- End .intro-slide -->
         </div><!-- End .owl-carousel owl-simple -->
-
         <span class="slider-loader text-white"></span><!-- End .slider-loader -->
     </div><!-- End .intro-slider-container -->
 </center>

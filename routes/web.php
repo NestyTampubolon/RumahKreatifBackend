@@ -89,3 +89,8 @@ Route::get('/detail_pembelian/{product_purchase_id}', 'App\Http\Controllers\Pemb
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
 Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
 Route::get('/hapus_keranjang/{cart_id}', 'App\Http\Controllers\KeranjangController@HapusKeranjang');
+
+Route::get('/carousel', 'App\Http\Controllers\CarouselController@carousel');
+Route::post('/PostTambahCarousel', 'App\Http\Controllers\CarouselController@PostTambahCarousel');
+Route::post('/PostEditCarousel/{id}', 'App\Http\Controllers\CarouselController@PostEditCarousel');
+Route::get('/hapus_carousel/{id}', 'App\Http\Controllers\CarouselController@HapusCarousel');

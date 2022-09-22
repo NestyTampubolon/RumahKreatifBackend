@@ -24,10 +24,12 @@ class HomeController extends Controller
         }
 
         else{
+            $carousels = DB::table('carousels')->orderBy('id', 'desc')->get();
+
             $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->paginate(13);
 
-            return view('user.index')->with('products', $products);
+            return view('user.index')->with('products', $products)->with('carousels', $carousels);
         }
     }
 
