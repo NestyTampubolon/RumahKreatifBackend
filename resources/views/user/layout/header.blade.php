@@ -63,7 +63,7 @@
                     <form action="#" method="get">
                         <div class="header-search-wrapper search-wrapper-wide">
                             <label for="q" class="sr-only">Search</label>
-                            <input type="search" class="form-control" name="q" id="q" placeholder="Cari Produk ..." required>
+                            <input type="search" class="form-control" name="cari_produk" id="cari_produk"placeholder="Cari Produk ..." value="{{ old('cari_produk') }}" required>
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                         </div><!-- End .header-search-wrapper -->
                     </form>

@@ -75,12 +75,16 @@ Route::get('/daftar_rekening', 'App\Http\Controllers\RekeningController@daftar_r
 Route::get('/hapus_rekening/{bank_id}', 'App\Http\Controllers\RekeningController@HapusRekening');
 
 Route::get('/produk', 'App\Http\Controllers\ProdukController@produk');
+// Route::get('/produk', 'App\Http\Controllers\ProdukController@cari_produk');
+Route::get('/lihat_produk/{product_id}', 'App\Http\Controllers\ProdukController@lihat_produk');
+
 Route::get('/produk/kategori[{kategori_produk_id}]', 'App\Http\Controllers\ProdukController@produk_kategori');
 Route::get('/tambah_produk/pilih_kategori', 'App\Http\Controllers\ProdukController@pilih_kategori');
 Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@tambah_produk');
 Route::post('/PostTambahProduk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@PostTambahProduk');
+Route::get('/edit_produk/{product_id}', 'App\Http\Controllers\ProdukController@edit_produk');
+Route::post('/PostEditProduk/{product_id}', 'App\Http\Controllers\ProdukController@PostEditProduk');
 
-Route::get('/lihat_produk/{product_id}', 'App\Http\Controllers\ProdukController@lihat_produk');
 
 Route::post('/PostBeliProduk/{product_id}', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
@@ -94,3 +98,5 @@ Route::get('/carousel', 'App\Http\Controllers\CarouselController@carousel');
 Route::post('/PostTambahCarousel', 'App\Http\Controllers\CarouselController@PostTambahCarousel');
 Route::post('/PostEditCarousel/{id}', 'App\Http\Controllers\CarouselController@PostEditCarousel');
 Route::get('/hapus_carousel/{id}', 'App\Http\Controllers\CarouselController@HapusCarousel');
+
+Route::post('/PostTinjauan/{product_id}', 'App\Http\Controllers\TinjauanController@PostTinjauan');

@@ -7,7 +7,7 @@
 
         <form action="#" method="get" class="mobile-search">
             <label for="mobile-search" class="sr-only">Search</label>
-            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Cari Produk ..." required>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Cari Produk ..." value="{{ old('cari') }}" required>
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
         
@@ -17,9 +17,12 @@
                     <a href="index.html">Home</a>
                 </li> -->
                 <li>
-                    <a href="index.html">Home</a>
+                    <a href="{{ url('/') }}">Home</a>
                 </li>
                 <li>
+                    <a href="{{ url('/produk') }}">Produk</a>
+                </li>
+                <!-- <li>
                     <a href="category.html">Shop</a>
                     <ul>
                         <li><a href="category-list.html">Shop List</a></li>
@@ -60,7 +63,7 @@
                         <li><a href="404.html">Error 404</a></li>
                         <li><a href="coming-soon.html">Coming Soon</a></li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </nav><!-- End .mobile-nav -->
     </div><!-- End .mobile-menu-wrapper -->

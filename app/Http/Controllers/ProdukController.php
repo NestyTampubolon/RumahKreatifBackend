@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Session;
+use Illuminate\Support\Facades\File;
 
 class ProdukController extends Controller
 {
@@ -18,10 +20,37 @@ class ProdukController extends Controller
             return view('user.toko.produk')->with('products', $products);
         }
 
-        else{
+        else if(!$toko){
             $kategori_produk_id = 0;
             $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            
+            $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+            
+            // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
+
+            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
+        }
+    }
+
+    public function cari_produk(Request $request)
+    {        
+		$cari = $request->cari_produk;
+
+        $toko = Session::get('toko');
+
+        if($toko){
+            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+
+            return view('user.toko.produk')->with('products', $products);
+        }
+
+        else if(!$toko){
+            $kategori_produk_id = 0;
+            
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('product_name', 'like',"%".$cari."%")->orderBy('product_name', 'asc')->get();
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
             
@@ -148,6 +177,80 @@ class ProdukController extends Controller
 
         $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
         
-        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types', 'stocks']));
+        $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
+        $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
+        
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+        }
+        
+        else{
+            $cek_review = "";
+        }
+
+        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
     }
+
+    public function edit_produk($product_id) {
+        $toko = Session::get('toko');
+
+        $product = DB::table('products')->where('products.merchant_id', $toko)->where('product_id', $product_id)
+        ->join('categories', 'products.category_id', '=', 'categories.category_id')->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+        
+        $stock = DB::table('stocks')->where('product_id', $product_id)->first();
+        
+        $product_specifications = DB::table('product_specifications')->where('product_id', $product_id)
+        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')->get();
+
+        return view('user.toko.edit_produk')->with('product', $product)->with('stock', $stock)->with('product_id', $product_id)->with('product_specifications', $product_specifications);
+    }
+
+    public function PostEditProduk(Request $request, $product_id) {
+        $product_name = $request -> product_name;
+        $product_description = $request -> product_description;
+        $price = $request -> price;
+        $product_image = $request -> file('product_image');
+        $stok = $request -> stok;
+
+        if(!$product_image){
+            DB::table('products')->where('product_id', $product_id)->update([
+                'product_name' => $product_name,
+                'product_description' => $product_description,
+                'price' => $price,
+            ]);
+
+            DB::table('stocks')->where('product_id', $product_id)->update([
+                'stok' => $stok,
+            ]);
+        }
+
+        if($product_image){
+            $products_lama = DB::table('products')->where('product_id', $product_id)->first();
+            $asal_gambar = 'asset/u_file/product_image/';
+            $product_image_lama = public_path($asal_gambar . $products_lama->product_image);
+
+            if(File::exists($product_image_lama)){
+                File::delete($product_image_lama);
+            }
+
+            $nama_product_image = time().'_'.$product_image->getClientOriginalName();
+            $tujuan_upload = './asset/u_file/product_image';
+            $product_image->move($tujuan_upload,$nama_product_image);
+            
+            DB::table('products')->where('product_id', $product_id)->update([
+                'product_name' => $product_name,
+                'product_description' => $product_description,
+                'price' => $price,
+                'product_image' => $nama_product_image,
+            ]);
+
+            DB::table('stocks')->where('product_id', $product_id)->update([
+                'stok' => $stok,
+            ]);
+        }
+
+        return redirect('../produk');
+    }
+
 }

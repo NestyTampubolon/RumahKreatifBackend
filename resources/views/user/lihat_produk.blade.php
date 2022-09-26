@@ -2,11 +2,61 @@
 
 @section('title', 'Rumah Kreatif Toba')
 
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
     .intro-slider-container, .intro-slide{
         height:300px;
     }
+
+    .rating{
+        position: absolute;
+        /* top:50%; */
+        left: 50%;
+        transform: translate(-50%, -50%) rotateY(180deg);
+        display: flex;
+    }
+
+    .rating input{
+        display: none;
+    }
+
+    .rating label{
+        display: block;
+        cursor: pointer;
+        width: 30px;
+        /*background: #ccc;*/
+    }
+
+    .rating label:before{
+        content:'\f005';
+        font-family: fontAwesome;
+        position: relative;
+        display: block;
+        font-size: 30px;
+        color: #101010;
+    }
+
+    .rating label:after{
+        content:'\f005';
+        font-family: fontAwesome;
+        position: absolute;
+        display: block;
+        font-size: 30px;
+        color: #ffc107;
+        top:0;
+        opacity: 0;
+        transition: .5s;
+    }
+
+    .rating label:hover:after,
+    .rating label:hover ~ label:after,
+    .rating input:checked ~ label:after
+    {
+        opacity: 1;
+    }
+
 </style>
+
 
 @section('container')
 
@@ -156,17 +206,17 @@
             <div class="product-details-tab">
                 <ul class="nav nav-pills justify-content-center" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Deskripsi</a>
                     </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
                     </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Tinjauan ({{$jumlah_review}})</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
@@ -199,39 +249,51 @@
                             <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
                             We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
                         <div class="reviews">
-                            <h3>Reviews (2)</h3>
+                            <!-- <h3>Reviews</h3> -->
+                            @foreach($reviews as $reviews)
                             <div class="review">
                                 <div class="row no-gutters">
                                     <div class="col-auto">
-                                        <h4><a href="#">Samanta J.</a></h4>
+                                        <h4><a href="#">{{$reviews->name}}</a></h4>
                                         <div class="ratings-container">
                                             <div class="ratings">
+                                                @if($reviews->nilai_review == 5)
+                                                <div class="ratings-val" style="width: 100%;"></div>
+                                                @elseif($reviews->nilai_review == 4)
                                                 <div class="ratings-val" style="width: 80%;"></div>
+                                                @elseif($reviews->nilai_review == 3)
+                                                <div class="ratings-val" style="width: 60%;"></div>
+                                                @elseif($reviews->nilai_review == 2)
+                                                <div class="ratings-val" style="width: 40%;"></div>
+                                                @elseif($reviews->nilai_review == 1)
+                                                <div class="ratings-val" style="width: 20%;"></div>
+                                                @endif
                                             </div>
                                         </div>
-                                        <span class="review-date">6 days ago</span>
+                                        <!-- <span class="review-date">6 days ago</span> -->
                                     </div>
                                     <div class="col">
-                                        <h4>Good, perfect size</h4>
+                                        <!-- <h4>Good, perfect size</h4> -->
 
                                         <div class="review-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
+                                            <p>{{$reviews->isi_review}}</p>
                                         </div>
 
-                                        <div class="review-action">
+                                        <!-- <div class="review-action">
                                             <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
                                             <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
                             <div class="review">
                                 <div class="row no-gutters">
-                                    <div class="col-auto">
+                                    <!-- <div class="col-auto">
                                         <h4><a href="#">John Doe</a></h4>
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -251,11 +313,49 @@
                                             <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
                                             <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
                                         </div>
-                                    </div>
+                                    </div> -->
+                                    
+                                    @if(Auth::check())
+                                        @if(!$cek_review)
+                                        <div class="rating">
+                                            <input type="radio" id="star1" onclick="rate5()"><label for="star1"></label>
+                                            <input type="radio" id="star2" onclick="rate4()"><label for="star2"></label>
+                                            <input type="radio" id="star3" onclick="rate3()"><label for="star3"></label>
+                                            <input type="radio" id="star4" onclick="rate2()"><label for="star4"></label>
+                                            <input type="radio" id="star5" onclick="rate1()"><label for="star5"></label>
+                                        </div>
+                                        <script>
+                                            function rate1() {
+                                                $("#rate").modal();
+                                                document.getElementById("star5-modal").checked = true;
+                                            }
+                                            function rate2() {
+                                                $("#rate").modal();
+                                                document.getElementById("star4-modal").checked = true;
+                                            }
+                                            function rate3() {
+                                                $("#rate").modal();
+                                                document.getElementById("star3-modal").checked = true;
+                                            }
+                                            function rate4() {
+                                                $("#rate").modal();
+                                                document.getElementById("star2-modal").checked = true;
+                                            }
+                                            function rate5() {
+                                                $("#rate").modal();
+                                                document.getElementById("star1-modal").checked = true;
+                                            }
+                                        </script>
+                                        @else
+
+                                        @endif
+                                    @else
+
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -476,6 +576,48 @@
         </div> -->
     </div>
 </main>
+<div class="modal fade" id="rate" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                <form action="../PostTinjauan/{{$product->product_id}}" method="post">
+                                @csrf
+                                    <div class="rating">
+                                        <input type="radio" name="nilai_review" id="star1-modal" value="5"><label for="star1"></label>
+                                        <input type="radio" name="nilai_review" id="star2-modal" value="4"><label for="star2"></label>
+                                        <input type="radio" name="nilai_review" id="star3-modal" value="3"><label for="star3"></label>
+                                        <input type="radio" name="nilai_review" id="star4-modal" value="2"><label for="star4"></label>
+                                        <input type="radio" name="nilai_review" id="star5-modal" value="1"><label for="star5"></label>
+                                    </div>
+
+                                    
+                                    <div class="form-group">
+                                        <label for="isi_review">Isi Tinjauan *</label>
+                                        <input type="text" class="form-control" id="isi_review" name="isi_review" placeholder="Berikan pendapat Anda" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2 btn-round">
+                                            <span>KIRIM</span>
+                                        </button>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
 @endforeach
 
 @endsection

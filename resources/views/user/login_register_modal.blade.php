@@ -25,16 +25,16 @@
                                 <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Masuk</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Daftar</a>
+                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Daftar</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="tab-content-5">
                             <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                            @if (\Session::has('error'))
-                            <div class="alert alert-danger">
-                                Cek kembali akun anda.
-                            </div><br>
-                            @endif
+                                @if (\Session::has('error'))
+                                <div class="alert alert-danger">
+                                    Cek kembali akun anda.
+                                </div><br>
+                                @endif
                                 <form action="{{ url('/login') }}" method="post">
                                 @csrf
                                     <div class="form-group">
@@ -62,7 +62,7 @@
                                         <!-- <a href="#" class="forgot-link">Forgot Your Password?</a> -->
                                     </div><!-- End .form-footer -->
                                 </form>
-                                <div class="form-choice" hidden>
+                                <!-- <div class="form-choice">
                                     <p class="text-center">atau masuk melalui</p>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -70,11 +70,11 @@
                                                 <i class="icon-google"></i>
                                                 Login With Google
                                             </a>
-                                        </div><!-- End .col-6 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .form-choice -->
+                                        </div>
+                                    </div>
+                                </div> -->
                             </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab">
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
                                 <form action="{{ url('/registrasi') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                     <div class="form-group">
@@ -153,7 +153,7 @@
                                     </script>
                                 </form>
 
-                                <div class="form-choice" hidden>
+                                <!-- <div class="form-choice" hidden>
                                     <p class="text-center">atau masuk melalui</p>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -161,9 +161,9 @@
                                                 <i class="icon-google"></i>
                                                 Login With Google
                                             </a>
-                                        </div><!-- End .col-6 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .form-choice -->
+                                        </div>
+                                    </div>
+                                </div> -->
 
                             </div><!-- .End .tab-pane -->
                         </div><!-- End .tab-content -->

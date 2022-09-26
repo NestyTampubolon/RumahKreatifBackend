@@ -26,7 +26,7 @@
                     <div class="col-12 col-md-4 col-lg-3 col-xl-5col">
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
-                                    <a href="./lihat_produk/{{$products->product_id}}">
+                                    <a href="./edit_produk/{{$products->product_id}}">
                                         <img src="./asset/u_file/product_image/{{$products->product_image}}" alt="Product image" class="product-image">
                                         <!-- <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/products/product-7-2.jpg') }}" alt="Product image" class="product-image-hover"> -->
                                     </a>
