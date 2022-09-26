@@ -36,8 +36,6 @@
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
-                    <tr>
-                        <th align="center">ID Bank</th>
                         <th align="center">Nama Bank</th>
                         <th align="center" colspan="2">Action</th>
                     </tr>
@@ -45,7 +43,6 @@
                   <tbody>
                     @foreach($banks as $banks)
                     <tr>
-                        <td>{{$banks->id}}</td>
                         <td>{{$banks->nama_bank}}</td>
                         <td align="center" width="150px">
                             <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$banks->id}}">Edit</button>

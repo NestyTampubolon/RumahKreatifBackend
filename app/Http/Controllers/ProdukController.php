@@ -22,14 +22,19 @@ class ProdukController extends Controller
 
         else if(!$toko){
             $kategori_produk_id = 0;
+            
             $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            
+            $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
             
             // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
+            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)
+            ->with('kategori_produk_id', $kategori_produk_id);
         }
     }
 
@@ -37,27 +42,25 @@ class ProdukController extends Controller
     {        
 		$cari = $request->cari_produk;
 
-        $toko = Session::get('toko');
+            return redirect("./produk/cari/$cari");
+    }
 
-        if($toko){
-            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
-            ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+    public function cari_produk_view(Request $request)
+    {        
+		$cari = $request->cari_produk;
 
-            return view('user.toko.produk')->with('products', $products);
-        }
+        $kategori_produk_id = 0;
+        
+        $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('product_name', 'like',"%".$cari."%")
+        ->orwhere('nama_merchant', 'like',"%".$cari."%")->orderBy('product_name', 'asc')->get();
+        
+        $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
+        
+        $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
-        else if(!$toko){
-            $kategori_produk_id = 0;
-            
-            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
-            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('product_name', 'like',"%".$cari."%")->orderBy('product_name', 'asc')->get();
-            
-            $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
-            
-            // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
-
-            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
-        }
+        return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
     }
 
     public function produk_kategori($kategori_produk_id) {
@@ -75,11 +78,14 @@ class ProdukController extends Controller
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
+            $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
+            
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
             $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id)
+            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id)
             ->with('nama_kategori', $nama_kategori);
         }
     }
@@ -155,42 +161,7 @@ class ProdukController extends Controller
 
         return redirect('./produk');
     }
-
-    public function lihat_produk($product_id) {
-        $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
-
-        $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
-        
-        $product_specifications = DB::table('product_specifications')
-        ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
-        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
-        ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')
-        ->where('product_specifications.product_id', $product_id)->get();
-        
-        $category_type_specifications = DB::table('category_type_specifications')
-        ->join('categories', 'category_type_specifications.category_id', '=', 'categories.category_id')
-        ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
-        ->where('category_type_specifications.category_id', $product_category_id->category_id)->orderBy('category_type_specification_id', 'asc')->get();
-
-        $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
-
-        $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
-        
-        $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
-        $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
-        
-        if(Auth::check()){
-            $user_id = Auth::user()->id;
-            $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
-        }
-        
-        else{
-            $cek_review = "";
-        }
-
-        return view('user.lihat_produk', compact(['product', 'product_specifications', 'category_type_specifications', 'specification_types', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
-    }
+    
 
     public function edit_produk($product_id) {
         $toko = Session::get('toko');
@@ -251,6 +222,56 @@ class ProdukController extends Controller
         }
 
         return redirect('../produk');
+    }
+
+    public function lihat_produk($product_id) {
+        $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
+
+        // $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
+        
+        $product_specifications = DB::table('product_specifications')
+        ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
+        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
+        ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')
+        ->where('product_specifications.product_id', $product_id)->get();
+        
+        // $category_type_specifications = DB::table('category_type_specifications')
+        // ->join('categories', 'category_type_specifications.category_id', '=', 'categories.category_id')
+        // ->join('specification_types', 'category_type_specifications.specification_type_id', '=', 'specification_types.specification_type_id')
+        // ->where('category_type_specifications.category_id', $product_category_id->category_id)->orderBy('category_type_specification_id', 'asc')->get();
+
+        // $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
+
+        $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
+        
+        $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
+        $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
+        
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+        }
+        
+        else{
+            $cek_review = "";
+        }
+
+        return view('user.lihat_produk', compact(['product', 'product_specifications', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
+    }
+
+    public function produk_toko() {        
+        $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+        
+        $product_specifications = DB::table('product_specifications')
+        ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
+        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
+        ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
+        
+        $stocks = DB::table('stocks')->get();
+        
+        return view('admin.produk_toko')->with('products', $products)->with('product_specifications', $product_specifications)->with('stocks', $stocks);
     }
 
 }

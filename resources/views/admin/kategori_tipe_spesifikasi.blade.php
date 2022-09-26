@@ -49,9 +49,6 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID Kategori Tipe Spesifikasi</th>
-                        <th align="center">ID Kategori</th>
-                        <th align="center">ID Tipe Spesifikasi</th>
                         <th align="center">Nama Kategori</th>
                         <th align="center">Nama Tipe Spesifikasi</th>
                         <th align="center" colspan="1">Action</th>
@@ -61,10 +58,6 @@
                   
                     @foreach($category_type_specifications as $category_type_specifications)
                     <tr>
-                        <td>{{$category_type_specifications->category_type_specification_id}}</td>
-                        
-                        <td>{{$category_type_specifications->category_id}}</td>
-                        <td>{{$category_type_specifications->specification_type_id}}</td>
                         <td>{{$category_type_specifications->nama_kategori}}</td>
                         <td>{{$category_type_specifications->nama_jenis_spesifikasi}}</td>
                         <td align="center" width="150px">

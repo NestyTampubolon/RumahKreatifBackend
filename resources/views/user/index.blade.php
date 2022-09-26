@@ -346,7 +346,7 @@
                     <div class="row justify-content-center">
 
                         @foreach($products as $products)
-                        <div class="col-12 col-md-4 col-lg-3 col-xl-5col">
+                        <div class="col-6 col-md-4 col-lg-4 col-xl-5col">
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
                                     <a href="./lihat_produk/{{$products->product_id}}">

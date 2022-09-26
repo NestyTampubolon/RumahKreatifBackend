@@ -36,8 +36,6 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID Spesifikasi</th>
-                        <th align="center">ID Jenis Spesifikasi</th>
                         <th align="center">Nama Jenis Spesifikasi</th>
                         <th align="center">Nama Spesifikasi</th>
                         <th align="center" colspan="1">Action</th>
@@ -46,8 +44,6 @@
                   <tbody>
                     @foreach($specifications as $specifications)
                     <tr>
-                        <td>{{$specifications->specification_id}}</td>
-                        <td>{{$specifications->specification_type_id}}</td>
                         <td>{{$specifications->nama_jenis_spesifikasi}}</td>
                         <td>{{$specifications->nama_spesifikasi}}</td>
                         <td align="center" width="150px">

@@ -30,7 +30,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Bank</button>
+                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_carousel">Tambah Bank</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -61,7 +61,7 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Edit Bank</h4>
+                                    <h4 class="modal-title">Edit Carousel</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -138,7 +138,7 @@
 </div>
 <!-- /.content-wrapper -->
 
-<div class="modal fade" id="modal-tambah_bank">
+<div class="modal fade" id="modal-tambah_carousel">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

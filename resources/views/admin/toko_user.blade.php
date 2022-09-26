@@ -37,7 +37,6 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID User</th>
                         <th align="center">Username</th>
                         <th align="center">Email</th>
                         <th align="center">Status</th>
@@ -47,7 +46,6 @@
                   <tbody>
                     @foreach($merchants as $merchants)
                     <tr>
-                        <td>{{$merchants->user_id}}</td>
                         <td>{{$merchants->username}}</td>
                         <td>{{$merchants->email}}</td>
                         @if($merchants->is_verified==1)
@@ -55,9 +53,9 @@
                         @else
                             <td align="center"><small class="badge badge-danger">No Verified</small></td>
                         @endif
-                            <td align="center">
-                              <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$merchants->user_id}}">Cek</button>
-                            </td>
+                        <td align="center">
+                          <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$merchants->user_id}}">Cek</button>
+                        </td>
                     </tr>
                     
                     <div class="modal fade" id="modal-cek-{{$merchants->user_id}}">

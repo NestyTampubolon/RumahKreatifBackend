@@ -134,14 +134,12 @@
                                         <a href="../produk/kategori[{{$product->category_id}}]">{{$product->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
                                     <span class="meta-separator">|</span>
-                                    @foreach($category_type_specifications as $category_type_specification)
                                         @foreach($product_specifications as $product_specification)
-                                            @if($product_specification->specification_type_id == $category_type_specification->specification_type_id)
+                                            @if($product_specification->product_id == $product->product_id)
                                                 <a>{{$product_specification->nama_spesifikasi}}</a>
                                                 <span class="meta-separator">|</span>
                                             @endif
                                         @endforeach
-                                    @endforeach
                                     <div class="product-cat">
                                         <span>Sisa:</span>
                                         <a>{{$stocks->stok}}</a>

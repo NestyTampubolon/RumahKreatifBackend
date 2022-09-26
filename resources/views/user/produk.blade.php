@@ -23,7 +23,7 @@
                 @else
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                        <li class="breadcrumb-item active"><a href="#">Produk</a></li>
+                        <li class="breadcrumb-item active"><a href="{{ url('/produk') }}">Produk</a></li>
                     </ol>
                 @endif
             </div>
@@ -32,7 +32,38 @@
 
     <div class="page-content">
         <div class="container">
+            <?php
+                // $product_id = $product_info->product_id;
+                // $category_id = $product_info->category_id;
+            ?>
             <div class="row">
+                <aside class="col-lg-3 order-lg-first">
+                    <div class="sidebar sidebar-shop">
+
+                        <div class="mb-3"></div>
+
+                        <div class="widget widget-collapsible">
+                            <h3 class="widget-title">
+                                <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
+                                    Kategori
+                                </a>
+                            </h3><!-- End .widget-title -->
+
+                            <div class="collapse show" id="widget-1">
+                                <div class="widget-body">
+                                    <div class="filter-items filter-items-count">
+                                    @foreach($categories as $categories)
+                                        <div class="filter-item">
+                                            <label for="cat-1"><a href="../../produk/kategori[{{$categories->category_id}}]">{{$categories->nama_kategori}}</a></label>
+                                            <!-- <span class="item-count">3</span> -->
+                                        </div><!-- End .filter-item -->
+                                    @endforeach
+                                    </div><!-- End .filter-items -->
+                                </div><!-- End .widget-body -->
+                            </div><!-- End .collapse -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .sidebar sidebar-shop -->
+                </aside><!-- End .col-lg-3 -->
                 <div class="col-lg-9">
                     <div class="toolbox">
                         <!-- <div class="toolbox-left">
@@ -61,8 +92,8 @@
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
-                                        <a href="../lihat_produk/{{$product->product_id}}">
-                                            <img src="../asset/u_file/product_image/{{$product->product_image}}" alt="Product image" class="product-image">
+                                        <a href="../../lihat_produk/{{$product->product_id}}">
+                                            <img src="../../asset/u_file/product_image/{{$product->product_image}}" alt="Product image" class="product-image">
                                         </a>
 
                                         <!-- <div class="product-action-vertical">
@@ -78,7 +109,7 @@
 
                                     <div class="product-body">
                                         <div class="product-cat">
-                                            <a href="../produk/kategori[{{$product->category_id}}]">{{$product->nama_kategori}}</a>
+                                            <a href="../../produk/kategori[{{$categories->category_id}}]">{{$product->nama_kategori}}</a>
                                         </div><!-- End .product-cat -->
 
                                         <div class="mb-1"></div>
@@ -89,7 +120,7 @@
 
                                         <div class="mb-1"></div>
 
-                                        <h3 class="product-title"><a href="../lihat_produk/{{$product->product_id}}">{{$product->product_name}}</a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="../../lihat_produk/{{$product->product_id}}">{{$product->product_name}}</a></h3><!-- End .product-title -->
 
                                         <div class="mb-1"></div>
 
@@ -132,33 +163,6 @@
                         </ul>
                     </nav> -->
                 </div><!-- End .col-lg-9 -->
-                <aside class="col-lg-3 order-lg-first">
-                    <div class="sidebar sidebar-shop">
-
-                        <div class="mb-3"></div>
-
-                        <div class="widget widget-collapsible">
-                            <h3 class="widget-title">
-                                <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                                    Category
-                                </a>
-                            </h3><!-- End .widget-title -->
-
-                            <div class="collapse show" id="widget-1">
-                                <div class="widget-body">
-                                    <div class="filter-items filter-items-count">
-                                    @foreach($categories as $categories)
-                                        <div class="filter-item">
-                                            <label for="cat-1"><a href="../produk/kategori[{{$categories->category_id}}]">{{$categories->nama_kategori}}</a></label>
-                                            <!-- <span class="item-count">3</span> -->
-                                        </div><!-- End .filter-item -->
-                                    @endforeach
-                                    </div><!-- End .filter-items -->
-                                </div><!-- End .widget-body -->
-                            </div><!-- End .collapse -->
-                        </div><!-- End .widget -->
-                    </div><!-- End .sidebar sidebar-shop -->
-                </aside><!-- End .col-lg-3 -->
             </div><!-- End .row -->
         </div><!-- End .container -->
     </div><!-- End .page-content -->

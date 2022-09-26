@@ -126,10 +126,11 @@
             <div class="header-right">
                 <div class="header-search">
                     <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                    <form action="#" method="get">
+                    <form action="{{ url('/cari_produk') }}" id="form_cari_produk" method="post">
+                    @csrf
                         <div class="header-search-wrapper">
                             <label for="q" class="sr-only">Search</label>
-                            <input type="search" class="form-control" name="q" id="q" placeholder="Cari Produk ..." value="{{ old('cari') }}" required>
+                            <input type="search" class="form-control" name="cari_produk" id="cari_produk" placeholder="Cari Produk ..." value="{{ old('cari_produk') }}" required>
                         </div><!-- End .header-search-wrapper -->
                     </form>
                 </div><!-- End .header-search -->

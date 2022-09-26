@@ -75,16 +75,18 @@ Route::get('/daftar_rekening', 'App\Http\Controllers\RekeningController@daftar_r
 Route::get('/hapus_rekening/{bank_id}', 'App\Http\Controllers\RekeningController@HapusRekening');
 
 Route::get('/produk', 'App\Http\Controllers\ProdukController@produk');
-// Route::get('/produk', 'App\Http\Controllers\ProdukController@cari_produk');
+Route::post('/cari_produk', 'App\Http\Controllers\ProdukController@cari_produk');
+Route::get('/produk/cari/{cari_produk}', 'App\Http\Controllers\ProdukController@cari_produk_view');
 Route::get('/lihat_produk/{product_id}', 'App\Http\Controllers\ProdukController@lihat_produk');
-
 Route::get('/produk/kategori[{kategori_produk_id}]', 'App\Http\Controllers\ProdukController@produk_kategori');
+
 Route::get('/tambah_produk/pilih_kategori', 'App\Http\Controllers\ProdukController@pilih_kategori');
 Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@tambah_produk');
 Route::post('/PostTambahProduk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@PostTambahProduk');
 Route::get('/edit_produk/{product_id}', 'App\Http\Controllers\ProdukController@edit_produk');
 Route::post('/PostEditProduk/{product_id}', 'App\Http\Controllers\ProdukController@PostEditProduk');
 
+Route::get('/produk_toko', 'App\Http\Controllers\ProdukController@produk_toko');
 
 Route::post('/PostBeliProduk/{product_id}', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');

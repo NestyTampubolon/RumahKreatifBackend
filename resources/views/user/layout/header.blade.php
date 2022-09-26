@@ -59,14 +59,21 @@
 
             <div class="header-center">
                 <div class="header-search header-search-extended header-search-visible header-search-no-radius d-none d-lg-block">
-                    <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                    <form action="#" method="get">
+                    <form action="{{ url('/cari_produk') }}" id="form_cari_produk" method="post">
+                    @csrf
                         <div class="header-search-wrapper search-wrapper-wide">
-                            <label for="q" class="sr-only">Search</label>
-                            <input type="search" class="form-control" name="cari_produk" id="cari_produk"placeholder="Cari Produk ..." value="{{ old('cari_produk') }}" required>
+                            <!-- <label for="cari_produk" class="sr-only">Search</label> -->
+                            <input type="search" class="form-control" name="cari_produk" id="cari_produk" placeholder="Cari Produk ..." value="{{ old('cari_produk') }}" required>
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                         </div><!-- End .header-search-wrapper -->
                     </form>
+                    <script>
+                    function cari_produk() {
+                        var cari_produk = document.getElementById("cari_produk").value;
+                        document.getElementById("form_cari_produk").setAttribute("action", "{{ url('/produk/cari/"cari_produk"') }}",);
+                        // document.getElementById("form_cari_produk").submit();
+                    }
+                    </script>
                 </div><!-- End .header-search -->
             </div>
 

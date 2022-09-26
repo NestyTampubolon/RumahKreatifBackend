@@ -55,9 +55,9 @@
                         @else
                             <td align="center"><small class="badge badge-danger">No Verified</small></td>
                         @endif
-                            <td align="center">
-                              <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
-                            </td>
+                        <td align="center">
+                          <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
+                        </td>
                     </tr>
                     
                     <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">

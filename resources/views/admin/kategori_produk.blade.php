@@ -36,7 +36,6 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">ID Kategori Produk</th>
                         <th align="center">Nama Kategori Produk</th>
                         <th align="center" colspan="1">Action</th>
                     </tr>
@@ -44,7 +43,6 @@
                   <tbody>
                     @foreach($categories as $categories)
                     <tr>
-                        <td>{{$categories->category_id}}</td>
                         <td>{{$categories->nama_kategori}}</td>
                         <td align="center" width="150px">
                             <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$categories->category_id}}">Edit</button>

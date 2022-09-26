@@ -4,9 +4,10 @@
     <div class="mobile-menu-wrapper">
         <span class="mobile-menu-close"><i class="icon-close"></i></span>
         
-        <form action="#" method="get" class="mobile-search">
+        <form action="{{ url('/cari_produk') }}" id="form_cari_produk" method="post" class="mobile-search">
+        @csrf
             <label for="mobile-search" class="sr-only">Search</label>
-            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Cari Produk ..." value="{{ old('cari') }}" required>
+            <input type="search" class="form-control" name="cari_produk" id="cari_produk" placeholder="Cari Produk ..." value="{{ old('cari_produk') }}" required>
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
 
