@@ -28,9 +28,6 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_bank">Tambah Jenis Spesifikasi</button>
-              </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
