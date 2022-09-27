@@ -18,6 +18,7 @@ class CreateMerchantsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('nama_merchant');
             $table->text('deskripsi_toko');
+            $table->string('kontak_toko');
             $table->string('foto_merchant');
             $table->boolean('is_verified')->nullable();
             $table->timestampsTz($precision = 0);

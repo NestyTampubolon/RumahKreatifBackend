@@ -42,6 +42,32 @@ class KeranjangController extends Controller
         return redirect()->back();
     }
 
+    public function masuk_keranjang_beli(Request $request, $product_id) {
+        $user_id = Auth::user()->id;
+        
+        $jumlah_pembelian_produk = $request -> jumlah_pembelian_produk;
+
+        $cek_keranjang = DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+        
+        $jumlah_masuk_keranjang = DB::table('carts')->select('jumlah_masuk_keranjang')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+
+        if($cek_keranjang){
+            DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->update([
+                'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang->jumlah_masuk_keranjang + $jumlah_pembelian_produk,
+            ]);
+        }
+        
+        else{
+            DB::table('carts')->insert([
+                'user_id' => $user_id,
+                'product_id' => $product_id,
+                'jumlah_masuk_keranjang' => $jumlah_pembelian_produk,
+            ]);
+        }
+
+        return redirect('keranjang');
+    }
+
     public function HapusKeranjang($cart_id)
     {
         DB::table('carts')->where('cart_id', $cart_id)->delete();

@@ -35,6 +35,7 @@ class TokoController extends Controller
         $id = Auth::user()->id;
         $nama_merchant = $request -> nama_merchant;
         $deskripsi_toko = $request -> deskripsi_toko;
+        $kontak_toko = $request -> kontak_toko;
         $foto_merchant = $request -> file('foto_merchant');
 
         $nama_foto_merchant = time().'_'.$foto_merchant->getClientOriginalName();
@@ -45,6 +46,7 @@ class TokoController extends Controller
             'user_id' => $id,
             'nama_merchant' => $nama_merchant,
             'deskripsi_toko' => $deskripsi_toko,
+            'kontak_toko' => $kontak_toko,
             'foto_merchant' => $nama_foto_merchant,
         ]);
 

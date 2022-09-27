@@ -109,7 +109,7 @@
 
                                     <div class="product-body">
                                         <div class="product-cat">
-                                            <a href="../../produk/kategori[{{$categories->category_id}}]">{{$product->nama_kategori}}</a>
+                                            <a href="../../produk/kategori[{{$product->category_id}}]">{{$product->nama_kategori}}</a>
                                         </div><!-- End .product-cat -->
 
                                         <div class="mb-1"></div>

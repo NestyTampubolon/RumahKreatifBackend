@@ -19,6 +19,7 @@
 
                     <p>{{$merchants->nama_merchant}}</p>
                     <p>{{$merchants->deskripsi_toko}}</p>
+                    <p>{{$merchants->kontak_toko}}</p>
                     <a href="#">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->

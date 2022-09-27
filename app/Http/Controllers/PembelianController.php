@@ -9,6 +9,26 @@ use Session;
 
 class PembelianController extends Controller
 {
+    public function checkout(Request $request) {
+        $user_id = Auth::user()->id;
+
+        $product_id = $_POST['product_id'];
+        $jumlah_masuk_keranjang = $_POST['jumlah_masuk_keranjang'];
+        $jumlah_dipilih = count($product_id);
+        
+        for($x=0; $x<$jumlah_dipilih; $x++){
+            DB::table('carts')->where('product_id', $product_id[$x])->update([
+                'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang[$x],
+            ]);
+        }
+
+        $carts = DB::table('carts')->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
+        
+        $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+
+        return view('user.pembelian.checkout')->with('carts', $carts)->with('total_harga', $total_harga);
+    }
+
     public function PostBeliProduk(Request $request, $product_id) {
         $user_id = Auth::user()->id;
 

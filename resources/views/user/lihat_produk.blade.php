@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <form action="../PostBeliProduk/{{$product->product_id}}" method="post" enctype="multipart/form-data">
+            <form action="../masuk_keranjang_beli/{{$product->product_id}}" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="product-details product-details-centered product-details-separator">
                     <div class="container">
@@ -151,7 +151,7 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         <div class="product-details-quantity">
-                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" min="1" step="1" data-decimals="0" required>
+                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" step="1" data-decimals="0" required>
                                         </div>
                                         @if(Auth::check())
                                             <button type="submit" class="btn btn-primary"><span>BELI</span></button>
@@ -169,9 +169,9 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         @if(Auth::check())
-                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>add to cart</span></a>
+                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
                                         @else
-                                            <a href="#signin-modal" class="btn btn-product btn-cart" data-toggle="modal" title="My account"><span>add to cart</span></a>
+                                            <a href="#signin-modal" class="btn btn-product btn-cart" data-toggle="modal" title="My account"><span>tambah ke keranjang</span></a>
                                         @endif
                                     </div>
                                 </div>

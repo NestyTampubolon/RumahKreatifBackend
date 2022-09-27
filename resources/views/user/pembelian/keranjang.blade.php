@@ -13,7 +13,8 @@
         <div class="cart">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <form action="./checkout" method="post" enctype="multipart/form-data" class="col-lg-12">
+                        @csrf
                         <table class="table table-cart table-mobile">
                             <thead>
                                 <tr>
@@ -30,6 +31,13 @@
                                 <tr>
                                     <td class="product-col">
                                         <div class="product">
+                                            <input type="number" class="form-control" name="product_id[]" value="{{$carts->product_id}}" hidden required>
+                                            <figure class="product-media">
+                                                <a href="./lihat_produk/{{$carts->product_id}}">
+                                                    <img src="./asset/u_file/product_image/{{$carts->product_image}}" alt="Product image">
+                                                </a>
+                                            </figure>
+
                                             <h3 class="product-title">
                                                 <a href="./lihat_produk/{{$carts->product_id}}">{{$carts->product_name}}</a>
                                             </h3><!-- End .product-title -->
@@ -43,7 +51,7 @@
                                     </td>
                                     <td class="quantity-col">
                                         <div class="cart-product-quantity">
-                                            <input type="number" class="form-control" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]" value="{{$carts->jumlah_masuk_keranjang}}" min="1" step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
+                                            <input type="number" class="form-control" name="jumlah_masuk_keranjang[]" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]" value="{{$carts->jumlah_masuk_keranjang}}" min="1" step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
                                         </div><!-- End .cart-product-quantity -->
                                     </td>
                                     <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">
@@ -73,7 +81,10 @@
                                 @endforeach
                             </tbody>
                         </table><!-- End .table table-wishlist -->
-                    </div><!-- End .col-lg-9 -->
+                        <div class="cart-bottom">
+                            <button type="submit" class="btn btn-outline-primary-2"><span>CHECKOUT</span><i class="icon-long-arrow-right"></i></button>
+                        </div><!-- End .cart-bottom -->
+                    </form>
 
                     <!-- <aside class="col-lg-5">
                         <div class="summary summary-cart">

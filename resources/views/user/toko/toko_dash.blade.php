@@ -57,6 +57,18 @@
         <label>Deskripsi Toko *</label>
         <input type="text" name="deskripsi_toko" class="form-control" required>
         
+        <label>Kontak Toko *</label>
+        <input type="text" name="kontak_toko" class="form-control" onkeypress="return hanyaAngka(event)" required>
+        
+        <script>
+            function hanyaAngka(event) {
+                var angka = (event.which) ? event.which : event.keyCode
+                if ((angka < 48 || angka > 57) )
+                    return false;
+                return true;
+            }
+        </script>
+        
         <label>Foto Toko *</label>
         <div class="fileUpload">
             <input id="uploadBtn1" type="file" name="foto_merchant" class="upload" accept="image/*" required/>
