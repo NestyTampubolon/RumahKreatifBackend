@@ -25,6 +25,8 @@ class KeranjangController extends Controller
         
         $jumlah_masuk_keranjang = DB::table('carts')->select('jumlah_masuk_keranjang')->where('user_id', $user_id)->where('product_id', $product_id)->first();
 
+        $cek_keranjang = DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+        
         if($cek_keranjang){
             DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->update([
                 'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang->jumlah_masuk_keranjang + 1,
