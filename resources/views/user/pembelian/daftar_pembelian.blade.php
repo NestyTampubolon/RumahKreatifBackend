@@ -115,13 +115,19 @@
                     aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <div class="d-flex justify-content-around mb-1">
-                    @foreach($proof_of_payments as $proof_of_payment)
-                        @if($proof_of_payment->purchase_id == $purchases->purchase_id)
-                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. SILAHKAN KONFIRMASI.</p>
-                        @else
-                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. MENUNGGU BUKTI PEMBAYARAN</p>
-                        @endif
-                    @endforeach
+                    @if($count_proof_of_payment->count_proof_of_payment == 0)
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. MENUNGGU BUKTI PEMBAYARAN</p>
+                    @endif
+                    
+                    @if($count_proof_of_payment->count_proof_of_payment != 0)
+                        @foreach($proof_of_payments as $proof_of_payment)
+                            @if($proof_of_payment->purchase_id == $purchases->purchase_id)
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. SILAHKAN KONFIRMASI.</p>
+                            @else
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN</p>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
             @endif

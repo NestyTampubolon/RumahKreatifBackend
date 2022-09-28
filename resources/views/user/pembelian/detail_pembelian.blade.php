@@ -30,6 +30,32 @@
 
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
     @foreach($purchases as $purchases)
+    
+        @if($purchases->status_pembelian == "status1")
+            @if(!$cek_proof_of_payment)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-dashboard">
+                        <div class="card-body">
+                            <p class="">
+                                SILAHKAN LAKUKAN PEMBAYARAN PESANAN ANDA SENILAI
+                                <?php
+                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga,2,',','.');     
+                                    echo "<b>" . $total_harga_produk . "</b>";
+                                ?>
+                                
+                                KE NOMOR REKENING DIBAWAH INI.<br>
+                                <b>---------------</b>
+                            </p>
+                        </div><!-- End .card-body -->
+                    </div><!-- End .card-dashboard -->
+                </div><!-- End .col-lg-6 -->
+            </div><!-- End .row -->
+            @elseif($cek_proof_of_payment)
+
+            @endif
+        @endif
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
@@ -141,7 +167,7 @@
                     <p>Hrg: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>
                         <?php
-                            $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,2,',','.');     
+                            $harga_produk = "Rp " . number_format($product_purchases->price * $product_purchases->jumlah_pembelian_produk,2,',','.');     
                             echo $harga_produk
                         ?>
                     </p>

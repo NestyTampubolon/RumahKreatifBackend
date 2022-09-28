@@ -108,3 +108,7 @@ Route::get('/hapus_carousel/{id}', 'App\Http\Controllers\CarouselController@Hapu
 Route::post('/PostTinjauan/{product_id}', 'App\Http\Controllers\TinjauanController@PostTinjauan');
 
 Route::post('/checkout', 'App\Http\Controllers\PembelianController@checkout');
+
+Route::get('/panduan_penggunaan', function () {
+    return view('user.panduan_penggunaan');
+});

@@ -42,7 +42,7 @@ class ProdukController extends Controller
     {        
 		$cari = $request->cari_produk;
 
-            return redirect("./produk/cari/$cari");
+        return redirect("./produk/cari/$cari");
     }
 
     public function cari_produk_view(Request $request)

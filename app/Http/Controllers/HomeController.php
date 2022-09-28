@@ -29,7 +29,10 @@ class HomeController extends Controller
             $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->paginate(13);
 
-            return view('user.index')->with('products', $products)->with('carousels', $carousels);
+            $cek_http = DB::table('carousels')->where('link_carousel', 'like', 'https://'."%")->orwhere('link_carousel', 'like', 'http://'."%")->first();
+            $cek_www = DB::table('carousels')->where('link_carousel', 'like', 'www.'."%")->first();
+
+            return view('user.index')->with('products', $products)->with('carousels', $carousels)->with('cek_http', $cek_http)->with('cek_www', $cek_www);
         }
     }
 

@@ -52,6 +52,12 @@ class PembelianController extends Controller
                 'product_id' => $carts->product_id,
                 'jumlah_pembelian_produk' => $carts->jumlah_masuk_keranjang,
             ]);
+            
+            $stok = DB::table('stocks')->select('stok')->where('product_id', $carts->product_id)->first();
+
+            DB::table('stocks')->where('product_id', $carts->product_id)->update([
+                'stok' => $stok->stok - $carts->jumlah_masuk_keranjang,
+            ]);
         }
         
         DB::table('carts')->where('user_id', $user_id)->delete();
@@ -124,10 +130,13 @@ class PembelianController extends Controller
                 ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
                 ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
                 
+                $count_proof_of_payment = DB::table('proof_of_payments')->select(DB::raw('COUNT(*) as count_proof_of_payment'))->first();
+                
                 $proof_of_payments = DB::table('proof_of_payments')->get();
         
                 return view('user.pembelian.daftar_pembelian')->with('product_purchases', $product_purchases)->with('profile', $profile)
-                ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('proof_of_payments', $proof_of_payments);
+                ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('proof_of_payments', $proof_of_payments)
+                ->with('count_proof_of_payment', $count_proof_of_payment);
             }
         }
     }
@@ -182,11 +191,16 @@ class PembelianController extends Controller
                 ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
                 ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
                 ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
+                
+                $total_harga = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga'))->where('user_id', $user_id)
+                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')->first();
 
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
                 return view('user.pembelian.detail_pembelian')->with('product_purchases', $product_purchases)->with('profile', $profile)
-                ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('cek_proof_of_payment', $cek_proof_of_payment);
+                ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('total_harga', $total_harga)
+                ->with('cek_proof_of_payment', $cek_proof_of_payment);
             }
         }
     }

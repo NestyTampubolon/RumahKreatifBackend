@@ -135,6 +135,7 @@
             @endif
 
             @if($purchases->status_pembelian == "status1")
+            
             @endif
         </div>
     </a>

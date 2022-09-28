@@ -25,9 +25,29 @@
             @foreach($carousels as $carousels)
             <div class="intro-slide" style="background-image: url('./asset/u_file/carousel_image/{{$carousels->carousel_image}}'); height:300px">
                 @if($carousels->open_in_new_tab == 1)
-                <a href="{{$carousels->link_carousel}}" target="_blank" class="container intro-content" style="height:100%"></a>
+                    @if($carousels->link_carousel == "")
+                        <a href="#" target="_blank" class="container intro-content" style="height:100%"></a>
+                    @endif
+
+                    @if($cek_http)
+                        <a href="{{$carousels->link_carousel}}" target="_blank" class="container intro-content" style="height:100%"></a>
+                    @elseif($cek_www)
+                        <a href="https://{{$carousels->link_carousel}}" target="_blank" class="container intro-content" style="height:100%"></a>
+                    @else
+                        <a href="https://{{$carousels->link_carousel}}" target="_blank" class="container intro-content" style="height:100%"></a>
+                    @endif
                 @elseif($carousels->open_in_new_tab == 0)
-                <a href="{{$carousels->link_carousel}}" class="container intro-content" style="height:100%"></a>
+                    @if($carousels->link_carousel == "")
+                        <a href="#" class="container intro-content" style="height:100%"></a>
+                    @endif
+
+                    @if($cek_http)
+                        <a href="{{$carousels->link_carousel}}" class="container intro-content" style="height:100%"></a>
+                    @elseif($cek_www)
+                        <a href="https://{{$carousels->link_carousel}}" class="container intro-content" style="height:100%"></a>
+                    @else
+                        <a href="https://{{$carousels->link_carousel}}" class="container intro-content" style="height:100%"></a>
+                    @endif
                 @endif
             </div><!-- End .intro-slide -->
             @endforeach
@@ -35,7 +55,7 @@
         </div><!-- End .owl-carousel owl-simple -->
         <span class="slider-loader text-white"></span><!-- End .slider-loader -->
     </div><!-- End .intro-slider-container -->
-</center>
+    </center>
 
     <!-- <div class="brands-border owl-carousel owl-simple" data-toggle="owl" 
         data-owl-options='{
