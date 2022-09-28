@@ -12,8 +12,8 @@
     <div class="page-content">
         <div class="cart">
             <div class="container">
-                <div class="row">
-                    <form action="./PostBeliProduk" method="post" enctype="multipart/form-data" class="col-lg-9">
+                <form action="./PostBeliProduk" method="post" enctype="multipart/form-data" class="row">
+                    <div class="col-lg-9">
                         @csrf
                         <table class="table table-cart table-mobile">
                             <thead>
@@ -55,7 +55,7 @@
                                 <a href="./keranjang" class="btn btn-outline-primary-2" type="submit">KEMBALI</a>
                             </div><!-- .End .input-group-append -->
                         </div><!-- End .cart-bottom -->
-                    </form>
+                    </div>
 
                     <aside class="col-lg-3">
                         <div class="summary summary-cart">
@@ -72,6 +72,8 @@
 
                                     @foreach($carts as $carts)
                                     <tr>
+                                        <!-- <input type="">{{$carts->product_id}}</input>
+                                        <input type="">{{$carts->jumlah_masuk_keranjang}}</input> -->
                                         <td><a href="#">{{$carts->product_name}}</a></td>
                                         <td>
                                             <?php
@@ -84,8 +86,10 @@
                                     @endforeach
 
                                     <tr class="summary-shipping-estimate">
-                                        <td>Alamat Anda<br> <a href="dashboard.html">Ganti alamat</a></td>
-                                        <td>&nbsp;</td>
+                                        <td colspan="2">
+                                            Alamat Anda:<br> 
+                                            <input type="text" name="alamat_purchase" class="form-control" style="background-color:white" required>
+                                        </td>
                                     </tr>
 
                                     <tr class="summary-total">
@@ -99,12 +103,10 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <a href="#" class="btn btn-outline-primary-2 btn-order btn-block">LANJUTKAN PEMBELIAN</a>
+                            <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">LANJUTKAN PEMBELIAN</button>
                         </div>
                     </aside>
-                    
-                </div><!-- End .row -->
+                </form><!-- End .row -->
             </div><!-- End .container -->
         </div><!-- End .cart -->
     </div><!-- End .page-content -->

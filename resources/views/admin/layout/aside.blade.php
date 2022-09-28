@@ -49,6 +49,13 @@
                 <p>Dashboard</p>
             </a>
         </li>
+        <li class="nav-header">PEMBELIAN</li>
+        <li class="nav-item">
+            <a href="{{ url('/daftar_pembelian') }}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Pembelian</p>
+            </a>
+        </li>
         <li class="nav-header">USERS</li>
         <li class="nav-item">
             <a href="{{ url('/verifikasi_user') }}" class="nav-link">

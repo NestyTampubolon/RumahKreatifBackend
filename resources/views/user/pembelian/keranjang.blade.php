@@ -81,9 +81,11 @@
                                 @endforeach
                             </tbody>
                         </table><!-- End .table table-wishlist -->
+                        @if($cek_carts)
                         <div class="cart-bottom">
                             <button type="submit" class="btn btn-outline-primary-2"><span>CHECKOUT</span><i class="icon-long-arrow-right"></i></button>
                         </div><!-- End .cart-bottom -->
+                        @endif
                     </form>
 
                     <!-- <aside class="col-lg-5">

@@ -90,7 +90,10 @@ Route::get('/produk_toko', 'App\Http\Controllers\ProdukController@produk_toko');
 
 Route::post('/PostBeliProduk', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
-Route::get('/detail_pembelian/{product_purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
+Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
+
+Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
+Route::get('/update_status_pembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembayaran');
 
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
 Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
