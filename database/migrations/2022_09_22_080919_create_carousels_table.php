@@ -16,7 +16,7 @@ class CreateCarouselsTable extends Migration
         Schema::create('carousels', function (Blueprint $table) {
             $table->id();            
             $table->string('carousel_image');
-            $table->string('link_carousel');
+            $table->string('link_carousel')->nullable();
             $table->boolean('open_in_new_tab');
         });
     }
