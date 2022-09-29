@@ -73,7 +73,7 @@ class PembelianController extends Controller
             
             $profiles = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
             
-            $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->get();
+            $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
 
             $product_purchases = DB::table('product_purchases')->where('merchant_id', $toko)->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
@@ -95,7 +95,7 @@ class PembelianController extends Controller
             $cek_admin_id = DB::table('users')->where('id', $user_id)->where('is_admin', 1)->first();
 
             if($cek_admin_id){
-                $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->get();
+                $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
                 $profiles = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
                 
@@ -116,7 +116,7 @@ class PembelianController extends Controller
 
             else{                
                 $purchases = DB::table('purchases')->where('user_id', $user_id)
-                ->join('users', 'purchases.user_id', '=', 'users.id')->get();
+                ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
                 $profile = DB::table('profiles')->where('user_id', $user_id)
                 ->join('users', 'profiles.user_id', '=', 'users.id')->first();

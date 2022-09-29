@@ -122,7 +122,7 @@
                     @if($count_proof_of_payment->count_proof_of_payment != 0)
                         @foreach($proof_of_payments as $proof_of_payment)
                             @if($proof_of_payment->purchase_id == $purchases->purchase_id)
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. SILAHKAN KONFIRMASI.</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. MENUNGGU KONFIRMASI.</p>
                             @else
                                 <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN</p>
                             @endif
