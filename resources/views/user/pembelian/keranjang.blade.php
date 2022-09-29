@@ -51,15 +51,17 @@
                                     </td>
                                     <td class="quantity-col">
                                         <div class="cart-product-quantity">
-                                            <input type="number" class="form-control" name="jumlah_masuk_keranjang[]" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]" value="{{$carts->jumlah_masuk_keranjang}}" min="1" step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
+                                            <input type="number" class="form-control" name="jumlah_masuk_keranjang[]" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]"
+                                                value="{{$carts->jumlah_masuk_keranjang}}" min="1"
+                                                    max="<?php
+                                                        foreach($stocks as $stock){
+                                                            if($stock->product_id == $carts->product_id){
+                                                                echo $stock->stok;
+                                                            }
+                                                        }
+                                                    ?>"
+                                                step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
                                         </div><!-- End .cart-product-quantity -->
-                                    </td>
-                                    <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">
-                                        <?php
-                                            $total = $carts->price * $carts->jumlah_masuk_keranjang;
-                                            $total_harga_produk = "Rp." . number_format($total,2,',','.');  
-                                            echo $total_harga_produk;
-                                        ?>
                                     </td>
                                     <script>
                                         function total{{$carts->cart_id}}()
@@ -76,6 +78,13 @@
                                             total_harga_table<?php echo $carts->cart_id?>.innerHTML = rupiah(jumlah_barang<?php echo $carts->cart_id?> * <?php echo $carts->price?>) 
                                         }
                                     </script>
+                                    <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">
+                                        <?php
+                                            $total = $carts->price * $carts->jumlah_masuk_keranjang;
+                                            $total_harga_produk = "Rp." . number_format($total,2,',','.');  
+                                            echo $total_harga_produk;
+                                        ?>
+                                    </td>
                                     <td class="remove-col"><a href="./hapus_keranjang/{{$carts->cart_id}}" class="btn-remove"><i class="icon-close"></i></a></td>
                                 </tr>
                                 @endforeach

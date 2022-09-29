@@ -30,7 +30,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_carousel">Tambah Bank</button>
+                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-tambah_carousel">Tambah Carousel</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

@@ -40,12 +40,38 @@
                             <p class="">
                                 SILAHKAN LAKUKAN PEMBAYARAN PESANAN ANDA SENILAI
                                 <?php
-                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga,2,',','.');     
-                                    echo "<b>" . $total_harga_produk . "</b>";
+                                    $ongkir = 30000;
+                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga + $ongkir,2,',','.');
                                 ?>
-                                
+                                <b><a id="total_harga_produk">{{$total_harga_produk}}</a></b>
+
                                 KE NOMOR REKENING DIBAWAH INI.<br>
                                 <b>---------------</b>
+                            </p>
+                        </div><!-- End .card-body -->
+                    </div><!-- End .card-dashboard -->
+                </div><!-- End .col-lg-6 -->
+            </div><!-- End .row -->
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-dashboard">
+                        <div class="card-body">
+                            <p class="">
+                                <b>Keterangan Pembayaran: </b>
+                            </p>
+                            <p class="">
+                                <?php
+                                    $ongkir = 30000;
+                                    $total_pembelian = "Rp " . number_format($total_harga->total_harga + $ongkir,2,',','.');
+                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga,2,',','.');
+                                    $ongkir = "Rp " . number_format($ongkir,2,',','.');
+                                ?>
+                                
+                                (Total Harga Produk) <a id="set_harga_produk">{{$total_harga_produk}}</a> <a id="plus_ongkir">+ (Ongkos Kirim) {{$ongkir}}</a> = (Total Pembelian) <a id="total_pembelian">{{$total_pembelian}}</a>
+                            </p>
+                            <p class="">
+                                <a href="#voucher_open" data-toggle="modal" title="My account">DAPATKAN VOUCHER</a>
                             </p>
                         </div><!-- End .card-body -->
                     </div><!-- End .card-dashboard -->
@@ -177,6 +203,51 @@
     @endforeach
     </div><!-- End .row -->
 </div><!-- .End .tab-pane -->
+
+<div class="modal fade" id="voucher_open" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="voucher" role="tabpanel" aria-labelledby="voucher-tab" align="center">
+                                <h3>53111411647</h3>
+                                <button class="btn btn-primary btn-round" onclick="klaim_voucher()">
+                                    <span>KLAIM</span>
+                                </button>
+                            </div><!-- .End .tab-pane -->
+                            <script>
+                                function klaim_voucher() {
+                                    $("#voucher_open").modal("hide");
+                                    let total_harga_produk = document.getElementById("total_harga_produk");
+                                    let set_harga_produk = document.getElementById("set_harga_produk");
+                                    let plus_ongkir = document.getElementById("plus_ongkir");
+                                    let total_pembelian = document.getElementById("total_pembelian");
+
+                                    const rupiah = (number)=>{
+                                        return new Intl.NumberFormat("id-ID", {
+                                        style: "currency",
+                                        currency: "IDR"
+                                        }).format(number);
+                                    }
+                                    total_harga_produk.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
+                                    set_harga_produk.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
+                                    plus_ongkir.innerHTML = ""
+                                    total_pembelian.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
+                                }
+                            </script>
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
 
 @endsection
 

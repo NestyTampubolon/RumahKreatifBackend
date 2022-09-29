@@ -116,7 +116,7 @@
                 </div>
                 <div class="d-flex justify-content-around mb-1">
                     @if($count_proof_of_payment->count_proof_of_payment == 0)
-                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. MENUNGGU BUKTI PEMBAYARAN</p>
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN</p>
                     @endif
                     
                     @if($count_proof_of_payment->count_proof_of_payment != 0)

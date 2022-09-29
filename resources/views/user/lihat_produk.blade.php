@@ -151,7 +151,7 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         <div class="product-details-quantity">
-                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" step="1" data-decimals="0" required>
+                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
                                         </div>
                                         @if(Auth::check())
                                             <button type="submit" class="btn btn-primary"><span>BELI</span></button>
