@@ -14,24 +14,28 @@
     <h5 class="text-muted mb-0">Daftar Pesanan <span style="color: #800000;">Pelanggan</span></h5>
 </div>
 
-@foreach($purchases as $purchases)
+@foreach($cek_purchase as $cek_purchase)
 
-@if($purchases->status_pembelian == "status1")
+@foreach($purchases as $purchase)
+
+@if($purchase->purchase_id == $cek_purchase->purchase_id)
+
+@if($purchase->status_pembelian == "status1")
 
 @else
 <div class="card-body p-4">
-    <a href="./detail_pembelian/{{$purchases->purchase_id}}" class="p-2 card shadow-0 border mb-1">
+    <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="p-2 card shadow-0 border mb-1">
         <div class="row d-flex align-items-center">
             <div class="col-md-12 mb-1" align="center">
                 @foreach($profiles as $profile)
-                    @if($profile->id == $purchases->user_id)
+                    @if($profile->id == $purchase->user_id)
                         <p class="text-muted mb-0"><b>{{$profile->name}}</b></p>
                     @endif
                 @endforeach
             </div>
         </div>
         @foreach($product_purchases as $product_purchase)
-            @if($product_purchase->purchase_id == $purchases->purchase_id)
+            @if($product_purchase->purchase_id == $purchase->purchase_id)
             <div class="card border mb-1">
                 <div class="card-body">
                     <div class="row">
@@ -70,7 +74,7 @@
         @endforeach
         <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
         <div class="row d-flex align-items-center">
-            @if($purchases->status_pembelian == "status5")
+            @if($purchase->status_pembelian == "status5")
             <div class="col-md-12 mb-1">
                 <p class="text-muted ">Jejak Pembelian</p>
             </div>
@@ -86,7 +90,7 @@
             </div>
             @endif
 
-            @if($purchases->status_pembelian == "status4")
+            @if($purchase->status_pembelian == "status4")
             <div class="col-md-12 mb-1">
                 <p class="text-muted ">Jejak Pembelian</p>
             </div>
@@ -102,7 +106,7 @@
             </div>
             @endif
 
-            @if($purchases->status_pembelian == "status3")
+            @if($purchase->status_pembelian == "status3")
             <div class="col-md-12 mb-1">
                 <p class="text-muted ">Jejak Pembelian</p>
             </div>
@@ -118,7 +122,7 @@
             </div>
             @endif
 
-            @if($purchases->status_pembelian == "status2")
+            @if($purchase->status_pembelian == "status2")
             <div class="col-md-12 mb-1">
                 <p class="text-muted ">Jejak Pembelian</p>
             </div>
@@ -134,7 +138,7 @@
             </div>
             @endif
 
-            @if($purchases->status_pembelian == "status1")
+            @if($purchase->status_pembelian == "status1")
             
             @endif
         </div>
@@ -142,6 +146,10 @@
 </div>
 
 @endif
+
+@endif
+
+@endforeach
 
 @endforeach
 

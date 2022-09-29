@@ -100,8 +100,8 @@
 
                                     <div class="form-group">
                                         <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" maxlength="8" required>
-                                        <label><small class="form-text">Maksimal password 8 karakter</small></label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                        <!-- <label><small class="form-text">Minimal password 8 karakter</small></label> -->
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
