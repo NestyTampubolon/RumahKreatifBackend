@@ -8,8 +8,6 @@
 
 @section('container')
 
-@foreach($purchases as $purchases)
-
 @if($purchases->status_pembelian == "status1")
 
 @else
@@ -127,8 +125,6 @@
 </div><!-- .End .tab-pane -->
 
 @endif
-
-@endforeach
 
 @endsection
 

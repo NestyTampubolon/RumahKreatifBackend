@@ -167,12 +167,12 @@ class ProdukController extends Controller
         $toko = Session::get('toko');
 
         $product = DB::table('products')->where('products.merchant_id', $toko)->where('product_id', $product_id)
-        ->join('categories', 'products.category_id', '=', 'categories.category_id')->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+        ->join('categories', 'products.category_id', '=', 'categories.category_id')->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
         
         $stock = DB::table('stocks')->where('product_id', $product_id)->first();
         
         $product_specifications = DB::table('product_specifications')->where('product_id', $product_id)
-        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')->get();
+        ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')->first();
 
         return view('user.toko.edit_produk')->with('product', $product)->with('stock', $stock)->with('product_id', $product_id)->with('product_specifications', $product_specifications);
     }

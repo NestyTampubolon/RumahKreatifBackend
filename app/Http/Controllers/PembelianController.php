@@ -148,8 +148,6 @@ class PembelianController extends Controller
             $cek_purchase = DB::table('purchases')->where('purchase_id', $purchase_id)->where('status_pembelian', 'status2')
             ->join('users', 'purchases.user_id', '=', 'users.id')->first();
 
-            $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->get();
-            
             $purchase = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
             
             $profile = DB::table('profiles')->where('user_id', $purchase->user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
@@ -166,7 +164,7 @@ class PembelianController extends Controller
             $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
 
             return view('user.toko.detail_pembelian')->with('product_purchases', $product_purchases)->with('product_specifications', $product_specifications)
-            ->with('purchases', $purchases)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile);
+            ->with('purchases', $purchase)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile);
         }
 
         else{

@@ -22,11 +22,17 @@ Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegis
 Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
 Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');
 
+Route::get('/profil', 'App\Http\Controllers\ProfilController@profil');
+Route::get('/edit_profil', 'App\Http\Controllers\ProfilController@edit_profil');
+Route::post('/PostEditProfil', 'App\Http\Controllers\ProfilController@PostEditProfil');
+
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
 
 Route::get('/toko', 'App\Http\Controllers\TokoController@toko');
+Route::get('/edit_toko', 'App\Http\Controllers\TokoController@edit_toko');
+Route::post('/PostEditToko', 'App\Http\Controllers\TokoController@PostEditToko');
 
 Route::post('/MasukToko', 'App\Http\Controllers\TokoController@MasukToko');
 Route::get('/keluar_toko', 'App\Http\Controllers\TokoController@keluar_toko');

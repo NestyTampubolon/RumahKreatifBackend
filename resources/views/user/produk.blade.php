@@ -10,7 +10,7 @@
 
 @section('container')
 <main class="main">
-    <div class="bg-light ">
+    <div class="bg-light" style="background-image: url('asset/Molla/assets/images/page-header-bg.jpg')">
         <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
             <div class="container d-flex align-items-center">
                 @if($kategori_produk_id > 0)

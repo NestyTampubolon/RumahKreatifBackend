@@ -27,7 +27,7 @@
 </style>
 
 @section('container')
-@foreach($product as $product)
+
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
     <form action="../PostEditProduk/{{$product_id}}" id="formProduct" method="post" enctype="multipart/form-data">
     @csrf
@@ -36,9 +36,7 @@
         
         <label>Deskripsi :</label>
         <label>
-            @foreach($product_specifications as $product_specifications)
-                {{$product_specifications->nama_spesifikasi}},
-            @endforeach
+            {{$product_specifications->nama_spesifikasi}},
         </label><br>
 
         <div class="mb-1"></div>
@@ -55,7 +53,7 @@
         <label>Gambar Produk *</label>
         <div class="fileUpload">
             <input id="uploadBtn" type="file" name="product_image" class="upload" accept="image/*"/>
-            <input class="form-control" id="uploadFile" placeholder="{{$product->product_image}}" disabled="disabled"/>
+            <input class="form-control" id="uploadFile" value="{{$product->product_image}}" disabled="disabled"/>
             <small class="form-text">Pastikan gambar yang anda masukkan dapat dilihat dengan jelas.</small>
         </div>
         
@@ -84,7 +82,6 @@
             }
         </script>
 </div><!-- .End .tab-pane -->
-@endforeach
 
 @endsection
 

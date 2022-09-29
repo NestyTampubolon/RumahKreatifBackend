@@ -108,7 +108,7 @@
                         <div class="icon">
                             <i class="icon-user"></i>
                         </div>
-                        <p>Akun</p>
+                        <p><b><?php echo Auth::user()->username ?></b></p>
                     </a>
                 </div><!-- End .compare-dropdown -->
                 

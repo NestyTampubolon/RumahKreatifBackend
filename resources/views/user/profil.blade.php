@@ -1,4 +1,4 @@
-@extends('user/toko/layout/main')
+@extends('user/layout/main_dash')
 
 @section('title', 'Rumah Kreatif Toba - Dashboard')
 
@@ -14,19 +14,25 @@
         <div class="col-lg-6">
             <div class="card card-dashboard">
                 <div class="card-body">
-                    <h3 class="card-title">Profil Toko</h3><!-- End .card-title -->
-
-                    <p>{{$merchants->nama_merchant}}</p>
-                    <p>{{$merchants->deskripsi_toko}}</p>
-                    <p>{{$merchants->kontak_toko}}</p>
-                    <a href="./edit_toko">Edit <i class="icon-edit"></i></a></p>
+                    <h3 class="card-title">Profil Pengguna</h3><!-- End .card-title -->
+                    <p>{{$profile->name}}</p>
+                    @if($profile->gender == "L")
+                        <p>Laki-laki</p>
+                    @elseif($profile->gender == "P")
+                        <p>Perempuan</p>
+                    @endif
+                    <p>{{$profile->birthday}}</p>
+                    <p>{{$profile->no_hp}}</p>
+                    <a href="./edit_profil">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->
         <div class="col-lg-6">
             <div class="card card-dashboard">
                 <div class="card-body">
-                    <img src="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" alt="Product image" class="product-image">
+                    <h3 class="card-title">Profil Akun</h3><!-- End .card-title -->
+                    <p>{{$profile->username}}</p>
+                    <p>{{$profile->email}}</p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->

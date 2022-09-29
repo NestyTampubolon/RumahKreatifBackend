@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Session;
+use Illuminate\Support\Facades\File;
 
 class TokoController extends Controller
 {
@@ -20,7 +21,7 @@ class TokoController extends Controller
         
         if(Session::get('toko')){
             $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
-            ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->where('merchants.user_id', $user_id)->get();
+            ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->where('merchants.user_id', $user_id)->first();
 
             return view('user.toko.toko')->with('merchants', $merchants);
         }
@@ -49,6 +50,66 @@ class TokoController extends Controller
             'kontak_toko' => $kontak_toko,
             'foto_merchant' => $nama_foto_merchant,
         ]);
+
+        return redirect('./toko');
+    }
+    
+
+    public function edit_toko() {
+        $user_id = Auth::user()->id;
+        
+        if(Session::get('toko')){
+            $toko = Session::get('toko');
+
+            $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
+            ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->where('merchant_id', $toko)->first();
+
+            return view('user.toko.edit_toko')->with('merchants', $merchants);
+        }
+
+        else{
+            return redirect('./');;
+        }
+    }
+
+    public function PostEditToko(Request $request) {
+        $id = Auth::user()->id;
+        
+        $toko = Session::get('toko');
+
+        $nama_merchant = $request -> nama_merchant;
+        $deskripsi_toko = $request -> deskripsi_toko;
+        $kontak_toko = $request -> kontak_toko;
+        $foto_merchant = $request -> file('foto_merchant');
+
+        if(!$foto_merchant){
+            DB::table('merchants')->where('merchant_id', $toko)->update([
+                'nama_merchant' => $nama_merchant,
+                'deskripsi_toko' => $deskripsi_toko,
+                'kontak_toko' => $kontak_toko,
+            ]);
+        }
+
+        if($foto_merchant){
+            $merchant_lama = DB::table('merchants')->where('merchant_id', $toko)->first();
+            $asal_gambar = 'asset/u_file/foto_merchant/';
+            $foto_merchant_lama = public_path($asal_gambar . $merchant_lama->foto_merchant);
+
+            if(File::exists($foto_merchant_lama)){
+                File::delete($foto_merchant_lama);
+            }
+
+            $nama_foto_merchant = time().'_'.$foto_merchant->getClientOriginalName();
+            $tujuan_upload = './asset/u_file/foto_merchant';
+            $foto_merchant->move($tujuan_upload,$nama_foto_merchant);
+            
+            DB::table('merchants')->where('merchant_id', $toko)->update([
+                'nama_merchant' => $nama_merchant,
+                'deskripsi_toko' => $deskripsi_toko,
+                'kontak_toko' => $kontak_toko,
+                'foto_merchant' => $nama_foto_merchant,
+            ]);
+        }
 
         return redirect('./toko');
     }
