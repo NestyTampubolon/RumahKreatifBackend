@@ -25,6 +25,8 @@ class HomeController extends Controller
 
         else{
             $carousels = DB::table('carousels')->orderBy('id', 'desc')->get();
+            
+            $count_products = DB::table('products')->select(DB::raw('COUNT(*) as count_products'))->first();
 
             $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->paginate(13);
@@ -32,7 +34,8 @@ class HomeController extends Controller
             $cek_http = DB::table('carousels')->where('link_carousel', 'like', 'https://'."%")->orwhere('link_carousel', 'like', 'http://'."%")->first();
             $cek_www = DB::table('carousels')->where('link_carousel', 'like', 'www.'."%")->first();
 
-            return view('user.index')->with('products', $products)->with('carousels', $carousels)->with('cek_http', $cek_http)->with('cek_www', $cek_www);
+            return view('user.index')->with('products', $products)->with('carousels', $carousels)->with('cek_http', $cek_http)
+            ->with('cek_www', $cek_www)->with('count_products', $count_products);
         }
     }
 

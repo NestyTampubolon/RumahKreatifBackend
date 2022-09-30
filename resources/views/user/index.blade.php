@@ -348,7 +348,11 @@
 
     <div class="container">
         <div class="heading heading-center mb-3">
-            <h2 class="title">13 Newest Products</h2><!-- End .title -->
+            @if($count_products->count_products == 0)
+
+            @else
+            <h2 class="title">Produk Terbaru</h2><!-- End .title -->
+            @endif
 
             <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                 <!-- <li class="nav-item">
