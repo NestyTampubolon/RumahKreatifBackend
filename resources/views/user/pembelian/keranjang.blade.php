@@ -34,7 +34,17 @@
                                             <input type="number" class="form-control" name="product_id[]" value="{{$carts->product_id}}" hidden required>
                                             <figure class="product-media">
                                                 <a href="./lihat_produk/{{$carts->product_id}}">
-                                                    <img src="./asset/u_file/product_image/{{$carts->product_image}}" alt="Product image">
+                                                @foreach($product_images as $product_image)
+                                                    @if($product_image->product_id == $carts->product_id)
+                                                        @if($loop->iteration % 3 == 0)
+                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image">
+                                                        @elseif($loop->iteration % 6 == 0)
+                                                        
+                                                        @else
+
+                                                        @endif
+                                                    @endif
+                                                @endforeach
                                                 </a>
                                             </figure>
 
@@ -66,8 +76,8 @@
                                     <script>
                                         function total{{$carts->cart_id}}()
                                         {
-                                            let jumlah_barang<?php echo $carts->cart_id?> = document.getElementById("jumlah_masuk_keranjang[{{$carts->cart_id}}]").value;
-                                            let total_harga_table<?php echo $carts->cart_id?> = document.getElementById("total_harga_table[{{$carts->cart_id}}]");
+                                            let jumlah_barang<?php echo $carts->cart_id ?> = document.getElementById("jumlah_masuk_keranjang[{{$carts->cart_id}}]").value;
+                                            let total_harga_table<?php echo $carts->cart_id ?> = document.getElementById("total_harga_table[{{$carts->cart_id}}]");
                                             
                                             const rupiah = (number)=>{
                                                 return new Intl.NumberFormat("id-ID", {
@@ -75,7 +85,7 @@
                                                 currency: "IDR"
                                                 }).format(number);
                                             }
-                                            total_harga_table<?php echo $carts->cart_id?>.innerHTML = rupiah(jumlah_barang<?php echo $carts->cart_id?> * <?php echo $carts->price?>) 
+                                            total_harga_table<?php echo $carts->cart_id?>.innerHTML = rupiah(jumlah_barang<?php echo $carts->cart_id ?> * <?php echo $carts->price ?>) 
                                         }
                                     </script>
                                     <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">

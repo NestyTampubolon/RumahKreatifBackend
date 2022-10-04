@@ -93,7 +93,17 @@
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
                                         <a href="../../lihat_produk/{{$product->product_id}}">
-                                            <img src="../../asset/u_file/product_image/{{$product->product_image}}" alt="Product image" class="product-image">
+                                        @foreach($product_images as $product_image)
+                                            @if($product_image->product_id == $product->product_id)
+                                                @if($loop->iteration % 3 == 0)
+                                                <img src="../../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
+                                                @elseif($loop->iteration % 6 == 0)
+                                                <img src="../../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image-hover">
+                                                @else
+                                                
+                                                @endif
+                                            @endif
+                                        @endforeach
                                         </a>
 
                                         <!-- <div class="product-action-vertical">
@@ -115,7 +125,7 @@
                                         <div class="mb-1"></div>
 
                                         <div class="product-cat">
-                                            <a href="#"><b>{{$product->nama_merchant}}</b></a>
+                                            <a href="../../produk/toko[{{$product->merchant_id}}]"><b>{{$product->nama_merchant}}</b></a>
                                         </div><!-- End .product-cat -->
 
                                         <div class="mb-1"></div>

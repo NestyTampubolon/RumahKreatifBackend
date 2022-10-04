@@ -16,8 +16,10 @@ class ProdukController extends Controller
         if($toko){
             $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+            
+            $product_images = DB::table('product_images')->join('products', 'product_images.product_id', '=', 'products.product_id')->orderBy('product_image_id', 'asc')->get();
 
-            return view('user.toko.produk')->with('products', $products);
+            return view('user.toko.produk')->with('products', $products)->with('product_images', $product_images);
         }
 
         else if(!$toko){
@@ -31,9 +33,11 @@ class ProdukController extends Controller
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
             
+            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
+
             // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)
+            return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)->with('categories', $categories)
             ->with('kategori_produk_id', $kategori_produk_id);
         }
     }
@@ -42,7 +46,7 @@ class ProdukController extends Controller
     {        
 		$cari = $request->cari_produk;
 
-        return redirect("./produk/cari/$cari");
+        return redirect("./cari_produk/$cari");
     }
 
     public function cari_produk_view(Request $request)
@@ -59,8 +63,11 @@ class ProdukController extends Controller
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
         
         $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+        
+        $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
 
-        return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
+        return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)
+        ->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
     }
 
     public function produk_kategori($kategori_produk_id) {
@@ -78,6 +85,8 @@ class ProdukController extends Controller
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
+            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
+            
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
             
@@ -85,8 +94,8 @@ class ProdukController extends Controller
 
             $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id)
-            ->with('nama_kategori', $nama_kategori);
+            return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)->with('categories', $categories)
+            ->with('kategori_produk_id', $kategori_produk_id)->with('nama_kategori', $nama_kategori);
         }
     }
 
@@ -94,6 +103,36 @@ class ProdukController extends Controller
         $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
         return view('user.toko.pilih_kategori')->with('categories', $categories);
+    }
+    
+    public function produk_toko_belanja($merchant_id) {
+        $toko = Session::get('toko');
+
+        if($toko){
+            // $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            // ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
+
+            // return view('user.toko.produk')->with('products', $products);
+        }
+
+        else{
+            $products = DB::table('products')->where('products.merchant_id', $merchant_id)->orderBy('product_id', 'desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            
+            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
+            
+            $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
+            
+            $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
+
+            $kategori_produk_id = 0;
+
+            return view('user.produk')->with('products', $products)->with('product_images', $product_images)
+            ->with('categories', $categories)->with('product_info', $product_info)->with('merchant_id', $merchant_id)
+            ->with('kategori_produk_id', $kategori_produk_id);
+        }
     }
 
     public function tambah_produk($kategori_produk_id) {
@@ -121,15 +160,15 @@ class ProdukController extends Controller
         $product_name = $request -> product_name;
         $product_description = $request -> product_description;
         $price = $request -> price;
-        $product_image = $request -> file('product_image');
-
-        $nama_product_image = time().'_'.$product_image->getClientOriginalName();
-        $tujuan_upload = './asset/u_file/product_image';
-        $product_image->move($tujuan_upload,$nama_product_image);
+        $heavy = $request -> heavy;
         
         $specification_id = $request -> specification_id;
         
+        $product_image = $request -> file('product_image');
+        $jumlah_product_image = count($product_image);
+
         $stok = $request -> stok;
+        
 
         // dd($toko, $product_name, $price, $nama_product_image, $specification_id);
 
@@ -139,18 +178,31 @@ class ProdukController extends Controller
             'product_name' => $product_name,
             'product_description' => $product_description,
             'price' => $price,
-            'product_image' => $nama_product_image,
+            'heavy' => $heavy,
         ]);
         
         // $product_id = DB::table('products')->select('product_id')->pluck('product_id');
         $product_id = DB::table('products')->select('product_id')->orderBy('product_id', 'desc')->first();
- 
-        $jumlah_specification_id_dipilih = count($specification_id);
- 
-        for($x=0;$x<$jumlah_specification_id_dipilih;$x++){
-            DB::table('product_specifications')->insert([
+            
+        if($specification_id){
+            $jumlah_specification_id_dipilih = count($specification_id);
+            
+            for($x=0; $x<$jumlah_specification_id_dipilih; $x++){
+                DB::table('product_specifications')->insert([
+                    'product_id' => $product_id->product_id,
+                    'specification_id' => $specification_id[$x],
+                ]);
+            }
+        }
+        
+        for($x=0; $x<$jumlah_product_image; $x++){
+            $nama_product_image[$x] = time().'_'.$product_image[$x]->getClientOriginalName();
+            $tujuan_upload = './asset/u_file/product_image';
+            $product_image[$x]->move($tujuan_upload,$nama_product_image[$x]);
+            
+            DB::table('product_images')->insert([
                 'product_id' => $product_id->product_id,
-                'specification_id' => $specification_id[$x],
+                'product_image_name' => $nama_product_image[$x],
             ]);
         }
 
@@ -162,7 +214,6 @@ class ProdukController extends Controller
         return redirect('./produk');
     }
     
-
     public function edit_produk($product_id) {
         $toko = Session::get('toko');
 
@@ -173,15 +224,22 @@ class ProdukController extends Controller
         
         $product_specifications = DB::table('product_specifications')->where('product_id', $product_id)
         ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')->first();
+        
+        $product_images = DB::table('product_images')->where('product_id', $product_id)->get();
 
-        return view('user.toko.edit_produk')->with('product', $product)->with('stock', $stock)->with('product_id', $product_id)->with('product_specifications', $product_specifications);
+        return view('user.toko.edit_produk')->with('product', $product)->with('product_images', $product_images)->with('stock', $stock)
+        ->with('product_id', $product_id)->with('product_specifications', $product_specifications);
     }
 
     public function PostEditProduk(Request $request, $product_id) {
         $product_name = $request -> product_name;
         $product_description = $request -> product_description;
         $price = $request -> price;
+        $heavy = $request -> heavy;
+
         $product_image = $request -> file('product_image');
+        $jumlah_product_image = count($product_image);
+
         $stok = $request -> stok;
 
         if(!$product_image){
@@ -197,24 +255,35 @@ class ProdukController extends Controller
         }
 
         if($product_image){
-            $products_lama = DB::table('products')->where('product_id', $product_id)->first();
+            $products_lama = DB::table('product_images')->where('product_id', $product_id)->get();
             $asal_gambar = 'asset/u_file/product_image/';
-            $product_image_lama = public_path($asal_gambar . $products_lama->product_image);
-
-            if(File::exists($product_image_lama)){
-                File::delete($product_image_lama);
+            foreach($products_lama as $products_lama){
+                $product_image_lama = public_path($asal_gambar . $products_lama->product_image_name);
+                if(File::exists($product_image_lama)){
+                    File::delete($product_image_lama);
+                }
             }
 
-            $nama_product_image = time().'_'.$product_image->getClientOriginalName();
-            $tujuan_upload = './asset/u_file/product_image';
-            $product_image->move($tujuan_upload,$nama_product_image);
+
+            DB::table('product_images')->where('product_id', $product_id)->delete();
             
             DB::table('products')->where('product_id', $product_id)->update([
                 'product_name' => $product_name,
                 'product_description' => $product_description,
                 'price' => $price,
-                'product_image' => $nama_product_image,
+                'heavy' => $heavy,
             ]);
+
+            for($x=0; $x<$jumlah_product_image; $x++){
+                $nama_product_image[$x] = time().'_'.$product_image[$x]->getClientOriginalName();
+                $tujuan_upload = './asset/u_file/product_image';
+                $product_image[$x]->move($tujuan_upload,$nama_product_image[$x]);
+                
+                DB::table('product_images')->insert([
+                    'product_id' => $product_id,
+                    'product_image_name' => $nama_product_image[$x],
+                ]);
+            }
 
             DB::table('stocks')->where('product_id', $product_id)->update([
                 'stok' => $stok,
@@ -224,9 +293,58 @@ class ProdukController extends Controller
         return redirect('../produk');
     }
 
+    // public function PostEditProduk(Request $request, $product_id) {
+    //     $product_name = $request -> product_name;
+    //     $product_description = $request -> product_description;
+    //     $price = $request -> price;
+    //     $product_image = $request -> file('product_image');
+    //     $stok = $request -> stok;
+
+    //     if(!$product_image){
+    //         DB::table('products')->where('product_id', $product_id)->update([
+    //             'product_name' => $product_name,
+    //             'product_description' => $product_description,
+    //             'price' => $price,
+    //         ]);
+
+    //         DB::table('stocks')->where('product_id', $product_id)->update([
+    //             'stok' => $stok,
+    //         ]);
+    //     }
+
+    //     if($product_image){
+    //         $products_lama = DB::table('products')->where('product_id', $product_id)->first();
+    //         $asal_gambar = 'asset/u_file/product_image/';
+    //         $product_image_lama = public_path($asal_gambar . $products_lama->product_image);
+
+    //         if(File::exists($product_image_lama)){
+    //             File::delete($product_image_lama);
+    //         }
+
+    //         $nama_product_image = time().'_'.$product_image->getClientOriginalName();
+    //         $tujuan_upload = './asset/u_file/product_image';
+    //         $product_image->move($tujuan_upload,$nama_product_image);
+            
+    //         DB::table('products')->where('product_id', $product_id)->update([
+    //             'product_name' => $product_name,
+    //             'product_description' => $product_description,
+    //             'price' => $price,
+    //             'product_image' => $nama_product_image,
+    //         ]);
+
+    //         DB::table('stocks')->where('product_id', $product_id)->update([
+    //             'stok' => $stok,
+    //         ]);
+    //     }
+
+    //     return redirect('../produk');
+    // }
+
     public function lihat_produk($product_id) {
         $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
+        
+        $product_images = DB::table('product_images')->where('product_id', $product_id)->orderBy('product_image_id', 'asc')->get();
 
         // $product_category_id = DB::table('products')->select('category_id')->where('product_id', $product_id)->first();
         
@@ -257,12 +375,12 @@ class ProdukController extends Controller
             $cek_review = "";
         }
 
-        return view('user.lihat_produk', compact(['product', 'product_specifications', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
+        return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
     }
 
     public function produk_toko() {        
-        $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+        $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_name', 'asc')->get();
         
         $product_specifications = DB::table('product_specifications')
         ->join('products', 'product_specifications.product_id', '=', 'products.product_id')

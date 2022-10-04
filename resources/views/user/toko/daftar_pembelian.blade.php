@@ -40,8 +40,17 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <img src="./asset/u_file/product_image/{{$product_purchase->product_image}}"
-                            class="img-fluid" alt="Phone">
+                            @foreach($product_images as $product_image)
+                                @if($product_image->product_id == $product_purchase->product_id)
+                                    @if($loop->iteration % 3 == 0)
+                                    <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="Product image">
+                                    @elseif($loop->iteration % 6 == 0)
+                                    
+                                    @else
+                                    
+                                    @endif
+                                @endif
+                            @endforeach
                         </div>
                         
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">

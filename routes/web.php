@@ -22,6 +22,8 @@ Route::post('/registrasi', 'App\Http\Controllers\AutentikasiController@PostRegis
 Route::post('/login', 'App\Http\Controllers\AutentikasiController@PostLogin');
 Route::get('/logout', 'App\Http\Controllers\AutentikasiController@Logout');
 
+// Route::get('/mail_message','App\Http\Controllers\MailController@index');
+
 Route::get('/profil', 'App\Http\Controllers\ProfilController@profil');
 Route::get('/edit_profil', 'App\Http\Controllers\ProfilController@edit_profil');
 Route::post('/PostEditProfil', 'App\Http\Controllers\ProfilController@PostEditProfil');
@@ -82,9 +84,10 @@ Route::get('/hapus_rekening/{bank_id}', 'App\Http\Controllers\RekeningController
 
 Route::get('/produk', 'App\Http\Controllers\ProdukController@produk');
 Route::post('/cari_produk', 'App\Http\Controllers\ProdukController@cari_produk');
-Route::get('/produk/cari/{cari_produk}', 'App\Http\Controllers\ProdukController@cari_produk_view');
+Route::get('/cari_produk/{cari_produk}', 'App\Http\Controllers\ProdukController@cari_produk_view');
 Route::get('/lihat_produk/{product_id}', 'App\Http\Controllers\ProdukController@lihat_produk');
 Route::get('/produk/kategori[{kategori_produk_id}]', 'App\Http\Controllers\ProdukController@produk_kategori');
+Route::get('/produk/toko[{merchant_id}]', 'App\Http\Controllers\ProdukController@produk_toko_belanja');
 
 Route::get('/tambah_produk/pilih_kategori', 'App\Http\Controllers\ProdukController@pilih_kategori');
 Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@tambah_produk');

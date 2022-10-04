@@ -37,6 +37,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
+                        <th align="center">Nama Toko</th>
                         <th align="center">Username</th>
                         <th align="center">Email</th>
                         <th align="center">Status</th>
@@ -46,6 +47,7 @@
                   <tbody>
                     @foreach($merchants as $merchants)
                     <tr>
+                        <td>{{$merchants->nama_merchant}}</td>
                         <td>{{$merchants->username}}</td>
                         <td>{{$merchants->email}}</td>
                         @if($merchants->is_verified==1)
@@ -68,7 +70,6 @@
                                   </button>
                               </div>
                               <div class="modal-body">
-                                  <center><a>{{$merchants->nama_merchant}}</a></center>
                                   <center><a>{{$merchants->deskripsi_toko}}</a></center>
                                   <center><a>{{$merchants->kontak_toko}}</a></center>
                                   <center><a href="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" target="_blank">Lihat Foto Toko</a></center>

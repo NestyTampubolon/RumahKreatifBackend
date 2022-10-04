@@ -27,7 +27,17 @@
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
                                     <a href="./edit_produk/{{$products->product_id}}">
-                                        <img src="./asset/u_file/product_image/{{$products->product_image}}" alt="Product image" class="product-image">
+                                        @foreach($product_images as $product_image)
+                                            @if($product_image->product_id == $products->product_id)
+                                                @if($loop->iteration % 3 == 0)
+                                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
+                                                @elseif($loop->iteration % 6 == 0)
+                                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image-hover">
+                                                @else
+                                                
+                                                @endif
+                                            @endif
+                                        @endforeach
                                         <!-- <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/products/product-7-2.jpg') }}" alt="Product image" class="product-image-hover"> -->
                                     </a>
                                 </figure><!-- End .product-media -->
@@ -45,7 +55,7 @@
                                     
                                     <div class="mb-1"></div>
 
-                                    <h3 class="product-title"><a href="./lihat_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
+                                    <h3 class="product-title"><a href="./edit_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
                                     
                                     <div class="mb-1"></div>
 

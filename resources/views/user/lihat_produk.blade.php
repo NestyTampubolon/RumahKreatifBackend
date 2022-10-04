@@ -88,9 +88,13 @@
                 </nav>
                 <div class="container">
                     <div class="product-gallery-carousel owl-carousel owl-full owl-nav-dark">
-                        <figure class="product-gallery-image">
-                            <img src="../asset/u_file/product_image/{{$product->product_image}}" data-zoom-image="{{ URL::asset('asset/Molla/assets/images/products/single/gallery/1-big.jpg') }}" alt="product image">
-                        </figure>
+                        @foreach($product_images as $product_image)
+                            @if($product_image->product_id == $product->product_id)
+                            <figure class="product-gallery-image">
+                                <img src="../asset/u_file/product_image/{{$product_image->product_image_name}}" data-zoom-image="../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="product image">
+                            </figure>
+                            @endif
+                        @endforeach
 
                         <!-- <figure class="product-gallery-image">
                             <img src="{{ URL::asset('asset/Molla/assets/images/products/single/gallery/2.jpg') }}" data-zoom-image="{{ URL::asset('asset/Molla/assets/images/products/single/gallery/2-big.jpg') }}" alt="product image">

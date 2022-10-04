@@ -14,12 +14,14 @@ class KeranjangController extends Controller
         // ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
 
         $carts = DB::table('carts')->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
+        
+        $product_images = DB::table('product_images')->get();
        
         $cek_carts = DB::table('carts')->where('user_id', $user_id)->first();
         
         $stocks = DB::table('stocks')->get();
 
-        return view('user.pembelian.keranjang')->with('carts', $carts)->with('cek_carts', $cek_carts)->with('stocks', $stocks);
+        return view('user.pembelian.keranjang')->with('carts', $carts)->with('product_images', $product_images)->with('cek_carts', $cek_carts)->with('stocks', $stocks);
     }
 
     public function masuk_keranjang(Request $request, $product_id) {

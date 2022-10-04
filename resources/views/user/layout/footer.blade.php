@@ -119,7 +119,9 @@
                         </ul>
                     </div>
                 </div> -->
+                @if(Session::get('toko'))
 
+                @else
                 <div class="col-sm-4 col-lg-2">
                     <div class="widget">
                         <h4 class="widget-title">HELP</h4>
@@ -129,6 +131,7 @@
                         </ul>
                     </div>
                 </div>
+                @endif
 
                 <!-- <div class="col-sm-4 col-lg-2">
                     <div class="widget">

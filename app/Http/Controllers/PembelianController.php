@@ -24,9 +24,11 @@ class PembelianController extends Controller
 
         $carts = DB::table('carts')->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
         
+        $product_images = DB::table('product_images')->get();
+        
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
 
-        return view('user.pembelian.checkout')->with('carts', $carts)->with('total_harga', $total_harga);
+        return view('user.pembelian.checkout')->with('carts', $carts)->with('product_images', $product_images)->with('total_harga', $total_harga);
     }
 
     public function PostBeliProduk(Request $request) {
@@ -88,6 +90,8 @@ class PembelianController extends Controller
 
             $product_purchases = DB::table('product_purchases')->where('merchant_id', $toko)->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
+            
+            $product_images = DB::table('product_images')->get();
 
             $product_specifications = DB::table('product_specifications')
             ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
@@ -98,9 +102,9 @@ class PembelianController extends Controller
 
             $proof_of_payments = DB::table('proof_of_payments')->get();
 
-            return view('user.toko.daftar_pembelian')->with('cek_purchase', $cek_purchase)->with('purchases', $purchases)->with('product_purchases', $product_purchases)
-            ->with('product_specifications', $product_specifications)->with('proof_of_payments', $proof_of_payments)->with('profiles', $profiles)
-            ->with('count_proof_of_payment', $count_proof_of_payment);
+            return view('user.toko.daftar_pembelian')->with('cek_purchase', $cek_purchase)->with('purchases', $purchases)->with('product_images', $product_images)
+            ->with('product_purchases', $product_purchases)->with('product_specifications', $product_specifications)
+            ->with('proof_of_payments', $proof_of_payments)->with('profiles', $profiles)->with('count_proof_of_payment', $count_proof_of_payment);
         }
 
         else{
@@ -138,6 +142,8 @@ class PembelianController extends Controller
                 $product_purchases = DB::table('product_purchases')->where('user_id', $user_id)
                 ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
+                
+                $product_images = DB::table('product_images')->get();
 
                 $product_specifications = DB::table('product_specifications')
                 ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
@@ -148,7 +154,7 @@ class PembelianController extends Controller
                 
                 $proof_of_payments = DB::table('proof_of_payments')->get();
         
-                return view('user.pembelian.daftar_pembelian')->with('product_purchases', $product_purchases)->with('profile', $profile)
+                return view('user.pembelian.daftar_pembelian')->with('product_purchases', $product_purchases)->with('profile', $profile)->with('product_images', $product_images)
                 ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('proof_of_payments', $proof_of_payments)
                 ->with('count_proof_of_payment', $count_proof_of_payment);
             }

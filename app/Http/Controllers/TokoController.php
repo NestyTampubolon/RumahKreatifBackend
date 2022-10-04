@@ -150,7 +150,7 @@ class TokoController extends Controller
 
     public function TokoUser(Request $request) {
         $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
-        ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->orderBy('merchants.user_id', 'asc')->get();
+        ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->orderBy('merchant_id', 'desc')->get();
 
         return view('admin.toko_user')->with('merchants', $merchants);
     }
