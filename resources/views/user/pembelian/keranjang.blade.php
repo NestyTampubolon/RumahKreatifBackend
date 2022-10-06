@@ -37,7 +37,7 @@
                                                 @foreach($product_images as $product_image)
                                                     @if($product_image->product_id == $carts->product_id)
                                                         @if($loop->iteration % 3 == 0)
-                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image">
+                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$carts->product_name}}">
                                                         @elseif($loop->iteration % 6 == 0)
                                                         
                                                         @else

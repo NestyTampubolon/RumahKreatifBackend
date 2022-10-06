@@ -98,11 +98,11 @@
                                                 $product_images_hover = DB::table('product_images')->select('product_image_name')->where('product_id', $product->product_id)->orderBy('product_image_id', 'desc')->limit(1)->get();
                                             ?>
                                             @foreach($product_images as $product_image)
-                                                <img src="../../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
+                                                <img src="../../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$product->product_name}}" class="product-image">
                                             @endforeach
                                             
                                             @foreach($product_images_hover as $product_image_hover)
-                                                <img src="../../asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="Product image" class="product-image-hover">
+                                                <img src="../../asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="{{$product->product_name}}" class="product-image-hover">
                                             @endforeach
                                         </a>
 

@@ -27,7 +27,7 @@
                                 $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $product_purchase->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
                             ?>
                             @foreach($product_images as $product_image)
-                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="Product image">
+                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}">
                             @endforeach
                         </div>
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
