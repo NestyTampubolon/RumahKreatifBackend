@@ -374,18 +374,17 @@
                             <div class="product product-11 text-center">
                                 <figure class="product-media">
                                     <a href="./lihat_produk/{{$products->product_id}}">
+                                        <?php
+                                            $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                                            $product_images_hover = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'desc')->limit(1)->get();
+                                        ?>
                                         @foreach($product_images as $product_image)
-                                            @if($product_image->product_id == $products->product_id)
-                                                @if($loop->iteration % 3 == 0)
-                                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
-                                                @elseif($loop->iteration % 6 == 0)
-                                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image-hover">
-                                                @else
-                                                
-                                                @endif
-                                            @endif
+                                            <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
                                         @endforeach
-                                        <!-- <img src="{{ URL::asset('asset/Molla/assets/images/demos/demo-2/products/product-7-2.jpg') }}" alt="Product image" class="product-image-hover"> -->
+                                        
+                                        @foreach($product_images_hover as $product_image_hover)
+                                            <img src="./asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="Product image" class="product-image-hover">
+                                        @endforeach
                                     </a>
                                 </figure><!-- End .product-media -->
 

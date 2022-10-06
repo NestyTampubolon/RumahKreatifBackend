@@ -32,16 +32,11 @@
                                             <input type="number" class="form-control" name="product_id[]" value="{{$cart->product_id}}" hidden required>
                                             <figure class="product-media">
                                                 <a href="./lihat_produk/{{$cart->product_id}}">
+                                                    <?php
+                                                        $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $cart->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                                                    ?>
                                                     @foreach($product_images as $product_image)
-                                                        @if($product_image->product_id == $cart->product_id)
-                                                            @if($loop->iteration % 3 == 0)
-                                                            <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image">
-                                                            @elseif($loop->iteration % 6 == 0)
-                                                            
-                                                            @else
-                                                            
-                                                            @endif
-                                                        @endif
+                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image">
                                                     @endforeach
                                                 </a>
                                             </figure>

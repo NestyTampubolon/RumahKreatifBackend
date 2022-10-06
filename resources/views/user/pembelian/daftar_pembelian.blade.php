@@ -23,16 +23,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-2">
+                            <?php
+                                $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $product_purchase->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                            ?>
                             @foreach($product_images as $product_image)
-                                @if($product_image->product_id == $product_purchase->product_id)
-                                    @if($loop->iteration % 3 == 0)
-                                    <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="Product image">
-                                    @elseif($loop->iteration % 6 == 0)
-                                    
-                                    @else
-                                    
-                                    @endif
-                                @endif
+                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="Product image">
                             @endforeach
                         </div>
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">

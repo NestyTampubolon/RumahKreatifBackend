@@ -17,9 +17,7 @@ class ProdukController extends Controller
             $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
             
-            $product_images = DB::table('product_images')->join('products', 'product_images.product_id', '=', 'products.product_id')->orderBy('product_image_id', 'asc')->get();
-
-            return view('user.toko.produk')->with('products', $products)->with('product_images', $product_images);
+            return view('user.toko.produk')->with('products', $products);
         }
 
         else if(!$toko){
@@ -32,12 +30,10 @@ class ProdukController extends Controller
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
             
             $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
-            
-            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
 
             // $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)->with('categories', $categories)
+            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)
             ->with('kategori_produk_id', $kategori_produk_id);
         }
     }
@@ -63,10 +59,8 @@ class ProdukController extends Controller
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
         
         $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
-        
-        $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
 
-        return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)
+        return view('user.produk')->with('products', $products)->with('product_info', $product_info)
         ->with('categories', $categories)->with('kategori_produk_id', $kategori_produk_id);
     }
 
@@ -85,8 +79,6 @@ class ProdukController extends Controller
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
-            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
-            
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
             
@@ -94,7 +86,7 @@ class ProdukController extends Controller
 
             $nama_kategori = DB::table('categories')->where('category_id', $kategori_produk_id)->first();
 
-            return view('user.produk')->with('products', $products)->with('product_images', $product_images)->with('product_info', $product_info)->with('categories', $categories)
+            return view('user.produk')->with('products', $products)->with('product_info', $product_info)->with('categories', $categories)
             ->with('kategori_produk_id', $kategori_produk_id)->with('nama_kategori', $nama_kategori);
         }
     }
@@ -120,8 +112,6 @@ class ProdukController extends Controller
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
-            $product_images = DB::table('product_images')->orderBy('product_image_id', 'asc')->get();
-            
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
             
@@ -129,8 +119,7 @@ class ProdukController extends Controller
 
             $kategori_produk_id = 0;
 
-            return view('user.produk')->with('products', $products)->with('product_images', $product_images)
-            ->with('categories', $categories)->with('product_info', $product_info)->with('merchant_id', $merchant_id)
+            return view('user.produk')->with('products', $products)->with('categories', $categories)->with('product_info', $product_info)->with('merchant_id', $merchant_id)
             ->with('kategori_produk_id', $kategori_produk_id);
         }
     }
