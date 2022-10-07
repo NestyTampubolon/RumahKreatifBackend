@@ -168,6 +168,7 @@ class ProdukController extends Controller
             'product_description' => $product_description,
             'price' => $price,
             'heavy' => $heavy,
+            'is_deleted' => '0',
         ]);
         
         // $product_id = DB::table('products')->select('product_id')->pluck('product_id');
