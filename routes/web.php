@@ -94,6 +94,7 @@ Route::get('/tambah_produk/{kategori_produk_id}', 'App\Http\Controllers\ProdukCo
 Route::post('/PostTambahProduk/{kategori_produk_id}', 'App\Http\Controllers\ProdukController@PostTambahProduk');
 Route::get('/edit_produk/{product_id}', 'App\Http\Controllers\ProdukController@edit_produk');
 Route::post('/PostEditProduk/{product_id}', 'App\Http\Controllers\ProdukController@PostEditProduk');
+Route::get('/HapusProduk/{product_id}', 'App\Http\Controllers\ProdukController@HapusProduk');
 
 Route::get('/produk_toko', 'App\Http\Controllers\ProdukController@produk_toko');
 

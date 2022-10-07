@@ -51,11 +51,18 @@
                         <td>{{$products->nama_kategori}}</td>
                         <td>{{$products->nama_merchant}}</td>
                         <td>
-                            @foreach($product_specifications as $product_specification)
-                                @if($product_specification->product_id == $products->product_id)
-                                    <a>{{$product_specification->nama_spesifikasi}}</a><a>,</a>
-                                @endif
-                            @endforeach      
+                            <?php
+                              $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $products->product_id)->count();
+                            ?>
+                            @if($jumlah_product_specifications == 0)
+
+                            @else
+                                @foreach($product_specifications as $product_specification)
+                                    @if($product_specification->product_id == $products->product_id)
+                                        <a>{{$product_specification->nama_spesifikasi}}</a><a>,</a>
+                                    @endif
+                                @endforeach   
+                            @endif   
                         </td>
                         <td>
                             @foreach($stocks as $stock)

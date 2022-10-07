@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->text('product_description');
             $table->unsignedBigInteger('price');
             $table->integer('heavy');
+            $table->boolean('is_deleted');
             // $table->string('category');
             // $table->integer('stock');
             // $table->integer('sold');

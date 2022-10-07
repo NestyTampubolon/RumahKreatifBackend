@@ -14,7 +14,7 @@ class ProdukController extends Controller
         $toko = Session::get('toko');
 
         if($toko){
-            $products = DB::table('products')->where('merchant_id', $toko)->orderBy('product_id', 'desc')
+            $products = DB::table('products')->where('merchant_id', $toko)->where('is_deleted', 0)->orderBy('product_id', 'desc')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')->get();
             
             return view('user.toko.produk')->with('products', $products);
@@ -23,7 +23,7 @@ class ProdukController extends Controller
         else if(!$toko){
             $kategori_produk_id = 0;
             
-            $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            $products = DB::table('products')->where('is_deleted', 0)->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
@@ -52,7 +52,7 @@ class ProdukController extends Controller
         $kategori_produk_id = 0;
         
         $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('product_name', 'like',"%".$cari."%")
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")
         ->orwhere('nama_merchant', 'like',"%".$cari."%")->orderBy('product_name', 'asc')->get();
         
         $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
@@ -75,7 +75,7 @@ class ProdukController extends Controller
         }
 
         else{
-            $products = DB::table('products')->where('products.category_id', $kategori_produk_id)->orderBy('product_id', 'desc')
+            $products = DB::table('products')->where('products.category_id', $kategori_produk_id)->where('is_deleted', 0)->orderBy('product_id', 'desc')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
@@ -108,7 +108,7 @@ class ProdukController extends Controller
         }
 
         else{
-            $products = DB::table('products')->where('products.merchant_id', $merchant_id)->orderBy('product_id', 'desc')
+            $products = DB::table('products')->where('products.merchant_id', $merchant_id)->where('is_deleted', 0)->orderBy('product_id', 'desc')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
             
@@ -206,7 +206,7 @@ class ProdukController extends Controller
     public function edit_produk($product_id) {
         $toko = Session::get('toko');
 
-        $product = DB::table('products')->where('products.merchant_id', $toko)->where('product_id', $product_id)
+        $product = DB::table('products')->where('products.merchant_id', $toko)->where('product_id', $product_id)->where('is_deleted', 0)
         ->join('categories', 'products.category_id', '=', 'categories.category_id')->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
         
         $stock = DB::table('stocks')->where('product_id', $product_id)->first();
@@ -214,10 +214,12 @@ class ProdukController extends Controller
         $product_specifications = DB::table('product_specifications')->where('product_id', $product_id)
         ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')->first();
         
+        $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_id)->count();
+        
         $product_images = DB::table('product_images')->where('product_id', $product_id)->get();
 
         return view('user.toko.edit_produk')->with('product', $product)->with('product_images', $product_images)->with('stock', $stock)
-        ->with('product_id', $product_id)->with('product_specifications', $product_specifications);
+        ->with('product_id', $product_id)->with('product_specifications', $product_specifications)->with('jumlah_product_specifications', $jumlah_product_specifications);
     }
 
     public function PostEditProduk(Request $request, $product_id) {
@@ -281,6 +283,14 @@ class ProdukController extends Controller
 
         return redirect('../produk');
     }
+    
+    public function HapusProduk($product_id) {
+        DB::table('products')->where('product_id', $product_id)->update([
+            'is_deleted' => '1',
+        ]);
+
+        return redirect('../produk');
+    }
 
     // public function PostEditProduk(Request $request, $product_id) {
     //     $product_name = $request -> product_name;
@@ -330,7 +340,7 @@ class ProdukController extends Controller
     // }
 
     public function lihat_produk($product_id) {
-        $product = DB::table('products')->where('product_id', $product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
+        $product = DB::table('products')->where('product_id', $product_id)->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
         
         $product_images = DB::table('product_images')->where('product_id', $product_id)->orderBy('product_image_id', 'asc')->get();
@@ -368,7 +378,7 @@ class ProdukController extends Controller
     }
 
     public function produk_toko() {        
-        $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        $products = DB::table('products')->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_name', 'asc')->get();
         
         $product_specifications = DB::table('product_specifications')

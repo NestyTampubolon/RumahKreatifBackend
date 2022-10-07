@@ -138,12 +138,19 @@
                                         <a href="../produk/kategori[{{$product->category_id}}]">{{$product->nama_kategori}}</a>
                                     </div><!-- End .product-cat -->
                                     <span class="meta-separator">|</span>
+                                    <?php
+                                        $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product->product_id)->count();
+                                    ?>
+                                    @if($jumlah_product_specifications == 0)
+
+                                    @else
                                         @foreach($product_specifications as $product_specification)
                                             @if($product_specification->product_id == $product->product_id)
                                                 <a>{{$product_specification->nama_spesifikasi}}</a>
                                                 <span class="meta-separator">|</span>
                                             @endif
                                         @endforeach
+                                    @endif
                                     <div class="product-cat">
                                         <span>Sisa:</span>
                                         <a>{{$stocks->stok}}</a>

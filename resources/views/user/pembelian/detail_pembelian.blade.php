@@ -183,12 +183,19 @@
             <div class="card card-dashboard">
                 <div class="card-body">
                     <h3 class="card-title">{{$product_purchases->product_name}}</h3>
-                    <p> 
-                    @foreach($product_specifications as $product_specification)
-                        @if($product_specification->product_id == $product_purchases->product_id)
-                            <a>{{$product_specification->nama_spesifikasi}},</a>&nbsp;
-                        @endif
-                    @endforeach
+                    <p>
+                    <?php
+                        $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchases->product_id)->count();
+                    ?>
+                    @if($jumlah_product_specifications == 0)
+
+                    @else
+                        @foreach($product_specifications as $product_specification)
+                            @if($product_specification->product_id == $product_purchases->product_id)
+                                <a>{{$product_specification->nama_spesifikasi}},</a>&nbsp;
+                            @endif
+                        @endforeach
+                    @endif
                     </p>
                     <p>Hrg: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>

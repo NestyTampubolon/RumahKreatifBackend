@@ -36,7 +36,11 @@
         
         <label>Deskripsi :</label>
         <label>
+            @if($jumlah_product_specifications == 0)
+
+            @else
             {{$product_specifications->nama_spesifikasi}},
+            @endif
         </label><br>
 
         <div class="mb-1"></div>
@@ -129,10 +133,23 @@
                 <input type="number" id="qty" name="stok" class="form-control" min="1" step="1" data-decimals="0" value="{{$stock->stok}}" required>
             </div><!-- End .col-sm-6 -->
         </div><!-- End .row -->
+        <div class="row">
+            <div class="col-sm-5">
+                <button type="submit" class="btn btn-primary btn-round">
+                    <span>EDIT</span>
+                </button>
+            </div><!-- End .col-sm-6 -->
+            
+            <div class="col-sm-2" align="center">
+                    <span>atau</span>
+            </div><!-- End .col-sm-6 -->
 
-        <button type="submit" class="btn btn-primary btn-round">
-            <span>EDIT</span>
-        </button>
+            <div class="col-sm-5" align="center">
+                <a href="../HapusProduk/{{$product_id}}" class="btn btn-primary btn-round" style="background-color: red">
+                    <span>HAPUS</span>
+                </a>
+            </div><!-- End .col-sm-6 -->
+        </div><!-- End .row -->
     </form>
     
     <script>

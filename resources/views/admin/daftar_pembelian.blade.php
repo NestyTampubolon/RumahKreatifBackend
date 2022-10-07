@@ -113,13 +113,20 @@
                                                     <a>Product ID: {{$product_purchase->product_id}}</a> |
 
                                                     <a>Nama Produk: {{$product_purchase->product_name}}</a> |
+                                                    <?php
+                                                      $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchase->product_id)->count();
+                                                    ?>
+                                                    @if($jumlah_product_specifications == 0)
+
+                                                    @else
                                                     <a>Spesifikasi Produk: 
                                                         @foreach($product_specifications as $product_specification)
                                                             @if($product_specification->product_id == $product_purchase->product_id)
-                                                                {{$product_specification->nama_spesifikasi}}, 
+                                                                {{$product_specification->nama_spesifikasi}},
                                                             @endif
                                                         @endforeach
                                                     </a> |
+                                                    @endif
                                                     <a>Jumlah Pembelian: {{$product_purchase->jumlah_pembelian_produk}}</a> |
                                                     <a>Harga: 
                                                     <?php

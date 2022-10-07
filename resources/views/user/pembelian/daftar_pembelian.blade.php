@@ -33,14 +33,20 @@
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                             <p class="text-muted mb-0">{{$product_purchase->product_name}}</p>
                         </div>
+                        <?php
+                            $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchase->product_id)->count();
+                        ?>
+                        @if($jumlah_product_specifications == 0)
 
-                        @foreach($product_specifications as $product_specification)
-                            @if($product_specification->product_id == $product_purchase->product_id)
-                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                <p class="text-muted mb-0 small">{{$product_specification->nama_spesifikasi}}</p>
-                            </div>
-                            @endif
-                        @endforeach
+                        @else
+                            @foreach($product_specifications as $product_specification)
+                                @if($product_specification->product_id == $product_purchase->product_id)
+                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small">{{$product_specification->nama_spesifikasi}}</p>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
 
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                             <p class="text-muted mb-0 small">Jmlh: {{$product_purchase->jumlah_pembelian_produk}}</p>
