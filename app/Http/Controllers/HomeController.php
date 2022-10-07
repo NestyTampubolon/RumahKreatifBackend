@@ -28,7 +28,7 @@ class HomeController extends Controller
             
             $count_products = DB::table('products')->select(DB::raw('COUNT(*) as count_products'))->first();
 
-            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            $products = DB::table('products')->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->limit(10)->get();
 
             $cek_http = DB::table('carousels')->where('link_carousel', 'like', 'https://'."%")->orwhere('link_carousel', 'like', 'http://'."%")->first();
