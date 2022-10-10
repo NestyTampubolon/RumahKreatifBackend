@@ -368,14 +368,15 @@ class ProdukController extends Controller
         
         if(Auth::check()){
             $user_id = Auth::user()->id;
+            $cek_alamat = DB::table('user_address')->where('user_id', $user_id)->first();
             $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_alamat', 'reviews', 'jumlah_review', 'cek_review']));
         }
         
         else{
-            $cek_review = "";
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'reviews', 'jumlah_review']));
         }
-
-        return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'reviews', 'cek_review', 'jumlah_review']));
     }
 
     public function produk_toko() {        

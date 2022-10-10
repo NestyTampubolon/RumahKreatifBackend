@@ -56,6 +56,9 @@
 								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pembelian</a>
 								    </li>
 								    <li class="nav-item">
+								        <a class="nav-link" href="{{ url('/daftar_alamat') }}">Alamat</a>
+								    </li>
+								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/daftar_rekening') }}">Rekening</a>
 								    </li>
 								    <li class="nav-item">

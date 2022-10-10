@@ -165,7 +165,11 @@
                                             <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
                                         </div>
                                         @if(Auth::check())
+                                            @if($cek_alamat)
                                             <button type="submit" class="btn btn-primary"><span>BELI</span></button>
+                                            @else
+                                            <a href="../alamat" class="btn btn-primary"><span>BELI</span></a>
+                                            @endif
                                         @else
                                             <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI</span></a>
                                         @endif
@@ -180,7 +184,11 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         @if(Auth::check())
+                                            @if($cek_alamat)
                                             <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
+                                            @else
+                                            <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
+                                            @endif
                                         @else
                                             <a href="#signin-modal" class="btn btn-product btn-cart" data-toggle="modal" title="My account"><span>tambah ke keranjang</span></a>
                                         @endif

@@ -28,6 +28,12 @@ Route::get('/profil', 'App\Http\Controllers\ProfilController@profil');
 Route::get('/edit_profil', 'App\Http\Controllers\ProfilController@edit_profil');
 Route::post('/PostEditProfil', 'App\Http\Controllers\ProfilController@PostEditProfil');
 
+Route::get('/alamat', 'App\Http\Controllers\AlamatController@alamat');
+Route::get('/ambil_lokasi', 'App\Http\Controllers\AlamatController@ambil_lokasi');
+Route::post('/PostAlamat', 'App\Http\Controllers\AlamatController@PostAlamat');
+Route::get('/daftar_alamat', 'App\Http\Controllers\AlamatController@daftar_alamat');
+Route::get('/hapus_alamat/{address_id}', 'App\Http\Controllers\AlamatController@HapusAlamat');
+
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\HomeController@dashboard');
@@ -78,7 +84,6 @@ Route::get('/hapus_bank/{bank_id}', 'App\Http\Controllers\BankController@HapusBa
 
 Route::get('/rekening', 'App\Http\Controllers\RekeningController@rekening');
 Route::post('/PostRekening', 'App\Http\Controllers\RekeningController@PostRekening');
-
 Route::get('/daftar_rekening', 'App\Http\Controllers\RekeningController@daftar_rekening');
 Route::get('/hapus_rekening/{bank_id}', 'App\Http\Controllers\RekeningController@HapusRekening');
 
