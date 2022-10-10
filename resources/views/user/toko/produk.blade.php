@@ -23,50 +23,50 @@
                 <div class="row justify-content-center">
 
                     @foreach($products as $products)
-                    <div class="col-12 col-md-4 col-lg-3 col-xl-5col">
-                            <div class="product product-11 text-center">
-                                <figure class="product-media">
-                                    <a href="./edit_produk/{{$products->product_id}}">
-                                        <?php
-                                            $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
-                                            $product_images_hover = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'desc')->limit(1)->get();
-                                        ?>
-                                        @foreach($product_images as $product_image)
-                                            <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
-                                        @endforeach
-                                        
-                                        @foreach($product_images_hover as $product_image_hover)
-                                            <img src="./asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="Product image" class="product-image-hover">
-                                        @endforeach
-                                    </a>
-                                </figure><!-- End .product-media -->
-
-                                <div class="">
-                                    <div class="mb-1"></div>
-
-                                    <div class="product-cat">
-                                        <a href="#">{{$products->nama_kategori}}</a>
-                                    </div><!-- End .product-cat -->
+                    <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                        <div class="product product-11 text-center">
+                            <figure class="product-media">
+                                <a href="./edit_produk/{{$products->product_id}}">
+                                    <?php
+                                        $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                                        $product_images_hover = DB::table('product_images')->select('product_image_name')->where('product_id', $products->product_id)->orderBy('product_image_id', 'desc')->limit(1)->get();
+                                    ?>
+                                    @foreach($product_images as $product_image)
+                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
+                                    @endforeach
                                     
-                                    <div class="mb-1"></div>
-                                    
-                                    <!-- <hr style="margin:0px; border-top:1px solid grant; "> -->
-                                    
-                                    <div class="mb-1"></div>
+                                    @foreach($product_images_hover as $product_image_hover)
+                                        <img src="./asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="Product image" class="product-image-hover">
+                                    @endforeach
+                                </a>
+                            </figure><!-- End .product-media -->
 
-                                    <h3 class="product-title"><a href="./edit_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
-                                    
-                                    <div class="mb-1"></div>
+                            <div class="">
+                                <div class="mb-1"></div>
 
-                                    <div class="product-price">
-                                        <?php
-                                            $harga_produk = "Rp " . number_format($products->price,2,',','.');     
-                                            echo $harga_produk
-                                        ?>
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                                <div class="product-cat">
+                                    <a href="#">{{$products->nama_kategori}}</a>
+                                </div><!-- End .product-cat -->
+                                
+                                <div class="mb-1"></div>
+                                
+                                <!-- <hr style="margin:0px; border-top:1px solid grant; "> -->
+                                
+                                <div class="mb-1"></div>
+
+                                <h3 class="product-title"><a href="./edit_produk/{{$products->product_id}}">{{$products->product_name}}</a></h3><!-- End .product-title -->
+                                
+                                <div class="mb-1"></div>
+
+                                <div class="product-price">
+                                    <?php
+                                        $harga_produk = "Rp " . number_format($products->price,2,',','.');     
+                                        echo $harga_produk
+                                    ?>
+                                </div><!-- End .product-price -->
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
                     @endforeach
 
                 </div><!-- End .row -->

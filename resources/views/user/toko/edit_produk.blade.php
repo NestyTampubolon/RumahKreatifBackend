@@ -58,7 +58,8 @@
         <div class="row">
         @foreach($product_images as $product_image)
             @if($product_image->product_id == $product->product_id)
-                <div class="col-lg-2">
+            
+            <div class="col-4 col-md-4 col-lg-4 col-xl-2">
                     <img src="../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
                 </div>
             @endif
