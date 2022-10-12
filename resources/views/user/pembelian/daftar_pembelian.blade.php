@@ -14,6 +14,8 @@
     <h5 class="text-muted mb-0">Pesanan Anda, <span style="color: #800000;">{{$profile->name}}</span>!</h5>
 </div>
 
+@if($cek_purchases)
+
 @foreach($purchases as $purchases)
 <div class="card-body p-4">
     <a href="./detail_pembelian/{{$purchases->purchase_id}}" class="p-2 card shadow-0 border mb-1">
@@ -66,7 +68,8 @@
         @endforeach
         <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
         <div class="row d-flex align-items-center">
-            @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5")
+            @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b"
+            || $purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
                 <div class="col-md-12 mb-1">
                     <p class="text-muted ">Jejak Pembelian</p>
                 </div>
@@ -82,7 +85,8 @@
                 </div>
             @endif
 
-            @if($purchases->status_pembelian == "status3")
+            @if($purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status3_ambil"
+            || $purchases->status_pembelian == "status4_ambil_a")
                 <div class="col-md-12 mb-1">
                     <p class="text-muted ">Jejak Pembelian</p>
                 </div>
@@ -93,12 +97,22 @@
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="d-flex justify-content-around mb-1">
+                        @if($purchases->status_pembelian == "status3")
                         <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN SAMPAI.</p>
+                        @endif
+
+                        @if($purchases->status_pembelian == "status3_ambil")
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">SILAHKAN AMBIL PESANAN ANDA DI TOKO.</p>
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status4_ambil_a")
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan telah diberikan.</p>
+                        @endif
                     </div>
                 </div>
             @endif
 
-            @if($purchases->status_pembelian == "status2")
+            @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
                 <div class="col-md-12 mb-1">
                     <p class="text-muted ">Jejak Pembelian</p>
                 </div>
@@ -109,12 +123,12 @@
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="d-flex justify-content-around mb-1">
-                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES</p>
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.</p>
                     </div>
                 </div>
             @endif
 
-            @if($purchases->status_pembelian == "status1")
+            @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
             <div class="col-md-12 mb-1">
                 <p class="text-muted ">Jejak Pembelian</p>
             </div>
@@ -126,17 +140,18 @@
                 </div>
                 <div class="d-flex justify-content-around mb-1">
                     @if($count_proof_of_payment->count_proof_of_payment == 0)
-                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN</p>
+                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN.</p>
                     @endif
                     
+                    <?php
+                        $proof_of_payments = DB::table('proof_of_payments')->where('purchase_id', $purchases->purchase_id)->first();
+                    ?>
                     @if($count_proof_of_payment->count_proof_of_payment != 0)
-                        @foreach($proof_of_payments as $proof_of_payment)
-                            @if($proof_of_payment->purchase_id == $purchases->purchase_id)
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. MENUNGGU KONFIRMASI.</p>
-                            @else
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN</p>
-                            @endif
-                        @endforeach
+                        @if($proof_of_payments)
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. MENUNGGU KONFIRMASI.</p>
+                        @else
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN.</p>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -146,6 +161,13 @@
 </div>
 @endforeach
     
+@else
+
+<div class="col-md-12" align="center">
+    <h6 style="color:darkred"><b>Anda Tidak Memiliki Pesanan</b></h6>
+</div>
+
+@endif
 
 @endsection
 

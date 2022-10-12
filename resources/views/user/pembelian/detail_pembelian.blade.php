@@ -31,7 +31,7 @@
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
     @foreach($purchases as $purchases)
     
-        @if($purchases->status_pembelian == "status1")
+        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
             @if(!$cek_proof_of_payment)
             <div class="row">
                 <div class="col-lg-12">
@@ -41,7 +41,8 @@
                                 SILAHKAN LAKUKAN PEMBAYARAN PESANAN ANDA SENILAI
                                 <?php
                                     $ongkir = 30000;
-                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga + $ongkir,2,',','.');
+                                    // $total_harga_produk = "Rp " . number_format($total_harga->total_harga + $ongkir,2,',','.');
+                                    $total_harga_produk = "Rp " . number_format($total_harga->total_harga,2,',','.');
                                 ?>
                                 <b><a id="total_harga_produk">{{$total_harga_produk}}</a></b>
 
@@ -68,11 +69,14 @@
                                     $ongkir = "Rp " . number_format($ongkir,2,',','.');
                                 ?>
                                 
-                                (Total Harga Produk) <a id="set_harga_produk">{{$total_harga_produk}}</a> <a id="plus_ongkir">+ (Ongkos Kirim) {{$ongkir}}</a> = (Total Pembelian) <a id="total_pembelian">{{$total_pembelian}}</a>
+                                <!-- (Total Harga Produk) <a id="set_harga_produk">{{$total_harga_produk}}</a> <a id="plus_ongkir">+ (Ongkos Kirim) {{$ongkir}}</a> = (Total Pembelian) <a id="total_pembelian">{{$total_pembelian}}</a> -->
+
+                                (Total Harga Produk) <a id="set_harga_produk">{{$total_harga_produk}}</a> <a id="plus_ongkir">
                             </p>
-                            <p class="">
+                            <!-- <p class="">
                                 <a href="#voucher_open" data-toggle="modal" title="My account">DAPATKAN VOUCHER</a>
-                            </p>
+                            </p> -->
+
                         </div><!-- End .card-body -->
                     </div><!-- End .card-dashboard -->
                 </div><!-- End .col-lg-6 -->
@@ -82,23 +86,36 @@
             @endif
         @endif
 
+        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2"
+        || $purchases->status_pembelian == "status2_ambil" || $purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status3_ambil"
+        || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_a" || $purchases->status_pembelian == "status4_ambil_b"
+        || $purchases->status_pembelian == "status5")
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5")
+                        @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b"
+                        || $purchases->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
                             <p class="">Pesanan Diterima. PEMBELIAN BERHASIL.</p>
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status4_ambil_a")
+                            <p class="">Pesanan telah diberikan.</p>
                         @endif
 
                         @if($purchases->status_pembelian == "status3")
                             <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN SAMPAI.</p>
                         @endif
+                        
+                        @if($purchases->status_pembelian == "status3_ambil")
+                            <p class="">Pesanan Telah Disiapkan. SILAHKAN AMBIL PESANAN ANDA</p>
+                        @endif
 
-                        @if($purchases->status_pembelian == "status2")
+                        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
                             <p class="">Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.</p>
                         @endif
 
-                        @if($purchases->status_pembelian == "status1")
+                        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
                             @if(!$cek_proof_of_payment)
                             <p class="">Belum Dapat Dikonfirmasi. KIRIM BUKTI PEMBAYARAN.</p>
                             
@@ -110,19 +127,22 @@
                 </div><!-- End .card-dashboard -->
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
-        
-        
-        @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5")
-
         @endif
 
-        @if($purchases->status_pembelian == "status3")
+        @if($purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status4_ambil_a")
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
+                        @if($purchases->status_pembelian == "status3")
                         <p class="">Jika pesanan telah sampai di lokasi dan telah diterima. SILAHKAN KONFIRMASI PESANAN.</p>
-                        <a href="../update_status_pembayaran/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status4_ambil_a")
+                        <p class="">Jika pesanan telah diterima. SILAHKAN KONFIRMASI</p>
+                        @endif
+                        
+                        <a href="../update_status_pembelian/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
                             <span>KONFIRMASI</span>
                         </a>
                     </div><!-- End .card-body -->
@@ -130,12 +150,8 @@
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
         @endif
-        
-        @if($purchases->status_pembelian == "status2")
 
-        @endif
-
-        @if($purchases->status_pembelian == "status1")
+        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
             @if(!$cek_proof_of_payment)
             <form action="../PostBuktiPembayaran/{{$purchases->purchase_id}}" method="post" enctype="multipart/form-data" class="row" >
             @csrf
@@ -165,16 +181,36 @@
             @endif
         @endif
 
+
+        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status2" 
+        || $purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        <h6 class="">{{$purchases->alamat_purchase}}</h6>
+                        <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6>
                         <p></p>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
+        
+        @elseif($purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2_ambil") 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <h6 class="">Alamat Toko : <br><br> {{$merchant_address->merchant_street_address}}</h6>
+                        <p></p>
+                    </div><!-- End .card-body -->
+                </div><!-- End .card-dashboard -->
+            </div><!-- End .col-lg-6 -->
+        </div><!-- End .row -->
+
+        @else
+
+        @endif
+
     @endforeach
 
     <div class="row">

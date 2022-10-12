@@ -131,7 +131,7 @@
 
             <div class="col-sm-6">
                 <label>Stok *</label>
-                <input type="number" id="qty" name="stok" class="form-control" min="1" step="1" data-decimals="0" value="{{$stock->stok}}" required>
+                <input type="number" id="qty" name="stok" class="form-control" min="0" step="1" data-decimals="0" value="{{$stock->stok}}" required>
             </div><!-- End .col-sm-6 -->
         </div><!-- End .row -->
         <div class="row">

@@ -32,11 +32,11 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                        <th align="center">ID Pesanan</th>
-                        <th align="center">User ID</th>
-                        <th align="center">Status Pesanan</th>
-                        <th align="center" colspan="2">Action</th>
+                  <thead align="center">
+                        <th>ID Pesanan</th>
+                        <th>User ID</th>
+                        <th>Status Pesanan</th>
+                        <th colspan="2">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -45,46 +45,53 @@
                         <td>{{$purchases->purchase_id}}</td>
                         <td>{{$purchases->user_id}}</td>
                         <td>
-                          @if($purchases->status_pembelian == "status5")
+                          @if($purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
                             PENJUALAN DAN PEMBELIAN BERHASIL.
                           @endif
 
-                          @if($purchases->status_pembelian == "status4")
+                          @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
                             Transaksi Sukses. SILAHKAN KIRIM BAYARAN.
+                          @endif
+                          
+                          @if($purchases->status_pembelian == "status4_ambil_a")
+                            Pesanan telah diberikan. TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.
                           @endif
 
                           @if($purchases->status_pembelian == "status3")
                             Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.
                           @endif
+                          
+                          @if($purchases->status_pembelian == "status3_ambil")
+                            MENUNGGU PELANGGAN MENGAMBIL PESANAN.
+                          @endif
 
-                          @if($purchases->status_pembelian == "status2")
+                          @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
                               Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.
                           @endif
 
-                          @if($purchases->status_pembelian == "status1")
-                              @foreach($proof_of_payments as $proof_of_payment)
-                                  @if($proof_of_payment->purchase_id == $purchases->purchase_id)
+                          <?php
+                              $proof_of_payments = DB::table('proof_of_payments')->where('purchase_id', $purchases->purchase_id)->first();
+                          ?>
+                          @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
+                              @if($proof_of_payments)
                                   Bukti Pembayaran Telah Dikirim. SILAHKAN KONFIRMASI.
-                                  @else
-                                      Belum Dapat Dikonfirmasi. TUNGGU BUKTI PEMBAYARAN.
-                                  @endif
-                              @endforeach
+                              @else
+                                  Belum Dapat Dikonfirmasi. TUNGGU BUKTI PEMBAYARAN.
+                              @endif
                           @endif
                         </td>
                         <td align="center" width="150px">
                           
-                            @if($purchases->status_pembelian == "status2")
+                            @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
                             
                             @endif
 
-                            @if($purchases->status_pembelian == "status1")
-                                @foreach($proof_of_payments as $proof_of_payment)
-                                    @if($proof_of_payment->purchase_id == $purchases->purchase_id)
-                                    <a href="./update_status_pembayaran/{{$purchases->purchase_id}}" class="btn btn-block btn-info">Konfirmasi Pembayaran</a>
-                                    @else
+                            @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
+                                @if($proof_of_payments)
+                                <a href="./update_statu_pembelian/{{$purchases->purchase_id}}" class="btn btn-block btn-info">Konfirmasi Pembayaran</a>
+                                @else
 
-                                    @endif
-                                @endforeach
+                                @endif
                             @endif
                         </td>
                         <td align="center" width="100px">
@@ -137,14 +144,12 @@
                                                     <br>
                                                 @endif
                                             @endforeach<br>
-                                            @if($purchases->status_pembelian == "status1")
-                                                @foreach($proof_of_payments as $proof_of_payment)
-                                                    @if($proof_of_payment->purchase_id == $purchases->purchase_id)
-                                                        <center><a href="./asset/u_file/proof_of_payment_image/{{$proof_of_payment->proof_of_payment_image}}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>
-                                                    @else
-                                                        <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
-                                                    @endif
-                                                @endforeach
+                                            @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
+                                                @if($proof_of_payments)
+                                                    <center><a href="./asset/u_file/proof_of_payment_image/{{$proof_of_payments->proof_of_payment_image}}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>
+                                                @else
+                                                    <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
+                                                @endif
                                             @endif
                                             
                                             </div>

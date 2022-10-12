@@ -15,7 +15,7 @@
 
 <main class="main">
     <center>
-    <div class="intro-slider-container" style=" width:92%; height:300px">
+    <div class="intro-slider-container" style="width:92%; height:290px">
         <div class="owl-carousel owl-simple owl-light owl-nav-inside" data-toggle="owl" data-owl-options='{"nav": false}'>
             
             <!-- <div class="intro-slide" style="background-image: url({{ URL::asset('asset/Molla/assets/images/demos/demo-2/slider/slide-1.jpg') }}); height:300px">
@@ -23,7 +23,7 @@
             </div> -->
 
             @foreach($carousels as $carousels)
-            <div class="intro-slide" style="background-image: url('./asset/u_file/carousel_image/{{$carousels->carousel_image}}'); height:300px">
+            <div class="intro-slide" style="background-image: url('./asset/u_file/carousel_image/{{$carousels->carousel_image}}'); height:100%">
                 @if($carousels->open_in_new_tab == 1)
                     @if($carousels->link_carousel == "")
                         <a href="#" target="_blank" class="container intro-content" style="height:100%"></a>

@@ -16,23 +16,35 @@
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        @if($purchases->status_pembelian == "status5")
+                        @if($purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
                             <p class="">Penjualan Telah Dibayar. PENJUALAN BERHASIL.</p>
                         @endif
 
                         @if($purchases->status_pembelian == "status4")
                             <p class="">Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN.</p>
                         @endif
-
-                        @if($purchases->status_pembelian == "status3")
-                            <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA</p>
+                        
+                        @if($purchases->status_pembelian == "status4_ambil_a")
+                            <p class="">TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.</p>
+                        @endif
+                         
+                        @if($purchases->status_pembelian == "status4_ambil_b")
+                            <p class="">Pesanan Telah Diterima. SILAHKAN TUNGGU BAYARAN.</p>
                         @endif
 
-                        @if($purchases->status_pembelian == "status2")
+                        @if($purchases->status_pembelian == "status3")
+                            <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.</p>
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status3_ambil")
+                            <p class="">SILAHKAN TUNGGU PELANGGAN MENGAMBIL PESANAN.</p>
+                        @endif
+
+                        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
                             <p class="">Ada Pesanan. SILAHKAN PROSES PESANAN.</p>
                         @endif
 
-                        @if($purchases->status_pembelian == "status1")
+                        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1")
                         
                         @endif
                     </div><!-- End .card-body -->
@@ -40,32 +52,29 @@
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
 
-        @if($purchases->status_pembelian == "status4")
+        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil"
+        || $purchases->status_pembelian == "status3_ambil" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        <p class="">Jika bayaran telah diterima. SILAHKAN KONFIRMASI.</p>
-                        <a href="../update_status_pembayaran/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
-                            <span>KONFIRMASI</span>
-                        </a>
-                    </div><!-- End .card-body -->
-                </div><!-- End .card-dashboard -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
-        @endif
-
-        @if($purchases->status_pembelian == "status2")
-        
-        @endif
-        
-        @if($purchases->status_pembelian == "status2")
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-dashboard">
-                    <div class="card-body">
+                        @if($purchases->status_pembelian == "status2")
                         <p class="">Jika pesanan telah dikirim dan sedang dalam perjalanan. SILAHKAN KONFIRMASI PESANAN.</p>
-                        <a href="../update_status_pembayaran/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status2_ambil")
+                        <p class="">Jika pesanan telah disiapkan. SILAHKAN KONFIRMASI PESANAN.</p>
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status3_ambil")
+                        <p class="">Jika pesanan telah diambil pelanggan. SILAHKAN KONFIRMASI PESANAN.</p>
+                        @endif
+                        
+                        @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
+                        <p class="">Jika bayaran telah diterima. SILAHKAN KONFIRMASI.</p>
+                        @endif
+
+                        <a href="../update_status_pembelian/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
                             <span>KONFIRMASI</span>
                         </a>
                     </div><!-- End .card-body -->
@@ -86,16 +95,22 @@
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
         
+        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status3" 
+        || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        <h6 class="">{{$purchases->alamat_purchase}}</h6>
+                        <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6>
                         <p></p>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
+
+        @else
+
+        @endif
 
     <div class="row">
     @foreach($product_purchases as $product_purchases)

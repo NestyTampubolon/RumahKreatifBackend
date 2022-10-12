@@ -17,7 +17,7 @@
                         @csrf
                         <table class="table table-cart table-mobile">
                             <thead>
-                                <tr>
+                                <tr align="center">
                                     <th>Produk</th>
                                     <th>Harga</th>
                                     <th>Jumlah</th>
@@ -28,75 +28,72 @@
 
                             <tbody>
                                 @foreach($carts as $carts)
-                                <tr>
-                                    <td class="product-col">
-                                        <div class="product">
-                                            <input type="number" class="form-control" name="product_id[]" value="{{$carts->product_id}}" hidden required>
-                                            <figure class="product-media">
-                                                <a href="./lihat_produk/{{$carts->product_id}}">
-                                                @foreach($product_images as $product_image)
-                                                    @if($product_image->product_id == $carts->product_id)
-                                                        @if($loop->iteration % 3 == 0)
-                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$carts->product_name}}">
-                                                        @elseif($loop->iteration % 6 == 0)
+                                    @foreach($stocks as $stock)
+                                        @if($stock->product_id == $carts->product_id)
+                                            @if($stock->stok > 0)
+                                            <tr align="center">
+                                                <td class="product-col">
+                                                    <div class="product">
+                                                        <input type="number" class="form-control" name="product_id[]" value="{{$carts->product_id}}" hidden required>
+                                                        <figure class="product-media">
+                                                            <a href="./lihat_produk/{{$carts->product_id}}">
+                                                            <?php
+                                                                $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $carts->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                                                            ?>
+                                                            @foreach($product_images as $product_image)
+                                                                <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$carts->product_name}}">
+                                                            @endforeach
+                                                            </a>
+                                                        </figure>
+
+                                                        <h3 class="product-title">
+                                                            <a href="./lihat_produk/{{$carts->product_id}}">{{$carts->product_name}}</a>
+                                                        </h3><!-- End .product-title -->
+                                                    </div><!-- End .product -->
+                                                </td>
+                                                <td class="price-col" id="harga">
+                                                    <?php
+                                                        $harga_produk = "Rp." . number_format($carts->price,2,',','.');     
+                                                        echo $harga_produk
+                                                    ?>
+                                                </td>
+                                                <td class="quantity-col">
+                                                    <div class="cart-product-quantity">
+                                                        <input type="number" class="form-control" name="jumlah_masuk_keranjang[]" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]"
+                                                            value="{{$carts->jumlah_masuk_keranjang}}" min="1" max="{{$stock->stok}}"
+                                                            step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
+
+                                                    </div><!-- End .cart-product-quantity -->
+                                                </td>
+                                                <script>
+                                                    function total{{$carts->cart_id}}()
+                                                    {
+                                                        let jumlah_barang<?php echo $carts->cart_id ?> = document.getElementById("jumlah_masuk_keranjang[{{$carts->cart_id}}]").value;
+                                                        let total_harga_table<?php echo $carts->cart_id ?> = document.getElementById("total_harga_table[{{$carts->cart_id}}]");
                                                         
-                                                        @else
-
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                                </a>
-                                            </figure>
-
-                                            <h3 class="product-title">
-                                                <a href="./lihat_produk/{{$carts->product_id}}">{{$carts->product_name}}</a>
-                                            </h3><!-- End .product-title -->
-                                        </div><!-- End .product -->
-                                    </td>
-                                    <td class="price-col"  id="harga">
-                                        <?php
-                                            $harga_produk = "Rp." . number_format($carts->price,2,',','.');     
-                                            echo $harga_produk
-                                        ?>
-                                    </td>
-                                    <td class="quantity-col">
-                                        <div class="cart-product-quantity">
-                                            <input type="number" class="form-control" name="jumlah_masuk_keranjang[]" id="jumlah_masuk_keranjang[{{$carts->cart_id}}]"
-                                                value="{{$carts->jumlah_masuk_keranjang}}" min="1"
-                                                    max="<?php
-                                                        foreach($stocks as $stock){
-                                                            if($stock->product_id == $carts->product_id){
-                                                                echo $stock->stok;
-                                                            }
+                                                        const rupiah = (number)=>{
+                                                            return new Intl.NumberFormat("id-ID", {
+                                                            style: "currency",
+                                                            currency: "IDR"
+                                                            }).format(number);
                                                         }
-                                                    ?>"
-                                                step="1" data-decimals="0" onchange="total{{$carts->cart_id}}()" required>
-                                        </div><!-- End .cart-product-quantity -->
-                                    </td>
-                                    <script>
-                                        function total{{$carts->cart_id}}()
-                                        {
-                                            let jumlah_barang<?php echo $carts->cart_id ?> = document.getElementById("jumlah_masuk_keranjang[{{$carts->cart_id}}]").value;
-                                            let total_harga_table<?php echo $carts->cart_id ?> = document.getElementById("total_harga_table[{{$carts->cart_id}}]");
-                                            
-                                            const rupiah = (number)=>{
-                                                return new Intl.NumberFormat("id-ID", {
-                                                style: "currency",
-                                                currency: "IDR"
-                                                }).format(number);
-                                            }
-                                            total_harga_table<?php echo $carts->cart_id?>.innerHTML = rupiah(jumlah_barang<?php echo $carts->cart_id ?> * <?php echo $carts->price ?>) 
-                                        }
-                                    </script>
-                                    <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">
-                                        <?php
-                                            $total = $carts->price * $carts->jumlah_masuk_keranjang;
-                                            $total_harga_produk = "Rp." . number_format($total,2,',','.');  
-                                            echo $total_harga_produk;
-                                        ?>
-                                    </td>
-                                    <td class="remove-col"><a href="./hapus_keranjang/{{$carts->cart_id}}" class="btn-remove"><i class="icon-close"></i></a></td>
-                                </tr>
+                                                        total_harga_table<?php echo $carts->cart_id?>.innerHTML = rupiah(jumlah_barang<?php echo $carts->cart_id ?> * <?php echo $carts->price ?>) 
+                                                    }
+                                                </script>
+                                                <td class="total-col" id="total_harga_table[{{$carts->cart_id}}]">
+                                                    <?php
+                                                        $total = $carts->price * $carts->jumlah_masuk_keranjang;
+                                                        $total_harga_produk = "Rp." . number_format($total,2,',','.');  
+                                                        echo $total_harga_produk;
+                                                    ?>
+                                                </td>
+                                                <td class="remove-col"><a href="./hapus_keranjang/{{$carts->cart_id}}" class="btn-remove"><i class="icon-close"></i></a></td>
+                                            </tr>
+                                            @elseif($stock->stok == 0)
+                                                <input type="number" class="form-control" name="product_id[]" value="{{$carts->product_id}}" hidden required>
+                                            @endif
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table><!-- End .table table-wishlist -->

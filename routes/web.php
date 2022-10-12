@@ -103,12 +103,20 @@ Route::get('/HapusProduk/{product_id}', 'App\Http\Controllers\ProdukController@H
 
 Route::get('/produk_toko', 'App\Http\Controllers\ProdukController@produk_toko');
 
+Route::post('/checkout', 'App\Http\Controllers\PembelianController@checkout');
+
+Route::get('/pilih_metode_pembelian', 'App\Http\Controllers\PembelianController@pilih_metode_pembelian');
+
+Route::get('/ambil_jalan', 'App\Http\Controllers\PembelianController@ambil_jalan');
+
+Route::post('/cek_ongkir', 'App\Http\Controllers\PembelianController@cek_ongkir');
+
 Route::post('/PostBeliProduk', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
 Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
 
 Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
-Route::get('/update_status_pembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembayaran');
+Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
 
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
 Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
@@ -121,8 +129,6 @@ Route::post('/PostEditCarousel/{id}', 'App\Http\Controllers\CarouselController@P
 Route::get('/hapus_carousel/{id}', 'App\Http\Controllers\CarouselController@HapusCarousel');
 
 Route::post('/PostTinjauan/{product_id}', 'App\Http\Controllers\TinjauanController@PostTinjauan');
-
-Route::post('/checkout', 'App\Http\Controllers\PembelianController@checkout');
 
 Route::get('/panduan_penggunaan', function () {
     return view('user.panduan_penggunaan');

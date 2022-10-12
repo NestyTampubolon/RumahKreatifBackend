@@ -60,7 +60,6 @@
 
 @section('container')
 
-@foreach($product as $product)
 <main class="main">
     <div class="page-content">
         <div class="product-details-top">
@@ -159,20 +158,27 @@
                             </div>
 
                             <div class="col-md-6">
+                                   
+                            @if($stocks->stok > 0)
+
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         <div class="product-details-quantity">
                                             <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
                                         </div>
                                         @if(Auth::check())
-                                            @if($cek_alamat)
-                                            <button type="submit" class="btn btn-primary"><span>BELI</span></button>
+                                            @if(!$merchant_address)
+                                            <a href="#pemberitahuan_alamat_toko" class="btn btn-primary" data-toggle="modal"><span>BELI SEKARANG</span></a>
+                                            @elseif($cek_alamat)
+                                            <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
                                             @else
-                                            <a href="../alamat" class="btn btn-primary"><span>BELI</span></a>
+                                            <a href="../alamat" class="btn btn-primary"><span>BELI SEKARANG</span></a>
                                             @endif
                                         @else
-                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI</span></a>
+                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI SEKARANG</span></a>
                                         @endif
+                                    
+
                                     </div>
 
                                     <!-- <div class="details-action-wrapper">
@@ -184,7 +190,9 @@
                                 <div class="product-details-action">
                                     <div class="details-action-col">
                                         @if(Auth::check())
-                                            @if($cek_alamat)
+                                            @if(!$merchant_address)
+                                            <a href="#pemberitahuan_alamat_toko" class="btn btn-product btn-cart" data-toggle="modal"><span>tambah ke keranjang</span></a>
+                                            @elseif($cek_alamat)
                                             <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
                                             @else
                                             <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
@@ -194,6 +202,10 @@
                                         @endif
                                     </div>
                                 </div>
+                                
+                            @elseif($stocks->stok == 0)
+                                <h6 style="color:darkred"><b>Maaf, Stok Telah Habis</b></h6>
+                            @endif
 
                                 <div class="product-details-footer details-footer-col">
                                     
@@ -593,6 +605,7 @@
         </div> -->
     </div>
 </main>
+
 <div class="modal fade" id="rate" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -602,39 +615,52 @@
                 </button>
 
                 <div class="form-box">
-                    <div class="form-tab">
-                        <div class="tab-content" id="tab-content-5">
-                            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                <form action="../PostTinjauan/{{$product->product_id}}" method="post">
-                                @csrf
-                                    <div class="rating">
-                                        <input type="radio" name="nilai_review" id="star1-modal" value="5"><label for="star1"></label>
-                                        <input type="radio" name="nilai_review" id="star2-modal" value="4"><label for="star2"></label>
-                                        <input type="radio" name="nilai_review" id="star3-modal" value="3"><label for="star3"></label>
-                                        <input type="radio" name="nilai_review" id="star4-modal" value="2"><label for="star4"></label>
-                                        <input type="radio" name="nilai_review" id="star5-modal" value="1"><label for="star5"></label>
-                                    </div>
+                    <div class="tab-content" id="tab-content-5">
+                        <div class="tab-pane fade show active">
+                            <form action="../PostTinjauan/{{$product->product_id}}" method="post">
+                            @csrf
+                                <div class="rating">
+                                    <input type="radio" name="nilai_review" id="star1-modal" value="5"><label for="star1"></label>
+                                    <input type="radio" name="nilai_review" id="star2-modal" value="4"><label for="star2"></label>
+                                    <input type="radio" name="nilai_review" id="star3-modal" value="3"><label for="star3"></label>
+                                    <input type="radio" name="nilai_review" id="star4-modal" value="2"><label for="star4"></label>
+                                    <input type="radio" name="nilai_review" id="star5-modal" value="1"><label for="star5"></label>
+                                </div><br>
 
-                                    
-                                    <div class="form-group">
-                                        <label for="isi_review">Isi Tinjauan *</label>
-                                        <input type="text" class="form-control" id="isi_review" name="isi_review" placeholder="Berikan pendapat Anda" required>
-                                    </div><!-- End .form-group -->
+                                
+                                <div class="form-group">
+                                    <label for="isi_review">Isi Tinjauan *</label>
+                                    <input type="text" class="form-control" id="isi_review" name="isi_review" placeholder="Berikan pendapat Anda" required>
+                                </div><!-- End .form-group -->
 
-                                    <div class="form-footer">
-                                        <button type="submit" class="btn btn-outline-primary-2 btn-round">
-                                            <span>KIRIM</span>
-                                        </button>
-                                    </div><!-- End .form-footer -->
-                                </form>
-                            </div><!-- .End .tab-pane -->
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .form-tab -->
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2 btn-round">
+                                        <span>KIRIM</span>
+                                    </button>
+                                </div><!-- End .form-footer -->
+                            </form>
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
                 </div><!-- End .form-box -->
             </div><!-- End .modal-body -->
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
-@endforeach
+
+<div class="modal fade" id="pemberitahuan_alamat_toko" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <h5>Mohon maaf. <br><br> Anda tidak dapat membeli dari toko ini dikarenakan toko belum memasukkan alamat.</h5>
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
 
 @endsection

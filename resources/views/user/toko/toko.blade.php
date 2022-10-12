@@ -15,10 +15,20 @@
             <div class="card card-dashboard">
                 <div class="card-body">
                     <h3 class="card-title">Profil Toko</h3><!-- End .card-title -->
-
-                    <p>{{$merchants->nama_merchant}}</p>
-                    <p>{{$merchants->deskripsi_toko}}</p>
-                    <p>{{$merchants->kontak_toko}}</p>
+                    <table>
+                        <tr>
+                            <td>Nama Toko : &emsp;</td>
+                            <td>{{$merchants->nama_merchant}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deskripsi Toko : &emsp;</td>
+                            <td>{{$merchants->deskripsi_toko}}</td>
+                        </tr>
+                        <tr>
+                            <td>Kontak Toko : &emsp;</td>
+                            <td>{{$merchants->kontak_toko}}</td>
+                        </tr>
+                    </table>
                     <a href="./edit_toko">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
@@ -26,7 +36,7 @@
         <div class="col-lg-6">
             <div class="card card-dashboard">
                 <div class="card-body">
-                    <img src="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" alt="Product image" class="product-image">
+                    <img src="./asset/u_file/foto_merchant/{{$merchants->foto_merchant}}" alt="{{$merchants->nama_merchant}}" class="product-image">
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->

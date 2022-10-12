@@ -23,8 +23,8 @@ class ProdukController extends Controller
         else if(!$toko){
             $kategori_produk_id = 0;
             
-            $products = DB::table('products')->where('is_deleted', 0)->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
-            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            $products = DB::table('products')->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->inRandomOrder()->get();
             
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
@@ -53,7 +53,7 @@ class ProdukController extends Controller
         
         $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")
-        ->orwhere('nama_merchant', 'like',"%".$cari."%")->orderBy('product_name', 'asc')->get();
+        ->orwhere('nama_merchant', 'like',"%".$cari."%")->inRandomOrder()->get();
         
         $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
@@ -75,9 +75,9 @@ class ProdukController extends Controller
         }
 
         else{
-            $products = DB::table('products')->where('products.category_id', $kategori_produk_id)->where('is_deleted', 0)->orderBy('product_id', 'desc')
+            $products = DB::table('products')->where('products.category_id', $kategori_produk_id)->where('is_deleted', 0)
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
-            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->inRandomOrder()->get();
             
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
@@ -108,9 +108,9 @@ class ProdukController extends Controller
         }
 
         else{
-            $products = DB::table('products')->where('products.merchant_id', $merchant_id)->where('is_deleted', 0)->orderBy('product_id', 'desc')
+            $products = DB::table('products')->where('products.merchant_id', $merchant_id)->where('is_deleted', 0)
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
-            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->inRandomOrder()->get();
             
             $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
@@ -342,7 +342,7 @@ class ProdukController extends Controller
 
     public function lihat_produk($product_id) {
         $product = DB::table('products')->where('product_id', $product_id)->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->get();
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->first();
         
         $product_images = DB::table('product_images')->where('product_id', $product_id)->orderBy('product_image_id', 'asc')->get();
 
@@ -362,6 +362,8 @@ class ProdukController extends Controller
         // $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
 
         $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
+
+        $merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->first();
         
         $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
         $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
@@ -371,11 +373,11 @@ class ProdukController extends Controller
             $cek_alamat = DB::table('user_address')->where('user_id', $user_id)->first();
             $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
 
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_alamat', 'reviews', 'jumlah_review', 'cek_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'merchant_address', 'reviews', 'jumlah_review', 'cek_alamat', 'cek_review']));
         }
         
         else{
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'reviews', 'jumlah_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'merchant_address', 'reviews', 'jumlah_review']));
         }
     }
 

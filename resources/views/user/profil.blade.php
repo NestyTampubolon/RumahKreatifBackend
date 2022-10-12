@@ -15,14 +15,30 @@
             <div class="card card-dashboard">
                 <div class="card-body">
                     <h3 class="card-title">Profil Pengguna</h3><!-- End .card-title -->
-                    <p>{{$profile->name}}</p>
-                    @if($profile->gender == "L")
-                        <p>Laki-laki</p>
-                    @elseif($profile->gender == "P")
-                        <p>Perempuan</p>
-                    @endif
-                    <p>{{$profile->birthday}}</p>
-                    <p>{{$profile->no_hp}}</p>
+                    <table>
+                        <tr>
+                            <td>Nama : &emsp;</td>
+                            <td>{{$profile->name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Jenis Kelamin : &emsp;</td>
+                            <td>
+                                @if($profile->gender == "L")
+                                    Laki-laki
+                                @elseif($profile->gender == "P")
+                                    Perempuan
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal Lahir : &emsp;</td>
+                            <td>{{$profile->birthday}}</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Handphone : &emsp;</td>
+                            <td>{{$profile->no_hp}}</td>
+                        </tr>
+                    </table>
                     <a href="./edit_profil">Edit <i class="icon-edit"></i></a></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
@@ -31,8 +47,16 @@
             <div class="card card-dashboard">
                 <div class="card-body">
                     <h3 class="card-title">Profil Akun</h3><!-- End .card-title -->
-                    <p>{{$profile->username}}</p>
-                    <p>{{$profile->email}}</p>
+                    <table>
+                        <tr>
+                            <td>Username : &emsp;</td>
+                            <td>{{$profile->username}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email : &emsp;</td>
+                            <td>{{$profile->email}}</td>
+                        </tr>
+                    </table>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->

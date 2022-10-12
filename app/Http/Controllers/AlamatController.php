@@ -10,8 +10,25 @@ use Session;
 class AlamatController extends Controller
 {
     public function alamat(Request $request) {
+        if(Session::get('toko')){
+            return view('user.toko.alamat');
+        }
 
-        return view('user.alamat');
+        else{
+            $user_id = Auth::user()->id;
+
+            $cek_admin_id = DB::table('users')->where('id', $user_id)->where('is_admin', 1)->first();
+
+            if($cek_admin_id){
+                
+            }
+
+            else{
+                $user_id = Auth::user()->id;
+    
+                return view('user.alamat');
+            }
+        }
     }
     
     public function ambil_lokasi(Request $request) {
