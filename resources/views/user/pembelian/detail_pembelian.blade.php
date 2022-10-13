@@ -95,7 +95,7 @@
                 <div class="card card-dashboard">
                     <div class="card-body">
                         @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b"
-                        || $purchases->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
+                        || $purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
                             <p class="">Pesanan Diterima. PEMBELIAN BERHASIL.</p>
                         @endif
                         
@@ -247,7 +247,7 @@
     </div><!-- End .row -->
 </div><!-- .End .tab-pane -->
 
-<div class="modal fade" id="voucher_open" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- <div class="modal fade" id="voucher_open" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -263,7 +263,7 @@
                                 <button class="btn btn-primary btn-round" onclick="klaim_voucher()">
                                     <span>KLAIM</span>
                                 </button>
-                            </div><!-- .End .tab-pane -->
+                            </div>
                             <script>
                                 function klaim_voucher() {
                                     $("#voucher_open").modal("hide");
@@ -278,19 +278,19 @@
                                         currency: "IDR"
                                         }).format(number);
                                     }
-                                    total_harga_produk.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
-                                    set_harga_produk.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
+                                    total_harga_produk.innerHTML = rupiah(<?php //echo $total_harga->total_harga ?>)
+                                    set_harga_produk.innerHTML = rupiah(<?php //echo $total_harga->total_harga ?>)
                                     plus_ongkir.innerHTML = ""
-                                    total_pembelian.innerHTML = rupiah(<?php echo $total_harga->total_harga ?>)
+                                    total_pembelian.innerHTML = rupiah(<?php //echo $total_harga->total_harga ?>)
                                 }
                             </script>
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .form-tab -->
-                </div><!-- End .form-box -->
-            </div><!-- End .modal-body -->
-        </div><!-- End .modal-content -->
-    </div><!-- End .modal-dialog -->
-</div><!-- End .modal -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
 
 @endsection
 

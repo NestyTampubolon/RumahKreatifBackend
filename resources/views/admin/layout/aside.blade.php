@@ -56,11 +56,18 @@
                 <p>Pembelian</p>
             </a>
         </li>
+        <li class="nav-header">VOUCHER</li>
+        <li class="nav-item">
+            <a href="{{ url('/voucher') }}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Voucher</p>
+            </a>
+        </li>
         <li class="nav-header">USERS</li>
         <li class="nav-item">
             <a href="{{ url('/verifikasi_user') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
-                <p>Verifikasi User</p>
+                <p>User</p>
             </a>
         </li>
         <li class="nav-header">TOKO</li>

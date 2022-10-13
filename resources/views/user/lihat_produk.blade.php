@@ -193,7 +193,7 @@
                                             @if(!$merchant_address)
                                             <a href="#pemberitahuan_alamat_toko" class="btn btn-product btn-cart" data-toggle="modal"><span>tambah ke keranjang</span></a>
                                             @elseif($cek_alamat)
-                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
+                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart" onclick="masuk_keranjang()"><span>tambah ke keranjang</span></a>
                                             @else
                                             <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
                                             @endif
