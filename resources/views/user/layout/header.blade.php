@@ -94,7 +94,10 @@
                     <a href="../keranjang" class="dropdown-toggle">
                         <div class="icon">
                             <i class="icon-shopping-cart"></i>
-                            <!-- <span class="cart-count">2</span> -->
+                            <span class="cart-count">
+                                <?php $jumlah_produk_keranjang = DB::table('carts')->where('user_id', Auth::user()->id)->count(); ?>
+                                {{$jumlah_produk_keranjang}}
+                            </span>
                         </div>
                         <p>Keranjang</p>
                     </a>
