@@ -104,8 +104,6 @@
                 </div>
             </div>
 
-            <form action="../masuk_keranjang_beli/{{$product->product_id}}" method="post" enctype="multipart/form-data">
-            @csrf
                 <div class="product-details product-details-centered product-details-separator">
                     <div class="container">
                         <div class="row">
@@ -161,32 +159,64 @@
                             <div class="col-md-6">
                                    
                             @if($stocks->stok > 0)
-
-                                <div class="product-details-action">
-                                    <div class="details-action-col">
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
-                                        </div>
+                                <!-- <div class="product-details-action">
+                                    <div class="details-action-col"> -->
                                         @if(Auth::check())
                                             @if(!$merchant_address)
-                                            <a href="#pemberitahuan_alamat_toko" class="btn btn-primary" data-toggle="modal"><span>BELI SEKARANG</span></a>
+                                                <div class="product-details-action">
+                                                    <div class="details-action-col">
+                                                        <div class="product-details-quantity">
+                                                            <a href="#pemberitahuan_alamat_toko" class="btn btn-primary" data-toggle="modal"><span>BELI SEKARANG</span></a>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
+                                                    </div>
+                                                </div>
                                             @elseif($cek_alamat)
-                                            <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
+                                            <form action="../masuk_keranjang_beli/{{$product->product_id}}" method="post" enctype="multipart/form-data">
+                                            @csrf
+                                                <div class="product-details-action">
+                                                    <div class="details-action-col">
+                                                        <div class="product-details-quantity">
+                                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                             @else
-                                            <a href="../alamat" class="btn btn-primary"><span>BELI SEKARANG</span></a>
+                                            <div class="product-details-action">
+                                                <!-- <div class="details-action-col"> -->
+                                                    <div class="product-details-quantity" style="margin-bottom:10px">
+                                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
+                                                    </div>
+                                                    <form action="../alamat" method="get" enctype="multipart/form-data">
+                                                    @csrf
+                                                        <input type="number" name="product" value="{{$product->product_id}}" hidden>
+                                                        <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
+                                                    </form>
+                                                    <!-- <a href="../alamat" class="btn btn-primary"><span>BELI SEKARANG</span></a> -->
+                                                <!-- </div> -->
+                                            </div>
+                                            
                                             @endif
                                         @else
-                                            <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI SEKARANG</span></a>
+                                            <div class="product-details-action">
+                                                <div class="details-action-col">
+                                                    <div class="product-details-quantity">
+                                                        <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
+                                                    </div>
+                                                    <a href="#signin-modal" class="btn btn-primary" data-toggle="modal" title="My account"><span>BELI SEKARANG</span></a>
+                                                </div>
+                                            </div>
                                         @endif
-                                    
 
-                                    </div>
+                                    <!-- </div> -->
 
                                     <!-- <div class="details-action-wrapper">
                                         <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
                                         <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
                                     </div> -->
-                                </div>
+                                <!-- </div> -->
 
                                 <div class="product-details-action">
                                     <div class="details-action-col">
@@ -200,7 +230,12 @@
                                                 <div><span>tambah ke keranjang</span></div>
                                             </label>
                                             @else
-                                            <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
+                                                <form action="../alamat" method="get" enctype="multipart/form-data">
+                                                @csrf
+                                                    <input type="number" name="product" value="{{$product->product_id}}" hidden>
+                                                    <button type="submit" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></button>
+                                                </form>
+                                                <!-- <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a> -->
                                             @endif
                                         @else
                                             <a href="#signin-modal" class="btn btn-product btn-cart" data-toggle="modal" title="My account"><span>tambah ke keranjang</span></a>
@@ -233,7 +268,6 @@
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
 
         <div class="container">
@@ -250,6 +284,9 @@
                     </li> -->
                     <li class="nav-item">
                         <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Tinjauan ({{$jumlah_review}})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="product-info_toko-link" data-toggle="tab" href="#product-info_toko-tab" role="tab" aria-controls="product-info_toko-tab" aria-selected="false">Informasi Toko</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -388,6 +425,32 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-info_toko-tab" role="tabpanel" aria-labelledby="product-info_toko-link">
+                        <div class="product-info_toko-content">
+                            <table>
+                                <tr>
+                                    <td>Nama Toko</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td>{{$product->nama_merchant}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Deskripsi Toko</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td>{{$product->deskripsi_toko}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kontak Toko</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td>{{$product->kontak_toko}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat Toko</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td>{{$merchant_address->merchant_street_address}}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -631,7 +694,6 @@
                                     <input type="radio" name="nilai_review" id="star4-modal" value="2"><label for="star4"></label>
                                     <input type="radio" name="nilai_review" id="star5-modal" value="1"><label for="star5"></label>
                                 </div><br>
-
                                 
                                 <div class="form-group">
                                     <label for="isi_review">Isi Tinjauan *</label>

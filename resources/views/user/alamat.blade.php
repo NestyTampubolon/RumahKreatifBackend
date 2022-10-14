@@ -11,6 +11,10 @@
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
     <form action="./PostAlamat" method="post" enctype="multipart/form-data">
     @csrf
+        @if($product)
+            <input type="number" name="product" value="{{(int)$product}}" hidden>
+        @endif
+
         <label>Provinsi *</label>
         <select name="province" id="province" class="custom-select form-control" required>
             <option value="" disabled selected>Pilih Provinsi</option>

@@ -32,8 +32,11 @@
                             <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                 @if (\Session::has('error'))
                                 <div class="alert alert-danger">
-                                    Cek kembali akun anda.
+                                    Akun tidak ditemukan. Cek kembali akun anda
                                 </div><br>
+                                <script>
+                                    alert("Akun tidak ditemukan. Cek kembali akun anda!");
+                                </script>
                                 @endif
                                 <form action="{{ url('/login') }}" method="post">
                                 @csrf

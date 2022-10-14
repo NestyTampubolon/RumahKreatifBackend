@@ -25,8 +25,10 @@ class AlamatController extends Controller
 
             else{
                 $user_id = Auth::user()->id;
-    
-                return view('user.alamat');
+                
+                $product = $request -> product;
+                
+                return view('user.alamat')->with('product', $product);
             }
         }
     }
@@ -58,6 +60,8 @@ class AlamatController extends Controller
         $subdistrict_id = $request -> subdistrict;
         $street_address = $request -> street_address;
 
+        $product = $request -> product;
+        
         if(Session::get('toko')){
             $toko = Session::get('toko');
 
@@ -93,6 +97,10 @@ class AlamatController extends Controller
                     'is_deleted' => 0,
                 ]);
             }
+        }
+
+        if($product){
+            return redirect("./lihat_produk/$product");
         }
 
         return redirect('./daftar_alamat');
