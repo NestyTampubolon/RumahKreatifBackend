@@ -22,15 +22,40 @@ class KeranjangController extends Controller
         return view('user.pembelian.keranjang')->with('carts', $carts)->with('cek_carts', $cek_carts)->with('stocks', $stocks);
     }
 
-    public function masuk_keranjang(Request $request, $product_id) {
-        $user_id = Auth::user()->id;
+    // public function masuk_keranjang(Request $request, $product_id) {
+    //     $user_id = Auth::user()->id;
         
-        $jumlah_masuk_keranjang = DB::table('carts')->select('jumlah_masuk_keranjang')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+    //     $jumlah_masuk_keranjang = DB::table('carts')->select('jumlah_masuk_keranjang')->where('user_id', $user_id)->where('product_id', $product_id)->first();
 
-        $cek_keranjang = DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+    //     $cek_keranjang = DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->first();
+        
+    //     if($cek_keranjang){
+    //         DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->update([
+    //             'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang->jumlah_masuk_keranjang + 1,
+    //         ]);
+    //     }
+        
+    //     else{
+    //         DB::table('carts')->insert([
+    //             'user_id' => $user_id,
+    //             'product_id' => $product_id,
+    //             'jumlah_masuk_keranjang' => 1,
+    //         ]);
+    //     }
+
+    //     return redirect()->back();
+    // }
+    
+    public function masuk_keranjang(Request $request) {
+        $user_id = Auth::user()->id;
+        $produk = $_GET['produk'];
+        
+        $jumlah_masuk_keranjang = DB::table('carts')->select('jumlah_masuk_keranjang')->where('user_id', $user_id)->where('product_id', $produk)->first();
+
+        $cek_keranjang = DB::table('carts')->where('user_id', $user_id)->where('product_id', $produk)->first();
         
         if($cek_keranjang){
-            DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id)->update([
+            DB::table('carts')->where('user_id', $user_id)->where('product_id', $produk)->update([
                 'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang->jumlah_masuk_keranjang + 1,
             ]);
         }
@@ -38,12 +63,14 @@ class KeranjangController extends Controller
         else{
             DB::table('carts')->insert([
                 'user_id' => $user_id,
-                'product_id' => $product_id,
+                'product_id' => $produk,
                 'jumlah_masuk_keranjang' => 1,
             ]);
         }
 
-        return redirect()->back();
+        $jumlah_produk_keranjang = DB::table('carts')->where('user_id', $user_id)->count();
+
+        return response()->json($jumlah_produk_keranjang);
     }
 
     public function masuk_keranjang_beli(Request $request, $product_id) {

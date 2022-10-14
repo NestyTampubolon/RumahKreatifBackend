@@ -46,7 +46,7 @@ class PembelianController extends Controller
         
         $merchant_address = DB::table('merchant_address')->get();
 
-        $user_address = DB::table('user_address')->where('user_id', $user_id)->orderBy('subdistrict_id', 'asc')->get();
+        $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('subdistrict_id', 'asc')->get();
 
         return view('user.pembelian.checkout')->with('cek_cart', $cek_cart)->with('carts', $carts)->with('vouchers', $vouchers)->with('total_harga', $total_harga)
         ->with('merchant_address', $merchant_address)->with('user_address', $user_address);

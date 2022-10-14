@@ -20,6 +20,7 @@ class CreateUserAddressTable extends Migration
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('subdistrict_id');
             $table->string('user_street_address');
+            $table->boolean('is_deleted');
             
             $table->foreign('user_id')->references('id')->on('users');
         });

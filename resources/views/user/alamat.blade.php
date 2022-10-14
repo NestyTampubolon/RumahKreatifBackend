@@ -45,6 +45,6 @@
         }
     });
 </script>
-<script src="{{ URL::asset('asset/js/rajaongkir.js') }}"></script>
+<script src="{{ URL::asset('asset/js/function.js') }}"></script>
 @endsection
 

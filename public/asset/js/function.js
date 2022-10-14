@@ -48,7 +48,6 @@ $("#province").change(function (data) {
     });
 });
 
-
 $("#city").change(function (data) {
     console.log($(this).val());
     $.ajax({
@@ -74,7 +73,6 @@ $("#city").change(function (data) {
         }
     });
 });
-
 
 $("#voucher").change(function (data) {
     console.log($(this).val());
@@ -198,53 +196,3 @@ $("#courier").change(function (data) {
         }
     });
 });
-
-// $("#street_address").change(function (data) {
-//     $.ajax({
-//         type: "POST",
-//         dataType: "json",
-//         url: "/cek_ongkir",
-//         data: "origin=" + $("#merchant_address").val() + "&originType=subdistrict" + "&destinationType=subdistrict" + "&destination=" + $("#subdistrict_address").val() + "&weight=" + $("#weight").val() + "&courier=" + "jne",
-//         complete: function (data) {
-//             console.log(data);
-//             data.then((result) => {
-//                 var _data = $.parseJSON(result);
-//                 _data["rajaongkir"]["results"].forEach((costs, indexC) => {
-
-//                     jQuery('<div>', {
-//                         id: costs["code"],
-//                     }).appendTo('#prices');
-
-//                     jQuery('<p>', {
-//                         text: costs["name"] + "( " + costs["code"] + " )",
-//                     }).appendTo("#" + costs["code"]);
-
-//                     jQuery('<ul>', {
-//                         id: costs["code"] + "-" + indexC,
-//                     }).appendTo("#" + costs["code"]);
-
-//                     costs["costs"].forEach((cost, indexCC) => {
-//                         console.log(cost["cost"]);
-//                         jQuery('<li>', {
-//                             id: costs["code"] + "-" + cost["service"],
-//                             text: cost["description"] + "( " + cost["service"] + " )",
-//                         }).appendTo("#" + costs["code"] + "-" + indexC);
-
-//                         jQuery('<ul>', {
-//                             id: costs["code"] + "-" + cost["service"] + "-" + indexCC,
-//                         }).appendTo("#" + costs["code"] + "-" + cost["service"]);
-
-//                         console.log(cost["cost"]);
-//                         cost["cost"].forEach((price) => {
-//                             console.log(price);
-//                             jQuery('<li>', {
-//                                 text: price["value"] + "( " + price["etd"] + " )",
-//                             }).appendTo("#" + costs["code"] + "-" + cost["service"] + "-" + indexCC);
-//                         });
-//                     });
-
-//                 });
-//             })
-//         }
-//     });
-// });

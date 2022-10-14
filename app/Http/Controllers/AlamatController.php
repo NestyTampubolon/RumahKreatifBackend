@@ -90,6 +90,7 @@ class AlamatController extends Controller
                     'city_id' => $city_id,
                     'subdistrict_id' => $subdistrict_id,
                     'user_street_address' => $street_address,
+                    'is_deleted' => 0,
                 ]);
             }
         }
@@ -124,7 +125,7 @@ class AlamatController extends Controller
 
             else{
                 $user_id = Auth::user()->id;
-                $user_address = DB::table('user_address')->where('user_id', $user_id)->orderBy('user_address_id', 'asc')->get();
+                $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('user_address_id', 'asc')->get();
     
                 return view('user.daftar_alamat')->with('user_address', $user_address);
             }
@@ -154,7 +155,10 @@ class AlamatController extends Controller
             else{
                 $user_id = Auth::user()->id;
                 
-                DB::table('user_address')->where('user_address_id', $user_address_id)->delete();
+                // DB::table('user_address')->where('user_address_id', $address_id)->delete();
+                DB::table('user_address')->where('user_address_id', $address_id)->update([
+                    'is_deleted' => 1,
+                ]);
                 
                 return redirect('./daftar_alamat');
             }

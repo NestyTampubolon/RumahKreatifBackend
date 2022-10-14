@@ -92,7 +92,7 @@
 
                 <div class="cart-dropdown">
                     <a href="../keranjang" class="dropdown-toggle">
-                        <div class="icon">
+                        <div class="icon" id="jumlah_produk_keranjang">
                             <i class="icon-shopping-cart"></i>
                             <span class="cart-count">
                                 <?php $jumlah_produk_keranjang = DB::table('carts')->where('user_id', Auth::user()->id)->count(); ?>

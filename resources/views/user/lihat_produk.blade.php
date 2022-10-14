@@ -57,6 +57,7 @@
 
 </style>
 
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @section('container')
 
@@ -193,7 +194,11 @@
                                             @if(!$merchant_address)
                                             <a href="#pemberitahuan_alamat_toko" class="btn btn-product btn-cart" data-toggle="modal"><span>tambah ke keranjang</span></a>
                                             @elseif($cek_alamat)
-                                            <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart" onclick="masuk_keranjang()"><span>tambah ke keranjang</span></a>
+                                            <!-- <a href="../masuk_keranjang/{{$product->product_id}}" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a> -->
+                                            <input type="checkbox" id="tambah_produk_keranjang" name="tambah_produk_keranjang" value="{{$product->product_id}}" hidden>
+                                            <label class="btn btn-product btn-cart" for="tambah_produk_keranjang">
+                                                <div><span>tambah ke keranjang</span></div>
+                                            </label>
                                             @else
                                             <a href="../alamat" class="btn btn-product btn-cart"><span>tambah ke keranjang</span></a>
                                             @endif
@@ -662,5 +667,32 @@
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
+
+<div class="modal fade" id="tambah_produk_keranjang_modal" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <h5>Produk telah ditambahkan ke keranjang.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script src="{{ URL::asset('asset/js/function_2.js') }}"></script>
 
 @endsection

@@ -124,7 +124,8 @@ Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\Pembelia
 Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
 
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
-Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
+// Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
+Route::get('/masuk_keranjang', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
 Route::post('/masuk_keranjang_beli/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang_beli');
 Route::get('/hapus_keranjang/{cart_id}', 'App\Http\Controllers\KeranjangController@HapusKeranjang');
 
