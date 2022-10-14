@@ -23,7 +23,7 @@ class CreatePurchasesTable extends Migration
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('checkout_id')->references('checkout_id')->on('users');
+            $table->foreign('checkout_id')->references('checkout_id')->on('checkouts');
         });
     }
 
