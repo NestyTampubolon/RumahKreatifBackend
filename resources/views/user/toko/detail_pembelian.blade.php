@@ -29,7 +29,12 @@
                         @endif
                          
                         @if($purchases->status_pembelian == "status4_ambil_b")
-                            <p class="">Pesanan Telah Diterima. SILAHKAN TUNGGU BAYARAN.</p>
+                            <?php
+                                $total_harga = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
+                            ?>
+                            <p class="">Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
+                            <b><a id="total_harga_produk">{{$total_harga}}</a></b>    
+                            DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.</p>
                         @endif
 
                         @if($purchases->status_pembelian == "status3")

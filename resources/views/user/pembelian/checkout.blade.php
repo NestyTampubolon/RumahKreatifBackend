@@ -119,6 +119,36 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            
+                            <table class="table table-summary">
+                                <tbody>
+                                    <tr class="summary-shipping-estimate">
+                                        <td>Gunakan Voucher:</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <?php
+                                                $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '>=', date('Y-m-d'))
+                                                ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->count();
+                                            ?>
+                                            @if($jumlah_vouchers > 0)
+                                            <select name="voucher" id="voucher" class="custom-select form-control" required>
+                                                <option value="" disabled selected>Pilih Voucher</option>
+                                                @foreach($vouchers as $vouchers)
+                                                @if($total_harga->total_harga >= $vouchers->minimal_pengambilan)
+                                                    <option value="{{$vouchers->voucher_id}}">{{$vouchers->nama_voucher}} ({{$vouchers->potongan}}%)</option>
+                                                @endif
+                                                @endforeach
+                                            </select>
+                                            @else
+                                                <input class="form-control" value="Tidak ada voucher yang bisa diambil." disabled>
+                                            @endif
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                             <table class="table table-summary">
                                 <tbody>
@@ -209,7 +239,7 @@
 
                             <table class="table table-summary">
                                 <tbody>
-                                    <tr class="summary-total">
+                                    <tr class="summary-total" id="total_harga_checkout">
                                         <td>Total:</td>
                                         <td>
                                             <?php

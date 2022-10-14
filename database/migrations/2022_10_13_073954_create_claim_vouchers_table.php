@@ -16,9 +16,11 @@ class CreateClaimVouchersTable extends Migration
         Schema::create('claim_vouchers', function (Blueprint $table) {
             $table->id('claim_voucher_id');
             $table->unsignedBigInteger('checkout_id');
+            $table->unsignedBigInteger('voucher_id');
             $table->timestampsTz($precision = 0);
             
             $table->foreign('checkout_id')->references('checkout_id')->on('checkouts');
+            $table->foreign('voucher_id')->references('voucher_id')->on('vouchers');
         });
     }
 

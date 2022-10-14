@@ -168,7 +168,7 @@ class ProdukController extends Controller
             'product_description' => $product_description,
             'price' => $price,
             'heavy' => $heavy,
-            'is_deleted' => '0',
+            'is_deleted' => 0,
         ]);
         
         // $product_id = DB::table('products')->select('product_id')->pluck('product_id');
@@ -287,7 +287,7 @@ class ProdukController extends Controller
     
     public function HapusProduk($product_id) {
         DB::table('products')->where('product_id', $product_id)->update([
-            'is_deleted' => '1',
+            'is_deleted' => 1,
         ]);
 
         return redirect('../produk');

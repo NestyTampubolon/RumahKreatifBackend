@@ -9,6 +9,25 @@
     .intro-slider-container, .intro-slide{
         height:300px;
     } */
+    
+    
+    @media screen and (min-width: 200px) { .intro-slider-container { max-height:50px; } }
+    
+    @media screen and (min-width: 325px) { .intro-slider-container { max-height:80px; }}
+
+    @media screen and (min-width: 450px) { .intro-slider-container { max-height:110px; }}
+    
+    @media screen and (min-width: 575px) { .intro-slider-container { max-height:140px; }}
+    
+    @media screen and (min-width: 700px) { .intro-slider-container { max-height:170px; } }
+
+    @media screen and (min-width: 825px) { .intro-slider-container { max-height:195px; } }
+    
+    @media screen and (min-width: 950px) { .intro-slider-container { max-height:230px; } }
+
+    @media screen and (min-width: 1075px) { .intro-slider-container { max-height:260px; } }
+
+    @media screen and (min-width: 1200px) { .intro-slider-container { max-height:290px; } }
 </style>
 
 @section('container')

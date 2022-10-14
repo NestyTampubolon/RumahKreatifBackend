@@ -76,6 +76,24 @@ $("#city").change(function (data) {
 });
 
 
+$("#voucher").change(function (data) {
+    console.log($(this).val());
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/ambil_voucher",
+        data: { voucher: $(this).val() },
+        success: function (data) {
+            console.log(data)
+
+            $("#total_harga_checkout").empty();
+
+            $("#total_harga_checkout").append($('<td>', { text: "Total:", }))
+            $("#total_harga_checkout").append($('<td>', { text: data, }))
+        }
+    });
+});
+
 $("#ambil_ditempat").click(function (data) {
     console.log($(this).val());
     $.ajax({
