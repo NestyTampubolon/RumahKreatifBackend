@@ -10,7 +10,7 @@ class VoucherController extends Controller
 {
     public function voucher() {
         $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '>=', date('Y-m-d'))
-        ->where('tanggal_batas_berlaku', '<=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
 
         return view('admin.voucher')->with('vouchers', $vouchers);
     }
