@@ -218,13 +218,14 @@
                                                     <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_semula}}</a></center><br>
                                                 @endif
                                                 
-                                                
                                                 @if($proof_of_payments)
                                                     <center><a href="./asset/u_file/proof_of_payment_image/{{$proof_of_payments->proof_of_payment_image}}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>
                                                 @endif
 
                                                 @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
-                                                    <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
+                                                    @if(!$proof_of_payments)
+                                                        <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
+                                                    @endif
                                                 @endif
 
                                                 

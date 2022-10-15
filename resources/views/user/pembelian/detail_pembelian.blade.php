@@ -161,7 +161,8 @@
         </div><!-- End .col-lg-6 -->
     </div><!-- End .row -->
     
-    @elseif($purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2_ambil") 
+    @elseif($purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2_ambil")
+    @if($cek_merchant_address > 0)
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-dashboard">
@@ -172,6 +173,9 @@
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->
     </div><!-- End .row -->
+    @elseif($cek_merchant_address == 0)
+
+    @endif
 
     @else
 
@@ -259,7 +263,7 @@
         <div class="col-lg-6">
             <div class="card card-dashboard">
                 <div class="card-body">
-                    <h3 class="card-title">{{$product_purchases->product_name}}</h3>
+                    <a href="../lihat_produk/{{$product_purchases->product_id}}"><h3 class="card-title">{{$product_purchases->product_name}}</h3></a>
                     <p>
                     <?php
                         $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchases->product_id)->count();

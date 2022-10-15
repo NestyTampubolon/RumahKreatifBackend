@@ -354,6 +354,8 @@ class PembelianController extends Controller
                 $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
     
+                $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->count();
+
                 $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->first();
 
                 $product_purchases = DB::table('product_purchases')->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
@@ -379,7 +381,7 @@ class PembelianController extends Controller
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
                 return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('merchant_address', $merchant_address)->with('product_purchases', $product_purchases)->with('profile', $profile)
+                ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('product_purchases', $product_purchases)->with('profile', $profile)
                 ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('total_harga', $total_harga)
                 ->with('total_harga_semula', $total_harga_semula)->with('cek_proof_of_payment', $cek_proof_of_payment);
                 
@@ -391,12 +393,18 @@ class PembelianController extends Controller
         $proof_of_payment_image = $request -> file('proof_of_payment_image');
 
         $proof_of_payment_image_name = time().'_'.$proof_of_payment_image->getClientOriginalName();
-        $tujuan_upload = './asset/u_file/proof_of_payment_image';
-        $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
+
 
         DB::table('proof_of_payments')->insert([
             'purchase_id' => $purchase_id,
             'proof_of_payment_image' => $proof_of_payment_image_name,
+        ]);
+        
+        $tujuan_upload = './asset/u_file/proof_of_payment_image';
+        $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
+
+        $request -> validate([
+            'proof_of_payment_image' => 'max:20000',  
         ]);
         
         return redirect()->back();
