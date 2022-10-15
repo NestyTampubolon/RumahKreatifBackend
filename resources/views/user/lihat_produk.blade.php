@@ -166,9 +166,9 @@
                                                 <div class="product-details-action">
                                                     <div class="details-action-col">
                                                         <div class="product-details-quantity">
-                                                            <a href="#pemberitahuan_alamat_toko" class="btn btn-primary" data-toggle="modal"><span>BELI SEKARANG</span></a>
+                                                            <input type="number" id="qty" name="jumlah_pembelian_produk" class="form-control" value="1" min="1" max="{{$stocks->stok}}" step="1" data-decimals="0" required>
                                                         </div>
-                                                        <button type="submit" class="btn btn-primary"><span>BELI SEKARANG</span></button>
+                                                        <a href="#pemberitahuan_alamat_toko" class="btn btn-primary" data-toggle="modal"><span>BELI SEKARANG</span></a>
                                                     </div>
                                                 </div>
                                             @elseif($cek_alamat)
