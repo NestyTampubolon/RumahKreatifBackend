@@ -41,7 +41,7 @@
                             SILAHKAN LAKUKAN PEMBAYARAN PESANAN ANDA SENILAI
                             <b><a id="total_harga_produk"></a></b>
                             KE NOMOR REKENING DIBAWAH INI.<br>
-                            <center><b>89508081375215693 (DANA)</b> A/N <b>Riyanthi A Sianturi</b><center>
+                            <center><b>081375215693 (DANA)</b> A/N <b>Riyanthi A Sianturi</b><center>
                         </p>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
