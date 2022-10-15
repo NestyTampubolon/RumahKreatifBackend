@@ -186,6 +186,7 @@
                                                                 @endif
                                                             @endforeach
                                                         @endif
+                                                        <a>Nama Toko: {{$product_purchase->nama_merchant}}</a> |
 
                                                         <a>Product ID: {{$product_purchase->product_id}}</a> |
 
@@ -206,7 +207,7 @@
                                                         @endif
                                                         <a>Jumlah Pembelian: {{$product_purchase->jumlah_pembelian_produk}}</a> |
                                                         <a>Harga: 
-                                                            {{$total_harga_pembelian_fix}}
+                                                            {{$total_harga_pembelian_fix}} dari {{$total_harga_pembelian_old}}
                                                         </a> ||
                                                         <br>
                                                     @endif

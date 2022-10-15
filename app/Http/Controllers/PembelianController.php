@@ -259,7 +259,8 @@ class PembelianController extends Controller
                 $profiles = DB::table('profiles')->get();
                 
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
+                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
 
                 $product_specifications = DB::table('product_specifications')
                 ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
