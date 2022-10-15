@@ -445,11 +445,15 @@
                                     <td>&emsp; : &emsp;</td>
                                     <td>{{$product->kontak_toko}}</td>
                                 </tr>
+                                @if($cek_merchant_address > 0 )
                                 <tr>
                                     <td>Alamat Toko</td>
                                     <td>&emsp; : &emsp;</td>
                                     <td>{{$merchant_address->merchant_street_address}}</td>
                                 </tr>
+                                @elseif($cek_merchant_address == 0 )
+                                
+                                @endif
                             </table>
                         </div>
                     </div>

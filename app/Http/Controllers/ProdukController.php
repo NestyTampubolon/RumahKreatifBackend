@@ -362,9 +362,11 @@ class ProdukController extends Controller
         // $specification_types = DB::table('specification_types')->orderBy('nama_jenis_spesifikasi', 'asc')->get();
 
         $stocks = DB::table('stocks')->where('product_id', $product_id)->first();
+        
+        $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->count();
 
         $merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->first();
-        
+
         $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
         $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
         
@@ -373,11 +375,11 @@ class ProdukController extends Controller
             $cek_alamat = DB::table('user_address')->where('user_id', $user_id)->first();
             $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
 
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'merchant_address', 'reviews', 'jumlah_review', 'cek_alamat', 'cek_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review', 'cek_alamat', 'cek_review']));
         }
         
         else{
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'merchant_address', 'reviews', 'jumlah_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review']));
         }
     }
 
