@@ -256,7 +256,7 @@ class PembelianController extends Controller
                 
                 $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
-                $profiles = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
+                $profiles = DB::table('profiles')->get();
                 
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
@@ -267,8 +267,8 @@ class PembelianController extends Controller
                 ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
         
                 return view('admin.daftar_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('product_purchases', $product_purchases)->with('product_specifications', $product_specifications)->with('purchases', $purchases)
-                ->with('profiles', $profiles);
+                ->with('product_purchases', $product_purchases)->with('profiles', $profiles)->with('product_specifications', $product_specifications)
+                ->with('purchases', $purchases);
             }
 
             else{

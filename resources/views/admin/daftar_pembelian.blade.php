@@ -34,7 +34,9 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead align="center">
                         <th>ID Pesanan</th>
+                        <th>Nama</th>
                         <th>User ID</th>
+                        <th>Username</th>
                         <th>Status Pesanan</th>
                         <th colspan="2">Action</th>
                     </tr>
@@ -46,7 +48,13 @@
                         @if($purchase->checkout_id == $checkout->checkout_id)
                         <tr>
                             <td>{{$purchase->purchase_id}}</td>
+                            @foreach($profiles as $profile)
+                              @if($profile->user_id == $purchase->user_id)
+                                <td>{{$profile->name}}</td>
+                              @endif
+                            @endforeach
                             <td>{{$purchase->user_id}}</td>
+                            <td>{{$purchase->username}}</td>
                             <td>
                               @if($purchase->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
                                 PENJUALAN DAN PEMBELIAN BERHASIL.
@@ -214,7 +222,7 @@
                                                 @if($proof_of_payments)
                                                     <center><a href="./asset/u_file/proof_of_payment_image/{{$proof_of_payments->proof_of_payment_image}}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>
                                                 @endif
-                                                
+
                                                 @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
                                                     <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
                                                 @endif
