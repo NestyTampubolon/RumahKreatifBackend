@@ -103,7 +103,7 @@ Route::get('/HapusProduk/{product_id}', 'App\Http\Controllers\ProdukController@H
 
 Route::get('/produk_toko', 'App\Http\Controllers\ProdukController@produk_toko');
 
-Route::post('/checkout', 'App\Http\Controllers\PembelianController@checkout');
+Route::post('/checkout/{merchant_id}', 'App\Http\Controllers\PembelianController@checkout');
 
 Route::get('/pilih_metode_pembelian', 'App\Http\Controllers\PembelianController@pilih_metode_pembelian');
 

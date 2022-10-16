@@ -9,7 +9,7 @@ use Session;
 
 class PembelianController extends Controller
 {
-    public function checkout() {
+    public function checkout($merchant_id) {
 
         $user_id = Auth::user()->id;
 
@@ -20,46 +20,50 @@ class PembelianController extends Controller
         for($x=0; $x<$jumlah_dipilih; $x++){
             $product = DB::table('products')->where('product_id', $product_id[$x])->first();
             $stocks = DB::table('stocks')->where('product_id', $product_id[$x])->first();
-            $merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->first();
+            // $merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->first();
 
-            if($stocks->stok > 0 && $merchant_address){
+            if($stocks->stok > 0){
                 $jumlah_masuk_keranjang = $_POST['jumlah_masuk_keranjang'];
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id[$x])->update([
                     'jumlah_masuk_keranjang' => $jumlah_masuk_keranjang[$x],
                 ]);
             }
             
-            else if($stocks->stok == 0 || !$merchant_address){
+            else if($stocks->stok == 0){
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id[$x])->delete();
             }
 
         }
 
-        $cek_cart = DB::table('carts')->where('user_id', $user_id)->count();
-        $carts = DB::table('carts')->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
+        $cek_cart = DB::table('carts')->where('user_id', $user_id)->where('merchant_id', $merchant_id)
+        ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+        $carts = DB::table('carts')->where('user_id', $user_id)->where('merchant_id', $merchant_id)
+        ->join('products', 'carts.product_id', '=', 'products.product_id')->get();
         
-        $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '>=', date('Y-m-d'))
+        $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
 
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
-        ->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
-        $merchant_address = DB::table('merchant_address')->get();
+        $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_id)->first();
 
         $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('subdistrict_id', 'asc')->get();
 
-        return view('user.pembelian.checkout')->with('cek_cart', $cek_cart)->with('carts', $carts)->with('vouchers', $vouchers)->with('total_harga', $total_harga)
+        return view('user.pembelian.checkout')->with('merchant_id', $merchant_id)->with('cek_cart', $cek_cart)->with('carts', $carts)
+        ->with('vouchers', $vouchers)->with('total_harga', $total_harga)
         ->with('merchant_address', $merchant_address)->with('user_address', $user_address);
     }
     
-    public function ambil_voucher(Request $request) {
+    public function ambil_voucher() {
         $user_id = Auth::user()->id;
         $voucher = $_GET['voucher'];
+        $merchant_id = $_GET['merchant_id'];
         
         $voucher_dipilih = DB::table('vouchers')->where('voucher_id', $voucher)->first();
         
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
-        ->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
         $potongan = (int)$total_harga->total_harga * $voucher_dipilih->potongan / 100;
 
@@ -145,10 +149,10 @@ class PembelianController extends Controller
     public function PostBeliProduk(Request $request) {
         $user_id = Auth::user()->id;
         
-        $metode_pembelian = $request -> metode_pembelian;
-
-        $alamat_purchase = $request -> alamat_purchase;
+        $merchant_id = $request -> merchant_id;
         
+        $metode_pembelian = $request -> metode_pembelian;
+        $alamat_purchase = $request -> alamat_purchase;
         $jumlah_pembelian_produk = $request -> jumlah_pembelian_produk;
         
         $voucher = $request -> voucher;
@@ -174,39 +178,35 @@ class PembelianController extends Controller
         else if($metode_pembelian = "pesanan_dikirim"){
             $status_pembelian = "status1";
         }
-
-        $merchant_purchase = DB::table('carts')->select('merchant_id')->where('user_id', $user_id)
-        ->join('products', 'carts.product_id', '=', 'products.product_id')->groupBy('merchant_id')->get();
         
-        foreach($merchant_purchase as $merchant_purchase){
-            DB::table('purchases')->insert([
-                'user_id' => $user_id,
-                'checkout_id' => $checkout_id->checkout_id,
-                'alamat_purchase' => $alamat_purchase,
-                'status_pembelian' => $status_pembelian,
+        DB::table('purchases')->insert([
+            'user_id' => $user_id,
+            'checkout_id' => $checkout_id->checkout_id,
+            'alamat_purchase' => $alamat_purchase,
+            'status_pembelian' => $status_pembelian,
+        ]);
+        
+        $purchase_id = DB::table('purchases')->select('purchase_id')->orderBy('purchase_id', 'desc')->first();
+
+        $product_purchase = DB::table('carts')->select('carts.product_id', 'jumlah_masuk_keranjang')->where('user_id', $user_id)
+        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
+
+        foreach($product_purchase as $product_purchase){
+            DB::table('product_purchases')->insert([
+                'purchase_id' => $purchase_id->purchase_id,
+                'product_id' => $product_purchase->product_id,
+                'jumlah_pembelian_produk' => $product_purchase->jumlah_masuk_keranjang,
             ]);
             
-            $purchase_id = DB::table('purchases')->select('purchase_id')->orderBy('purchase_id', 'desc')->first();
+            $stok = DB::table('stocks')->select('stok')->where('product_id', $product_purchase->product_id)->first();
 
-            $product_purchase = DB::table('carts')->select('carts.product_id', 'jumlah_masuk_keranjang')->where('user_id', $user_id)
-            ->where('merchant_id', $merchant_purchase->merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
-
-            foreach($product_purchase as $product_purchase){
-                DB::table('product_purchases')->insert([
-                    'purchase_id' => $purchase_id->purchase_id,
-                    'product_id' => $product_purchase->product_id,
-                    'jumlah_pembelian_produk' => $product_purchase->jumlah_masuk_keranjang,
-                ]);
-                
-                $stok = DB::table('stocks')->select('stok')->where('product_id', $product_purchase->product_id)->first();
-
-                DB::table('stocks')->where('product_id', $product_purchase->product_id)->update([
-                    'stok' => $stok->stok - $product_purchase->jumlah_masuk_keranjang,
-                ]);
-            }
+            DB::table('stocks')->where('product_id', $product_purchase->product_id)->update([
+                'stok' => $stok->stok - $product_purchase->jumlah_masuk_keranjang,
+            ]);
+            
+            DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_purchase->product_id)->delete();
         }
 
-        DB::table('carts')->where('user_id', $user_id)->delete();
 
         return redirect('../daftar_pembelian');
     }

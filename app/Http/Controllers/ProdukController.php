@@ -230,7 +230,6 @@ class ProdukController extends Controller
         $heavy = $request -> heavy;
 
         $product_image = $request -> file('product_image');
-        $jumlah_product_image = count($product_image);
 
         $stok = $request -> stok;
 
@@ -247,6 +246,7 @@ class ProdukController extends Controller
         }
 
         if($product_image){
+            $jumlah_product_image = count($product_image);
             $products_lama = DB::table('product_images')->where('product_id', $product_id)->get();
             $asal_gambar = 'asset/u_file/product_image/';
             foreach($products_lama as $products_lama){
@@ -255,7 +255,6 @@ class ProdukController extends Controller
                     File::delete($product_image_lama);
                 }
             }
-
 
             DB::table('product_images')->where('product_id', $product_id)->delete();
             

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
     <meta name="keywords" content="HTML5 Template">
-    <meta name="description" content="eCommerce Rumah Kreatif Toba">
+    <meta name="description" content="Marketplace Rumah Kreatif Toba">
     <meta name="author" content="p-themes">
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('asset/Image/logo_rkt.png') }}">

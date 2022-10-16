@@ -56,11 +56,10 @@
         
         <label>Gambar Produk Lama</label>
         <div class="row">
-        @foreach($product_images as $product_image)
-            @if($product_image->product_id == $product->product_id)
-            
+        @foreach($product_images as $product_image1)
+            @if($product_image1->product_id == $product->product_id)
             <div class="col-4 col-md-4 col-lg-4 col-xl-2">
-                    <img src="../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="Product image" class="product-image">
+                    <img src="../asset/u_file/product_image/{{$product_image1->product_image_name}}" alt="Product image" class="product-image">
                 </div>
             @endif
         @endforeach
@@ -69,32 +68,43 @@
 
         <label>Gambar Produk *</label>
         <div id="product_image">
+            
+        @foreach($product_images as $product_image2)
+            @if($product_image2->product_id == $product->product_id)
             <div class="fileUpload">
-                <input id="uploadBtn1" type="file" name="product_image[]" class="upload" accept="image/*" required/>
-                <input class="form-control" id="uploadFile1" placeholder="Pilih Foto..." disabled="disabled"/>
+                <input id="uploadBtn{{$loop->iteration}}" type="file" name="product_image[]" class="upload" accept="image/*"/>
+                <input class="form-control" id="uploadFile{{$loop->iteration}}" placeholder="{{$product_image2->product_image_name}}" disabled="disabled"/>
             </div>
-            <div class="fileUpload">
+            @endif
+        @endforeach
+            <!-- <div class="fileUpload">
                 <input id="uploadBtn2" type="file" name="product_image[]" class="upload" accept="image/*" required/>
                 <input class="form-control" id="uploadFile2" placeholder="Pilih Foto..." disabled="disabled"/>
             </div>
             <div class="fileUpload">
                 <input id="uploadBtn3" type="file" name="product_image[]" class="upload" accept="image/*" required/>
                 <input class="form-control" id="uploadFile3" placeholder="Pilih Foto..." disabled="disabled"/>
-            </div>
+            </div> -->
         </div>
         <small class="form-text" style="margin-top:-15px">Pilih Minimal 3 Gambar. Pastikan gambar yang anda masukkan dapat dilihat dengan jelas.</small>
         
         <script>
             document.getElementById("uploadBtn1").onchange = function () {
                 document.getElementById("uploadFile1").value = this.value;
+                document.getElementById('uploadBtn2').setAttribute('required','required')
+                document.getElementById('uploadBtn3').setAttribute('required','required')
             };
 
             document.getElementById("uploadBtn2").onchange = function () {
                 document.getElementById("uploadFile2").value = this.value;
+                document.getElementById('uploadBtn1').setAttribute('required','required')
+                document.getElementById('uploadBtn3').setAttribute('required','required')
             };      
 
             document.getElementById("uploadBtn3").onchange = function () {
                 document.getElementById("uploadFile3").value = this.value;
+                document.getElementById('uploadBtn1').setAttribute('required','required')
+                document.getElementById('uploadBtn2').setAttribute('required','required')
 
                 let stre3;
                 stre3 = "<div class='fileUpload'><input id='uploadBtn4' type='file' name='product_image[]' class='upload' accept='image/*'/><input class='form-control' id='uploadFile4' placeholder='Pilih Foto...' disabled='disabled'/></div>";

@@ -80,7 +80,7 @@ $("#voucher").change(function (data) {
         type: "GET",
         dataType: "json",
         url: "/ambil_voucher",
-        data: { voucher: $(this).val() },
+        data: { voucher: $(this).val(), merchant_id: $merchant_id },
         success: function (data) {
             console.log(data)
 

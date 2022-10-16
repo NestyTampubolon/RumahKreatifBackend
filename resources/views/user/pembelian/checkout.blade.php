@@ -14,7 +14,8 @@
     <div class="page-content">
         <div class="cart">
             <div class="container">
-                <form action="./PostBeliProduk" method="post" enctype="multipart/form-data" class="row">
+                <form action="../PostBeliProduk" method="post" enctype="multipart/form-data" class="row">
+                    <input type="text" name="merchant_id" value="{{$merchant_id}}" readonly hidden>
                     <div class="col-lg-9">
                         @csrf
                         <table class="table table-cart table-mobile">
@@ -30,28 +31,32 @@
 
                             <tbody>
                                 @foreach($carts as $cart)
+                                <?php
+                                    $harga_produk = "Rp." . number_format($cart->price,2,',','.');
+                                    $subtotal = $cart->price * $cart->jumlah_masuk_keranjang;
+                                    $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
+                                ?>
                                 <tr align="center">
                                     <td class="product-col">
                                         <div class="product">
                                             <input type="number" class="form-control" name="product_id[]" value="{{$cart->product_id}}" hidden required>
                                             <figure class="product-media">
-                                                <a href="./lihat_produk/{{$cart->product_id}}">
+                                                <a href="../lihat_produk/{{$cart->product_id}}">
                                                     <?php
                                                         $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $cart->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
                                                     ?>
                                                     @foreach($product_images as $product_image)
-                                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$cart->product_name}}">
+                                                        <img src="../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$cart->product_name}}">
                                                     @endforeach
                                                 </a>
                                             </figure>
 
                                             <h3 class="product-title">
-                                                <a href="./lihat_produk/{{$cart->product_id}}">{{$cart->product_name}}</a>
+                                                <a href="../lihat_produk/{{$cart->product_id}}">{{$cart->product_name}}</a>
                                             </h3><!-- End .product-title -->
                                         </div><!-- End .product -->
                                     </td>
                                     <td>
-                                        <?php $harga_produk = "Rp." . number_format($cart->price,2,',','.'); ?>
                                         {{$harga_produk}}
                                     </td>
                                     <td class="quantity-col">
@@ -60,10 +65,6 @@
                                         </div><!-- End .cart-product-quantity -->
                                     </td>
                                     <td>
-                                        <?php
-                                            $subtotal = $cart->price * $cart->jumlah_masuk_keranjang;
-                                            $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
-                                        ?>
                                         {{$subtotal_harga_produk}}
                                     </td>
                                 </tr>
@@ -72,7 +73,7 @@
                         </table><!-- End .table table-wishlist -->
                         <div class="cart-bottom">
                             <div class="input-group-append">
-                                <a href="./keranjang" class="btn btn-outline-primary-2" type="submit">KEMBALI</a>
+                                <a href="../keranjang" class="btn btn-outline-primary-2" type="submit">KEMBALI</a>
                             </div><!-- .End .input-group-append -->
                         </div><!-- End .cart-bottom -->
                     </div>
@@ -98,20 +99,8 @@
                                             <?php $heavy = $carts->heavy * $carts->jumlah_masuk_keranjang; ?>
                                             <input type="text" id="weight" value="{{$heavy}}">
                                         </td>
-                                        <td hidden>
-                                            <?php $heavy = $carts->heavy * $carts->jumlah_masuk_keranjang; ?>
-                                            @foreach($merchant_address as $merch_address)
-                                                @if($carts->merchant_id == $merch_address->merchant_id)
-                                                    <input type="text" id="merchant_address" value="{{$merch_address->subdistrict_id}}">
-                                                @endif
-                                            @endforeach
-                                        </td>
                                         <td>
                                             <p id="subtotal_harga_produk">
-                                                <?php
-                                                    $subtotal = $carts->price * $carts->jumlah_masuk_keranjang;
-                                                    $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
-                                                ?>
                                                 {{$subtotal_harga_produk}}
                                             </p>
                                         </td>
@@ -129,7 +118,7 @@
                                     <tr>
                                         <td>
                                             <?php
-                                                $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '>=', date('Y-m-d'))
+                                                $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
                                                 ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->count();
                                             ?>
                                             @if($jumlah_vouchers > 0)
@@ -270,6 +259,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    $merchant_id = <?php echo $merchant_id ?>
 </script>
 <script src="{{ URL::asset('asset/js/function.js') }}"></script>
 

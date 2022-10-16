@@ -131,57 +131,42 @@
                                                     @if($product_purchase->purchase_id == $purchase->purchase_id)
                                                         <?php
                                                             $jumlah_claim_voucher = DB::table('claim_vouchers')->where('checkout_id', $purchase->checkout_id)->count();
-                                                            
-                                                            $total_harga_semula = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_semula'))
-                                                            ->where('product_purchases.purchase_id', $purchase->purchase_id)
+                                                                
+                                                            $total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                                            ->where('purchases.checkout_id', $purchase->checkout_id)
                                                             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                                            ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')->first();
+                                                            ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                                            ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+                                                            
+                                                            $total_harga_pembelian_perproduk = $product_purchase->price * $product_purchase->jumlah_pembelian_produk;
+                                                            
+                                                            $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchase->purchase_id)->count();
+                                                            
+                                                            $total_harga_tanpa_pemotongan = "Rp." . number_format(floor($total_harga_pembelian->total_harga_pembelian),2,',','.');
                                                         ?>
                                                         @if($jumlah_claim_voucher == 0)
                                                             <?php
-                                                                $total_harga_semula = "Rp." . number_format(floor($total_harga_semula->total_harga_semula),2,',','.');
-                                                                $total_harga_pembelian = $product_purchase->price * $product_purchase->jumlah_pembelian_produk;
-                                                                $total_harga_pembelian_fix = "Rp." . number_format(floor($total_harga_pembelian),2,',','.');
+                                                                $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
+                                                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                                                             ?>
                                                         @else
                                                             @foreach($claim_vouchers as $claim_voucher)
-                                                                @if($claim_voucher->checkout_id == $checkout->checkout_id)
+                                                                @if($claim_voucher->checkout_id == $purchase->checkout_id)
                                                                     <?php
-                                                                        $jumlah_pembelian_checkout = DB::table('purchases')->where('checkout_id', $purchase->checkout_id)->count();
-                                                                        $jumlah_product_purchase_checkout = DB::table('product_purchases')
-                                                                        ->where('purchases.checkout_id', $purchase->checkout_id)
-                                                                        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                                                        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                                                        ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->count();
-                                                                        $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchase->purchase_id)->count();
-                                                                        
-                                                                        $total_harga = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga'))
-                                                                        ->where('purchases.checkout_id', $purchase->checkout_id)
-                                                                        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                                                        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                                                        ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-                                                                        
+
                                                                         $voucher = DB::table('vouchers')->where('voucher_id', $claim_voucher->voucher_id)->first();
                                                                         
-                                                                        $total_harga_pembelian = $product_purchase->price * $product_purchase->jumlah_pembelian_produk;
-                                                                        $total_harga_pembelian_old = "Rp." . number_format(floor($total_harga_pembelian),2,',','.');
-
-                                                                        $potongan = $total_harga_pembelian * $voucher->potongan / 100 / $jumlah_product_purchase;
-                                                                        $potongan_purchase = $total_harga_pembelian * $voucher->potongan / 100 ;
-                                                                        $checkout_hasil_potong = $total_harga->total_harga * $voucher->potongan / 100;
-                                                
-                                                                        if($checkout_hasil_potong > $voucher->maksimal_pemotongan){
-                                                                            $potongan = $voucher->maksimal_pemotongan / $jumlah_pembelian_checkout / $jumlah_product_purchase;
-                                                                            $potongan_purchase = $voucher->maksimal_pemotongan / $jumlah_pembelian_checkout;
+                                                                        $potongan_harga_pembelian = $total_harga_pembelian->total_harga_pembelian * $voucher->potongan / 100;
+                                                                        $potongan_harga_barang = $total_harga_pembelian_perproduk * $voucher->potongan / 100;
+                                                                        if($potongan_harga_pembelian > $voucher->maksimal_pemotongan){
+                                                                            $potongan_harga_barang = $voucher->maksimal_pemotongan / $jumlah_product_purchase;
                                                                         }
-                                                                
-                                                                        $total_harga_fix = (int)$total_harga_pembelian - $potongan;
-                                                                        $total_harga_checkout_fix = (int)$total_harga_semula->total_harga_semula - $potongan_purchase;
 
-                                                                        $rp_total_harga_pembelian_fix = "Rp." . number_format(floor($total_harga_checkout_fix),2,',','.');
-                                                                        $total_harga_semula = "Rp." . number_format(floor($total_harga_semula->total_harga_semula),2,',','.');
-                                                                
-                                                                        $total_harga_pembelian_fix = "Rp." . number_format(floor($total_harga_fix),2,',','.');
+                                                                        $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
+                                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                                                        
+                                                                        $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $potongan_harga_pembelian;
+                                                                        $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
                                                                     ?>
                                                                 @endif
                                                             @endforeach
@@ -205,18 +190,20 @@
                                                             @endforeach
                                                         </a> |
                                                         @endif
-                                                        <a>Jumlah Pembelian: {{$product_purchase->jumlah_pembelian_produk}}</a> |
-                                                        <a>Harga: 
-                                                            {{$total_harga_pembelian_fix}} dari {{$total_harga_pembelian_old}}
-                                                        </a> ||
+                                                            <a>Jumlah Pembelian: {{$product_purchase->jumlah_pembelian_produk}}</a> |
+                                                        @if($jumlah_claim_voucher == 0)
+                                                            <a>Harga: {{$total_harga_pembelian_perproduk}}</a> ||
+                                                        @elseif($jumlah_claim_voucher > 0)
+                                                            <a>Harga: {{$total_harga_pembelian_produk_fix}} dari {{$total_harga_pembelian_perproduk}} </a> ||
+                                                        @endif
                                                         <br>
                                                     @endif
                                                 @endforeach<br>
                                                 @if($jumlah_claim_voucher == 0)
-                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_semula}}</a></center><br>
-                                                @else
-                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$rp_total_harga_pembelian_fix}}</a></center>
-                                                    <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_semula}}</a></center><br>
+                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_tanpa_pemotongan}}</a></center><br>
+                                                @elseif($jumlah_claim_voucher > 0)
+                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_fix}}</a></center>
+                                                    <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_tanpa_pemotongan}}</a></center><br>
                                                 @endif
                                                 
                                                 @if($proof_of_payments)
@@ -228,7 +215,6 @@
                                                         <center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>
                                                     @endif
                                                 @endif
-
                                                 
                                                 </div>
                                             </div>

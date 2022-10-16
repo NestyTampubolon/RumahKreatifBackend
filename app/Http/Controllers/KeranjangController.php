@@ -13,13 +13,22 @@ class KeranjangController extends Controller
         // $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
         // ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
 
+        $merchants = DB::table('merchants')->get();
+        
+        // $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
+        //         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
+
+        $cart_by_merchants = DB::table('carts')->select('merchant_id')->where('user_id', $user_id)
+        ->join('products', 'carts.product_id', '=', 'products.product_id')->groupBy('merchant_id')->get();
+
         $carts = DB::table('carts')->where('user_id', $user_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
        
         $cek_carts = DB::table('carts')->where('user_id', $user_id)->first();
         
         $stocks = DB::table('stocks')->get();
 
-        return view('user.pembelian.keranjang')->with('carts', $carts)->with('cek_carts', $cek_carts)->with('stocks', $stocks);
+        return view('user.pembelian.keranjang')->with('merchants', $merchants)->with('cart_by_merchants', $cart_by_merchants)
+        ->with('carts', $carts)->with('cek_carts', $cek_carts)->with('stocks', $stocks);
     }
 
     // public function masuk_keranjang(Request $request, $product_id) {
