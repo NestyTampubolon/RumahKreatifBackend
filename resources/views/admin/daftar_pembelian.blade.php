@@ -142,12 +142,14 @@
                                                             
                                                             $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchase->purchase_id)->count();
                                                             
-                                                            $total_harga_tanpa_pemotongan = "Rp." . number_format(floor($total_harga_pembelian->total_harga_pembelian),2,',','.');
+                                                            $total_harga_pembelian_keseluruhan_tanpa_pemotongan = "Rp." . number_format(floor($total_harga_pembelian->total_harga_pembelian),2,',','.');
+                                                            
+                                                            $total_harga_pembelian_produk_tanpa_pemotongan = "Rp." . number_format(floor($total_harga_pembelian_perproduk),2,',','.');
                                                         ?>
                                                         @if($jumlah_claim_voucher == 0)
                                                             <?php
-                                                                $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
-                                                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                                                // $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
+                                                                // $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                                                             ?>
                                                         @else
                                                             @foreach($claim_vouchers as $claim_voucher)
@@ -192,18 +194,18 @@
                                                         @endif
                                                             <a>Jumlah Pembelian: {{$product_purchase->jumlah_pembelian_produk}}</a> |
                                                         @if($jumlah_claim_voucher == 0)
-                                                            <a>Harga: {{$total_harga_pembelian_perproduk}}</a> ||
+                                                            <a>Harga: {{$total_harga_pembelian_produk_tanpa_pemotongan}}</a> ||
                                                         @elseif($jumlah_claim_voucher > 0)
-                                                            <a>Harga: {{$total_harga_pembelian_produk_fix}} dari {{$total_harga_pembelian_perproduk}} </a> ||
+                                                            <a>Harga: {{$total_harga_pembelian_produk_fix}} dari {{$total_harga_pembelian_produk_tanpa_pemotongan}} </a> ||
                                                         @endif
                                                         <br>
                                                     @endif
                                                 @endforeach<br>
                                                 @if($jumlah_claim_voucher == 0)
-                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_tanpa_pemotongan}}</a></center><br>
+                                                    <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_tanpa_pemotongan}}</a></center><br>
                                                 @elseif($jumlah_claim_voucher > 0)
                                                     <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_fix}}</a></center>
-                                                    <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_tanpa_pemotongan}}</a></center><br>
+                                                    <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_pembelian_keseluruhan_tanpa_pemotongan}}</a></center><br>
                                                 @endif
                                                 
                                                 @if($proof_of_payments)
