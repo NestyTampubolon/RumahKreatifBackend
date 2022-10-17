@@ -162,6 +162,7 @@
                                                                         $potongan_harga_barang = $total_harga_pembelian_perproduk * $voucher->potongan / 100;
                                                                         if($potongan_harga_pembelian > $voucher->maksimal_pemotongan){
                                                                             $potongan_harga_barang = $voucher->maksimal_pemotongan / $jumlah_product_purchase;
+                                                                            $potongan_harga_pembelian = $voucher->maksimal_pemotongan;
                                                                         }
 
                                                                         $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
