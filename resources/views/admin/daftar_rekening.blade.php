@@ -33,7 +33,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                        <th align="center">User ID</th>
+                        <th align="center">Nama Toko</th>
                         <th align="center">Atas Nama</th>
                         <th align="center">Nama Bank</th>
                         <th align="center">Nomor Rekening</th>
@@ -41,10 +41,10 @@
                   </thead>
                   <tbody>
                     @foreach($rekenings as $rekening)
-                    @foreach($profiles as $profile)
-                      @if($profile->user_id == $rekening->user_id)
+                    @foreach($merchants as $merchant)
+                      @if($merchant->user_id == $rekening->user_id)
                     <tr>
-                        <td>{{$rekening->user_id}}</td>
+                        <td>{{$merchant->nama_merchant}}</td>
                         <td>{{$rekening->atas_nama}}</td>
                         <td>{{$rekening->nama_bank}}</td>
                         <td>{{$rekening->nomor_rekening}}</td>

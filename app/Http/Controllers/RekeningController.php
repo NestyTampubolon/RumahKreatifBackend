@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Session;
 
 class RekeningController extends Controller
 {
@@ -34,17 +35,21 @@ class RekeningController extends Controller
         $is_admin = Auth::user()->is_admin;
 
         if($is_admin == 1){
+            $merchants = DB::table('merchants')->join('users', 'merchants.user_id', '=', 'users.id')
+            ->join('profiles', 'merchants.user_id', '=', 'profiles.user_id')->orderBy('merchant_id', 'desc')->get();
             $rekenings = DB::table('rekenings')->join('users', 'rekenings.user_id', '=', 'users.id')->orderBy('rekenings.user_id', 'desc')->orderBy('rekening_id', 'asc')->get();
             $profiles = DB::table('profiles')->orderBy('profile_id', 'asc')->get();
 
-            return view('admin.daftar_rekening')->with('rekenings', $rekenings)->with('profiles', $profiles);
+            return view('admin.daftar_rekening')->with('merchants', $merchants)->with('rekenings', $rekenings)->with('profiles', $profiles);
         }
 
         else{
-            $user_id = Auth::user()->id;
-            $rekenings = DB::table('rekenings')->where('user_id', $user_id)->orderBy('rekening_id', 'asc')->get();
-
-            return view('user.toko.daftar_rekening')->with('rekenings', $rekenings);
+            if(Session::get('toko')){
+                $user_id = Auth::user()->id;
+                $rekenings = DB::table('rekenings')->where('user_id', $user_id)->orderBy('rekening_id', 'asc')->get();
+    
+                return view('user.toko.daftar_rekening')->with('rekenings', $rekenings);
+            }
         }   
     }
 
