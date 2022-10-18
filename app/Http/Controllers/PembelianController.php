@@ -399,7 +399,7 @@ class PembelianController extends Controller
         $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
 
         $request -> validate([
-            'proof_of_payment_image' => 'size:20000',  
+            'proof_of_payment_image' => 'size:50000',  
         ]);
 
         DB::table('proof_of_payments')->insert([
