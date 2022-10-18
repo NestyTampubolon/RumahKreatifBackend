@@ -95,10 +95,6 @@
                                     @foreach($carts as $carts)
                                     <tr>
                                         <td><a href="#">{{$carts->product_name}}</a></td>
-                                        <td hidden>
-                                            <?php $heavy = $carts->heavy * $carts->jumlah_masuk_keranjang; ?>
-                                            <input type="text" id="weight" value="{{$heavy}}">
-                                        </td>
                                         <td>
                                             <p id="subtotal_harga_produk">
                                                 {{$subtotal_harga_produk}}
@@ -162,7 +158,7 @@
                                 </tbody>
                             </table>
 
-                            <table class="table table-summary" id="alamat_table" hidden>
+                            <table class="table table-summary" id="alamat_table">
                                 <tbody>
                                     <tr class="summary-shipping-estimate">
                                         <td>Alamat Anda:</td>
@@ -209,7 +205,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <table class="table table-summary" id="pengiriman_table" hidden>
+                            <table class="table table-summary" id="pengiriman_table">
                                 <tbody>
                                     <tr class="summary-shipping-estimate">
                                         <td>Pengiriman</td>
@@ -232,14 +228,16 @@
                                         <td>Total:</td>
                                         <td>
                                             <?php
-                                                $total_harga_checkout = "Rp." . number_format($total_harga->total_harga,2,',','.');  
-                                                echo $total_harga_checkout;
+                                                $total_harga_checkout = "Rp." . number_format($total_harga->total_harga,2,',','.');
                                             ?>
+                                            {{$total_harga_checkout}}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div id="checkout"></div>
+                        </div>
+                        <div id="ongkir">
                         </div>
                     </aside>
                 @elseif($cek_cart == 0)
@@ -259,7 +257,16 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    $merchant_id = <?php echo $merchant_id ?>
+
+    $merchant_id = <?php echo $merchant_id ?>;
+    
+    $total_berat = <?php echo $total_berat->total_berat ?>;
+    $province_id = <?php echo $merchant_address->province_id ?>;
+    $city_id = <?php echo $merchant_address->city_id ?>;
+    $subdistrict_id = <?php echo $merchant_address->subdistrict_id ?>;
+    
+    $("#alamat_table").hide();
+    $("#pengiriman_table").hide();
 </script>
 <script src="{{ URL::asset('asset/js/function.js') }}"></script>
 

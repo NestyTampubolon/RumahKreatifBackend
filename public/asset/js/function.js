@@ -125,7 +125,6 @@ $("#pesanan_dikirim").click(function (data) {
         success: function (data) {
             console.log(data)
             $("#alamat_table").show();
-            $("#pengiriman_table").show();
         }
     });
 });
@@ -169,6 +168,7 @@ $("#street_address").change(function (data) {
             //     text: "CHECKOUT",
             // }))
 
+            $("#pengiriman_table").show();
             $("#courier").append($('<option>', { value: "jne", text: "JNE", }))
             $("#courier").append($('<option>', { value: "sicepat", text: "SICEPAT", }))
             $("#courier").append($('<option>', { value: "anteraja", text: "ANTERAJA", }))
@@ -184,7 +184,7 @@ $("#courier").change(function (data) {
         dataType: "json",
         url: "/cek_ongkir",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        data: "origin=" + $("#merchant_address").val() + "&originType=subdistrict" + "&destinationType=subdistrict" + "&destination=" + $("#subdistrict_address").val() + "&weight=" + $("#weight").val() + "&courier=" + $("#courier").val(),
+        data: "origin=" + $subdistrict_id + "&originType=subdistrict" + "&destinationType=subdistrict" + "&destination=" + $("#subdistrict_address").val() + "&weight=" + $total_berat + "&courier=" + $("#courier").val(),
         complete: function (data) {
             console.log(data);
             $("#checkout").empty();
@@ -193,6 +193,74 @@ $("#courier").change(function (data) {
                 class: "btn btn-primary btn-order btn-block",
                 text: "BELI SEKARANG",
             }))
+
+            $("#ongkir").empty();
+
+            data.then((result) => {
+                var _data = $.parseJSON(result);
+                _data["rajaongkir"]["results"].forEach((costs, indexC) => {
+
+                    costs["costs"].forEach((cost, indexCC)=>{
+                        $("#ongkir").append($('<a>', {
+                            text: costs["name"] + "( "+ costs["code"] + " )",
+                            text: costs["code"] + "-" + cost["service"] + "-" + indexCC,
+                        }))
+
+                        $("#ongkir").append($('<a>', {
+                            colspan: 2,
+                            id: "ongkir_info",
+                            text: cost["description"] + "( "+ cost["service"] + " )",
+                        }))
+
+                        cost["cost"].forEach((price)=>{
+                            $("#ongkir_info").append($('<a>', {
+                                text: price["value"] + "( "+ price["etd"] + " )",
+                            }))
+                        });
+                    });
+
+
+
+                    // jQuery('<div>', {
+                    //     id: costs["code"],
+                    // }).appendTo('#prices');
+
+                    // jQuery('<p>', {
+                    //     text: costs["name"] + "( "+ costs["code"] + " )",
+                    // }).appendTo("#" + costs["code"]);
+
+                    // jQuery('<ul>', {
+                    //     id: costs["code"] + "-" + indexC,
+                    // }).appendTo("#" + costs["code"]);
+
+                    // costs["costs"].forEach((cost, indexCC)=>{
+                    //     console.log(cost["cost"]);
+                    //     jQuery('<li>', {
+                    //         id: costs["code"] + "-" + cost["service"],
+                    //         text: cost["description"] + "( "+ cost["service"] + " )",
+                    //     }).appendTo("#" + costs["code"] + "-" + indexC);
+
+                    //     jQuery('<ul>', {
+                    //         id: costs["code"] + "-" + cost["service"] + "-" + indexCC,
+                    //     }).appendTo("#" + costs["code"] + "-" + cost["service"]);
+
+                    //     console.log(cost["cost"]);
+                    //     cost["cost"].forEach((price)=>{
+                    //         console.log(price);
+                    //         jQuery('<li>', {
+                    //             text: price["value"] + "( "+ price["etd"] + " )",
+                    //         }).appendTo("#" + costs["code"] + "-" + cost["service"] + "-" + indexCC);
+                    //     });
+                    // });
+
+
+
+                });
+            })
+
+
+
+
         }
     });
 });

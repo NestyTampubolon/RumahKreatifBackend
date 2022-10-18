@@ -20,8 +20,6 @@ class PembelianController extends Controller
         for($x=0; $x<$jumlah_dipilih; $x++){
             $product = DB::table('products')->where('product_id', $product_id[$x])->first();
             $stocks = DB::table('stocks')->where('product_id', $product_id[$x])->first();
-            // $merchant_address = DB::table('merchant_address')->where('merchant_id', $product->merchant_id)->first();
-
             if($stocks->stok > 0){
                 $jumlah_masuk_keranjang = $_POST['jumlah_masuk_keranjang'];
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id[$x])->update([
@@ -32,26 +30,29 @@ class PembelianController extends Controller
             else if($stocks->stok == 0){
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_id[$x])->delete();
             }
-
         }
 
         $cek_cart = DB::table('carts')->where('user_id', $user_id)->where('merchant_id', $merchant_id)
         ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+
         $carts = DB::table('carts')->where('user_id', $user_id)->where('merchant_id', $merchant_id)
         ->join('products', 'carts.product_id', '=', 'products.product_id')->get();
-        
+
         $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
 
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
         ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
+        $total_berat = DB::table('carts')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('merchant_id', $merchant_id)
+        ->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+        
         $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_id)->first();
 
         $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('subdistrict_id', 'asc')->get();
 
         return view('user.pembelian.checkout')->with('merchant_id', $merchant_id)->with('cek_cart', $cek_cart)->with('carts', $carts)
-        ->with('vouchers', $vouchers)->with('total_harga', $total_harga)
+        ->with('vouchers', $vouchers)->with('total_harga', $total_harga)->with('total_berat', $total_berat)
         ->with('merchant_address', $merchant_address)->with('user_address', $user_address);
     }
     
@@ -394,19 +395,18 @@ class PembelianController extends Controller
         $proof_of_payment_image = $request -> file('proof_of_payment_image');
 
         $proof_of_payment_image_name = time().'_'.$proof_of_payment_image->getClientOriginalName();
+        $tujuan_upload = './asset/u_file/proof_of_payment_image';
+        $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
 
+        $request -> validate([
+            'proof_of_payment_image' => 'size:20000',  
+        ]);
 
         DB::table('proof_of_payments')->insert([
             'purchase_id' => $purchase_id,
             'proof_of_payment_image' => $proof_of_payment_image_name,
         ]);
         
-        $tujuan_upload = './asset/u_file/proof_of_payment_image';
-        $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
-
-        $request -> validate([
-            'proof_of_payment_image' => 'max:20000',  
-        ]);
         
         return redirect()->back();
     }
