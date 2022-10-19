@@ -213,6 +213,11 @@ class PembelianController extends Controller
     }
 
     public function daftar_pembelian() {
+        // set logout saat habis session dan auth
+        if(!Auth::check()){
+            return redirect("./logout");
+        }
+        
         if(Session::get('toko')){
             $toko = Session::get('toko');
 
@@ -306,6 +311,11 @@ class PembelianController extends Controller
     }
 
     public function detail_pembelian($purchase_id) {
+        // set logout saat habis session dan auth
+        if(!Auth::check()){
+            return redirect("./logout");
+        }
+        
         if(Session::get('toko')){
             $toko = Session::get('toko');
             

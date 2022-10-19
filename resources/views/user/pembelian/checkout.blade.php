@@ -177,7 +177,7 @@
                                         </td>
                                     </tr>
                                     
-                                    <tr class="">
+                                    <tr class="" id="province_address_row">
                                         <td colspan="2">
                                             <label>Provinsi *</label>
                                             <select name="province" id="province_address" class="custom-select form-control">
@@ -186,7 +186,7 @@
                                         </td>
                                     </tr>
                                     
-                                    <tr class="">
+                                    <tr class="" id="city_address_row">
                                         <td colspan="2">
                                             <label>Kabupaten/Kota *</label>
                                             <select name="city" id="city_address" class="custom-select form-control">
@@ -195,7 +195,7 @@
                                         </td>
                                     </tr>
                                     
-                                    <tr class="">
+                                    <tr class="" id="subdistrict_address_row">
                                         <td colspan="2">
                                             <label>Kecamatan *</label>
                                             <select name="subdistrict" id="subdistrict_address" class="custom-select form-control">
@@ -223,7 +223,7 @@
                                         <td colspan="2">
                                             <label>Servis *</label>
                                             <select name="servis" id="servis" class="custom-select form-control">
-                                                <option value="" disabled selected>Pilih Kurir</option>
+                                                <option value="" disabled selected>Pilih Servis</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -274,6 +274,11 @@
     $subdistrict_id = <?php echo $merchant_address->subdistrict_id ?>;
     
     $("#alamat_table").hide();
+
+    $("#province_address_row").hide();
+    $("#city_address_row").hide();
+    $("#subdistrict_address_row").hide();
+
     $("#pengiriman_table").hide();
     $("#servis_row").hide();
 </script>

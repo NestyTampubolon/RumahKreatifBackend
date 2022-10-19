@@ -92,7 +92,7 @@ $("#voucher").change(function (data) {
     });
 });
 
-$("#ambil_ditempat").click(function (data) {
+$("#ambil_ditempat").change(function (data) {
     console.log($(this).val());
     $.ajax({
         type: "GET",
@@ -105,10 +105,13 @@ $("#ambil_ditempat").click(function (data) {
             $("#alamat_table").hide();
 
             $("#disabled_alamat").remove();
+            $("#province_address_row").hide();
             $("#province_address").empty();
             $("#province_address").append('<option value="" disabled selected>Pilih Provinsi</option>');
+            $("#city_address_row").hide();
             $("#city_address").empty();
             $("#city_address").append('<option value="" disabled selected>Pilih Kabupaten/Kota</option>');
+            $("#subdistrict_address_row").hide();
             $("#subdistrict_address").empty();
             $("#subdistrict_address").append('<option value="" disabled selected>Pilih Alamat Kecamatan</option>');
 
@@ -124,7 +127,7 @@ $("#ambil_ditempat").click(function (data) {
     });
 });
 
-$("#pesanan_dikirim").click(function (data) {
+$("#pesanan_dikirim").change(function (data) {
     console.log($(this).val());
     $.ajax({
         type: "GET",
@@ -133,9 +136,13 @@ $("#pesanan_dikirim").click(function (data) {
         data: { tipe: $(this).val() },
         success: function (data) {
             console.log(data)
-            $("#street_address").append('<option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>');
 
             $("#alamat_table").show();
+            
+            $("#street_address").append('<option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>');
+
+            $("#checkout").empty();
+
         }
     });
 });
@@ -150,8 +157,11 @@ $("#street_address").change(function (data) {
         success: function (data) {
             console.log(data)
 
+            $("#province_address_row").show();
             $("#province_address").empty();
+            $("#city_address_row").show();
             $("#city_address").empty();
+            $("#subdistrict_address_row").show();
             $("#subdistrict_address").empty();
 
             $("#courier").empty();
@@ -181,13 +191,15 @@ $("#street_address").change(function (data) {
             //     class: "btn btn-outline-primary-2 btn-order btn-block",
             //     text: "CHECKOUT",
             // }))
-
+            
             $("#pengiriman_table").show();
             $("#courier").append($('<option>', { value: "jne", text: "JNE", }))
             $("#courier").append($('<option>', { value: "sicepat", text: "SICEPAT", }))
             $("#courier").append($('<option>', { value: "anteraja", text: "ANTERAJA", }))
             $("#courier").append($('<option>', { value: "tiki", text: "TIKI", }))
             $("#courier").append($('<option>', { value: "jnt", text: "J&T", }))
+            
+            $("#servis_row").hide();
         }
     });
 });
@@ -209,6 +221,8 @@ $("#courier").change(function (data) {
             }))
 
             $("#servis").empty();
+            $("#servis").append('<option value="" disabled selected>Pilih Servis</option>');
+
             $("#ongkir").empty();
 
             data.then((result) => {

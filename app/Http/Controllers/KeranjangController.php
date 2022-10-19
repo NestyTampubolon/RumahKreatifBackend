@@ -9,6 +9,11 @@ use DB;
 class KeranjangController extends Controller
 {
     public function keranjang() {
+        // set logout saat habis session dan auth
+        if(!Auth::check()){
+            return redirect("./logout");
+        }
+        
         $user_id = Auth::user()->id;
         // $products = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
         // ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->get();
