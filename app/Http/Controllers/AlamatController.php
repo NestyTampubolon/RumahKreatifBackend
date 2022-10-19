@@ -107,6 +107,11 @@ class AlamatController extends Controller
     }
 
     public function daftar_alamat() {
+        // set logout saat habis session dan auth
+        if(!Auth::check()){
+            return redirect("./logout");
+        }
+        
         if(Session::get('toko')){
             $toko = Session::get('toko');
             $merchant_address = DB::table('merchant_address')->where('merchant_id', $toko)->first();

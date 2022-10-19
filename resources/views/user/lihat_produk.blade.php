@@ -433,23 +433,40 @@
                                 <tr>
                                     <td>Nama Toko</td>
                                     <td>&emsp; : &emsp;</td>
-                                    <td>{{$product->nama_merchant}}</td>
+                                    <td colspan="3">{{$product->nama_merchant}}</td>
                                 </tr>
                                 <tr>
                                     <td>Deskripsi Toko</td>
                                     <td>&emsp; : &emsp;</td>
-                                    <td>{{$product->deskripsi_toko}}</td>
+                                    <td colspan="3">{{$product->deskripsi_toko}}</td>
                                 </tr>
                                 <tr>
                                     <td>Kontak Toko</td>
                                     <td>&emsp; : &emsp;</td>
-                                    <td>{{$product->kontak_toko}}</td>
+                                    <td colspan="3">{{$product->kontak_toko}}</td>
                                 </tr>
                                 @if($cek_merchant_address > 0 )
                                 <tr>
-                                    <td>Alamat Toko</td>
+                                    <td rowspan="4">Lokasi Toko</td>
+                                    <td rowspan="4">&emsp; : &emsp;</td>
+                                    <td>Provinsi</td>
                                     <td>&emsp; : &emsp;</td>
-                                    <td>{{$merchant_address->merchant_street_address}}</td>
+                                    <td> {{$lokasi_toko["province"]}} </td>
+                                </tr>
+                                <tr>
+                                    <td>Kota</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td> {{$lokasi_toko["city"]}} </td>
+                                </tr>
+                                <tr>
+                                    <td>Kecamatan</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td>{{$lokasi_toko["subdistrict_name"]}} </td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td> {{$merchant_address->merchant_street_address}} </td>
                                 </tr>
                                 @elseif($cek_merchant_address == 0 )
                                 
@@ -758,6 +775,10 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    
+    $merchant_address_id = <?php echo $merchant_address->merchant_address_id ?>
+    
 </script>
 <script src="{{ URL::asset('asset/js/function_2.js') }}"></script>
 

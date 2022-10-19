@@ -15,17 +15,20 @@
             <div class="card card-dashboard">
                 <div class="card-body">
                     <h3 class="card-title">Profil Toko</h3><!-- End .card-title -->
-                    <table>
+                    <table width="100%">
                         <tr>
-                            <td>Nama Toko : &emsp;</td>
+                            <td>Nama Toko</td>
+                            <td> : </td>
                             <td>{{$merchants->nama_merchant}}</td>
                         </tr>
                         <tr>
-                            <td>Deskripsi Toko : &emsp;</td>
+                            <td>Deskripsi Toko</td>
+                            <td> : </td>
                             <td>{{$merchants->deskripsi_toko}}</td>
                         </tr>
                         <tr>
-                            <td>Kontak Toko : &emsp;</td>
+                            <td>Kontak Toko</td>
+                            <td> : </td>
                             <td>{{$merchants->kontak_toko}}</td>
                         </tr>
                     </table>

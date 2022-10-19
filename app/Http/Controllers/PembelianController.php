@@ -360,6 +360,39 @@ class PembelianController extends Controller
 
                 $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->first();
 
+                
+
+                $curl = curl_init();
+                
+                $param = $merchant_address->city_id;
+                $subdistrict_id = $merchant_address->subdistrict_id;
+                
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+                ));
+
+                $response = curl_exec($curl);
+                $collection = json_decode($response, true);
+                $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                    return $r['subdistrict_id'] == $subdistrict_id;
+                });
+                
+                foreach ($filters as $filter){
+                    $lokasi_toko = $filter;
+                }
+                
+                $err = curl_error($curl);
+                curl_close($curl);
+                
+
+
                 $product_purchases = DB::table('product_purchases')->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
                 ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
@@ -383,9 +416,10 @@ class PembelianController extends Controller
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
                 return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('product_purchases', $product_purchases)->with('profile', $profile)
-                ->with('product_specifications', $product_specifications)->with('purchases', $purchases)->with('total_harga', $total_harga)
-                ->with('total_harga_semula', $total_harga_semula)->with('cek_proof_of_payment', $cek_proof_of_payment);
+                ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
+                ->with('product_purchases', $product_purchases)->with('profile', $profile)->with('product_specifications', $product_specifications)
+                ->with('purchases', $purchases)->with('total_harga', $total_harga)->with('total_harga_semula', $total_harga_semula)
+                ->with('cek_proof_of_payment', $cek_proof_of_payment);
                 
             }
         }
@@ -397,10 +431,6 @@ class PembelianController extends Controller
         $proof_of_payment_image_name = time().'_'.$proof_of_payment_image->getClientOriginalName();
         $tujuan_upload = './asset/u_file/proof_of_payment_image';
         $proof_of_payment_image->move($tujuan_upload,$proof_of_payment_image_name);
-
-        $request -> validate([
-            'proof_of_payment_image' => 'size:50000',  
-        ]);
 
         DB::table('proof_of_payments')->insert([
             'purchase_id' => $purchase_id,

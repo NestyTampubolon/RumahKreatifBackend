@@ -29,10 +29,10 @@ $("#province").change(function (data) {
             console.log(data);
 
             $("#city").empty();
-            $("#city").append('<option value="">Pilih Kabupaten/Kota</option>');
+            $("#city").append('<option value="" disabled selected>Pilih Kabupaten/Kota</option>');
 
             $("#subdistrict").empty();
-            $("#subdistrict").append('<option value="">Pilih Kecamatan</option>');
+            $("#subdistrict").append('<option value="" disabled selected>Pilih Kecamatan</option>');
 
             data.then((result) => {
                 var _data = $.parseJSON(result);
@@ -59,7 +59,7 @@ $("#city").change(function (data) {
             console.log(data);
 
             $("#subdistrict").empty();
-            $("#subdistrict").append('<option value="">Pilih Kecamatan</option>');
+            $("#subdistrict").append('<option value="" disabled selected>Pilih Kecamatan</option>');
 
             data.then((result) => {
                 var _data = $.parseJSON(result);
@@ -101,10 +101,19 @@ $("#ambil_ditempat").click(function (data) {
         data: { tipe: $(this).val() },
         success: function (data) {
             console.log(data)
+            
             $("#alamat_table").hide();
+
+            $("#disabled_alamat").remove();
+            $("#province_address").empty();
+            $("#province_address").append('<option value="" disabled selected>Pilih Provinsi</option>');
+            $("#city_address").empty();
+            $("#city_address").append('<option value="" disabled selected>Pilih Kabupaten/Kota</option>');
+            $("#subdistrict_address").empty();
+            $("#subdistrict_address").append('<option value="" disabled selected>Pilih Alamat Kecamatan</option>');
+
             $("#pengiriman_table").hide();
 
-            
             $("#checkout").empty();
            
             $("#checkout").append($('<button>', {
@@ -124,6 +133,8 @@ $("#pesanan_dikirim").click(function (data) {
         data: { tipe: $(this).val() },
         success: function (data) {
             console.log(data)
+            $("#street_address").append('<option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>');
+
             $("#alamat_table").show();
         }
     });
@@ -143,6 +154,9 @@ $("#street_address").change(function (data) {
             $("#city_address").empty();
             $("#subdistrict_address").empty();
 
+            $("#courier").empty();
+            $("#courier").append('<option value="" disabled selected>Pilih Kurir</option>');
+            
             $("#checkout").empty();
 
             $("#province_address").append($('<option>', {
@@ -194,6 +208,7 @@ $("#courier").change(function (data) {
                 text: "BELI SEKARANG",
             }))
 
+            $("#servis").empty();
             $("#ongkir").empty();
 
             data.then((result) => {
@@ -201,10 +216,8 @@ $("#courier").change(function (data) {
                 _data["rajaongkir"]["results"].forEach((costs, indexC) => {
 
                     costs["costs"].forEach((cost, indexCC)=>{
-                        $("#ongkir").append($('<a>', {
-                            text: costs["name"] + "( "+ costs["code"] + " )",
-                            text: costs["code"] + "-" + cost["service"] + "-" + indexCC,
-                        }))
+                        $("#servis_row").show();
+                        $("#servis").append($('<option>', { value: cost["service"], text: cost["description"], }))
 
                         $("#ongkir").append($('<a>', {
                             colspan: 2,
@@ -257,10 +270,6 @@ $("#courier").change(function (data) {
 
                 });
             })
-
-
-
-
         }
     });
 });

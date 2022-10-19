@@ -17,11 +17,13 @@
                     <h3 class="card-title">Profil Pengguna</h3><!-- End .card-title -->
                     <table>
                         <tr>
-                            <td>Nama : &emsp;</td>
+                            <td>Nama</td>
+                            <td> : </td>
                             <td>{{$profile->name}}</td>
                         </tr>
                         <tr>
-                            <td>Jenis Kelamin : &emsp;</td>
+                            <td>Jenis Kelamin</td>
+                            <td> : </td>
                             <td>
                                 @if($profile->gender == "L")
                                     Laki-laki
@@ -31,11 +33,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Tanggal Lahir : &emsp;</td>
+                            <td>Tanggal Lahir</td>
+                            <td> : </td>
                             <td>{{$profile->birthday}}</td>
                         </tr>
                         <tr>
-                            <td>Nomor Handphone : &emsp;</td>
+                            <td>Nomor Handphone</td>
+                            <td> : </td>
                             <td>{{$profile->no_hp}}</td>
                         </tr>
                     </table>
@@ -49,11 +53,13 @@
                     <h3 class="card-title">Profil Akun</h3><!-- End .card-title -->
                     <table>
                         <tr>
-                            <td>Username : &emsp;</td>
+                            <td>Username</td>
+                            <td> : </td>
                             <td>{{$profile->username}}</td>
                         </tr>
                         <tr>
-                            <td>Email : &emsp;</td>
+                            <td>Email</td>
+                            <td> : </td>
                             <td>{{$profile->email}}</td>
                         </tr>
                     </table>

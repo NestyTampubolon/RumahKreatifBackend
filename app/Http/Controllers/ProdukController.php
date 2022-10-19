@@ -368,17 +368,50 @@ class ProdukController extends Controller
 
         $reviews = DB::table('reviews')->where('product_id', $product_id)->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')->orderBy('review_id', 'desc')->get();
         $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
+
+        
+
+        $curl = curl_init();
+        
+        $param = $merchant_address->city_id;
+        $subdistrict_id = $merchant_address->subdistrict_id;
+        
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+        ));
+
+        $response = curl_exec($curl);
+        $collection = json_decode($response, true);
+        $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+            return $r['subdistrict_id'] == $subdistrict_id;
+          });
+        
+        foreach ($filters as $filter){
+            $lokasi_toko = $filter;
+        }
+        
+        $err = curl_error($curl);
+        curl_close($curl);
+        
+
         
         if(Auth::check()){
             $user_id = Auth::user()->id;
             $cek_alamat = DB::table('user_address')->where('user_id', $user_id)->first();
             $cek_review = DB::table('reviews')->where('user_id', $user_id)->where('product_id', $product_id)->first();
 
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review', 'cek_alamat', 'cek_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review', 'cek_alamat', 'cek_review', 'lokasi_toko']));
         }
         
         else{
-            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review']));
+            return view('user.lihat_produk', compact(['product', 'product_images', 'product_specifications', 'stocks', 'cek_merchant_address', 'merchant_address', 'reviews', 'jumlah_review', 'lokasi_toko']));
         }
     }
 

@@ -169,8 +169,29 @@
         <div class="col-lg-12">
             <div class="card card-dashboard">
                 <div class="card-body">
-                    <h6 class="">Alamat Toko : <br><br> {{$merchant_address->merchant_street_address}}</h6>
-                    <p></p>
+                    <h3 class="card-title">Lokasi Toko </h3>
+                    <table>
+                        <tr>
+                            <td>Provinsi</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$lokasi_toko["province"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Kota</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$lokasi_toko["city"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Kecamatan</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td>{{$lokasi_toko["subdistrict_name"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$merchant_address->merchant_street_address}} </td>
+                        </tr>
+                    </table>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->

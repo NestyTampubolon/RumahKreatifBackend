@@ -169,7 +169,7 @@
                                         <td colspan="2">
                                             <label>Jalan *</label>
                                             <select name="street_address" id="street_address" class="custom-select form-control">
-                                                <option value="" disabled selected>Pilih Alamat Pengiriman</option>
+                                                <!-- <option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option> -->
                                                 @foreach($user_address as $user_address)
                                                     <option value="{{$user_address->user_address_id}}">{{$user_address->user_street_address}}</option>
                                                 @endforeach
@@ -215,6 +215,14 @@
                                         <td colspan="2">
                                             <label>Kurir *</label>
                                             <select name="courier" id="courier" class="custom-select form-control">
+                                                <option value="" disabled selected>Pilih Kurir</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="summary-shipping-estimate" id="servis_row">
+                                        <td colspan="2">
+                                            <label>Servis *</label>
+                                            <select name="servis" id="servis" class="custom-select form-control">
                                                 <option value="" disabled selected>Pilih Kurir</option>
                                             </select>
                                         </td>
@@ -267,6 +275,7 @@
     
     $("#alamat_table").hide();
     $("#pengiriman_table").hide();
+    $("#servis_row").hide();
 </script>
 <script src="{{ URL::asset('asset/js/function.js') }}"></script>
 
