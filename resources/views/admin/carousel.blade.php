@@ -35,12 +35,12 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
-                        <th align="center">ID Carousel</th>
-                        <th align="center">Gambar Carousel</th>
-                        <th align="center">Link Carousel</th>
-                        <th align="center" colspan="2">Action</th>
+                        <th>ID Carousel</th>
+                        <th>Gambar Carousel</th>
+                        <th>Link Carousel</th>
+                        <th colspan="2">Action</th>
                     </tr>
                   </thead>
                   <tbody>

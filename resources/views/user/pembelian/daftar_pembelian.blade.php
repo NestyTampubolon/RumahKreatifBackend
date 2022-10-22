@@ -64,6 +64,12 @@
                                     ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
                                     ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                                     ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+
+                                    // $total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                    // ->where('purchases.checkout_id', $purchase->checkout_id)
+                                    // ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                    // ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                    // ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
                                     
                                     $total_harga_pembelian_perproduk = $product_purchase->price * $product_purchase->jumlah_pembelian_produk;
                                     
@@ -78,16 +84,50 @@
                                     @foreach($claim_vouchers as $claim_voucher)
                                         @if($claim_voucher->checkout_id == $checkout->checkout_id)
                                             <?php
-                                                $voucher = DB::table('vouchers')->where('voucher_id', $claim_voucher->voucher_id)->first();
+                                                $target_kategori = explode(",", $claim_voucher->target_kategori);
 
-                                                $potongan_harga_pembelian = $total_harga_pembelian->total_harga_pembelian * $voucher->potongan / 100;
-                                                $potongan_harga_barang = $total_harga_pembelian_perproduk * $voucher->potongan / 100;
-                                                if($potongan_harga_pembelian > $voucher->maksimal_pemotongan){
-                                                    $potongan_harga_barang = $voucher->maksimal_pemotongan / $jumlah_product_purchase;
+                                                foreach($target_kategori as $target_kategori){
+                                                    
+                                                    $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                                    ->where('purchases.checkout_id', $purchase->checkout_id)->where('category_id', $target_kategori)
+                                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+                                                    // dd($subtotal_harga_produk);
+                                
+                                                    $potongan_subtotal = [];
+                                                    $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_voucher->potongan / 100;
+                                                    
+
+                                                    $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_voucher->potongan / 100;
+                                
+                                                    $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+
+                                                    if($jumlah_potongan_subtotal <= $claim_voucher->maksimal_pemotongan){
+                                                        if($product_purchase->category_id == $target_kategori){
+                                                            $potongan_harga_barang = $potongan_subtotal_perproduk;
+                                                        }
+    
+                                                        else{
+                                                            $potongan_harga_barang = 0;
+                                                        }
+                                                    }
+    
+                                                    else if($jumlah_potongan_subtotal > $claim_voucher->maksimal_pemotongan){
+                                                        if($product_purchase->category_id == $target_kategori){
+                                                            $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk->total_harga_pembelian * $claim_voucher->maksimal_pemotongan;
+                                                        }
+    
+                                                        else{
+                                                            $potongan_harga_barang = 0;
+                                                        }
+                                                    }
+                                                    
+                                                    if($claim_voucher->tipe_voucher == "pembelian"){
+                                                        $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
+                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                                    }
                                                 }
-                                        
-                                                $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
-                                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                                             ?>
                                         @endif
                                     @endforeach

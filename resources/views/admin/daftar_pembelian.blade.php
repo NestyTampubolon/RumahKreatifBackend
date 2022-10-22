@@ -15,7 +15,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -33,16 +33,17 @@
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead align="center">
+                    <tr>
                         <th>ID Pesanan</th>
                         <th>Nama</th>
                         <th>User ID</th>
                         <th>Username</th>
                         <th>Status Pesanan</th>
-                        <th colspan="2">Action</th>
+                        <th>Update Status </th>
+                        <th>Info</th>
                     </tr>
                   </thead>
                   <tbody>
-                    
                     @foreach($checkouts as $checkout)
                       @foreach($purchases as $purchase)
                         @if($purchase->checkout_id == $checkout->checkout_id)
@@ -92,7 +93,6 @@
                               @endif
                             </td>
                             <td align="center" width="150px">
-                              
                                 @if($purchase->status_pembelian == "status2" || $purchase->status_pembelian == "status2_ambil")
                                 
                                 @endif
@@ -106,25 +106,22 @@
                                 @endif
                             </td>
                             <td align="center" width="100px">
-                                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-edit-{{$purchase->purchase_id}}">Cek</button>
+                                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-detail-{{$purchase->purchase_id}}">Cek</button>
                             </td>
                         </tr>
                         
 
-                        <div class="modal fade" id="modal-edit-{{$purchase->purchase_id}}">
+                        <div class="modal fade" id="modal-detail-{{$purchase->purchase_id}}">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Edit Bank</h4>
+                                        <h4 class="modal-title">Detail Pembelian</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="card card-primary">
-                                        <!-- form start -->
-                                        <form action="./PostEditBank/" method="post" enctype="multipart/form-data">
-                                        @csrf
                                             <div class="card-body">
                                                 <div class="form-group">
                                                 @foreach($product_purchases as $product_purchase)
@@ -155,20 +152,53 @@
                                                             @foreach($claim_vouchers as $claim_voucher)
                                                                 @if($claim_voucher->checkout_id == $purchase->checkout_id)
                                                                     <?php
+                                                                        $target_kategori = explode(",", $claim_voucher->target_kategori);
 
-                                                                        $voucher = DB::table('vouchers')->where('voucher_id', $claim_voucher->voucher_id)->first();
-                                                                        
-                                                                        $potongan_harga_pembelian = $total_harga_pembelian->total_harga_pembelian * $voucher->potongan / 100;
-                                                                        $potongan_harga_barang = $total_harga_pembelian_perproduk * $voucher->potongan / 100;
-                                                                        if($potongan_harga_pembelian > $voucher->maksimal_pemotongan){
-                                                                            $potongan_harga_barang = $voucher->maksimal_pemotongan / $jumlah_product_purchase;
-                                                                            $potongan_harga_pembelian = $voucher->maksimal_pemotongan;
+                                                                        foreach($target_kategori as $target_kategori){
+                                                                            
+                                                                            $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                                                            ->where('purchases.checkout_id', $purchase->checkout_id)->where('category_id', $target_kategori)
+                                                                            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                                                            ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                                                            ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+                                                                            // dd($subtotal_harga_produk);
+                                                        
+                                                                            $potongan_subtotal = [];
+                                                                            $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_voucher->potongan / 100;
+                                                                            
+                        
+                                                                            $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_voucher->potongan / 100;
+                                                        
+                                                                            $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                        
+                                                                            if($jumlah_potongan_subtotal <= $claim_voucher->maksimal_pemotongan){
+                                                                                if($product_purchase->category_id == $target_kategori){
+                                                                                    $potongan_harga_barang = $potongan_subtotal_perproduk;
+                                                                                }
+                            
+                                                                                else{
+                                                                                    $potongan_harga_barang = 0;
+                                                                                }
+                                                                            }
+                            
+                                                                            else if($jumlah_potongan_subtotal > $claim_voucher->maksimal_pemotongan){
+                                                                                if($product_purchase->category_id == $target_kategori){
+                                                                                    $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk->total_harga_pembelian * $claim_voucher->maksimal_pemotongan;
+                                                                                }
+                            
+                                                                                else{
+                                                                                    $potongan_harga_barang = 0;
+                                                                                }
+                                                                                $jumlah_potongan_subtotal = $claim_voucher->maksimal_pemotongan;
+                                                                            }
+                                                                            
+                                                                            if($claim_voucher->tipe_voucher == "pembelian"){
+                                                                                $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
+                                                                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                                                            }
                                                                         }
 
-                                                                        $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
-                                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
-                                                                        
-                                                                        $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $potongan_harga_pembelian;
+                                                                        $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                                                                         $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
                                                                     ?>
                                                                 @endif
@@ -222,7 +252,6 @@
                                                 </div>
                                             </div>
                                             <!-- /.card-body -->
-                                        </form>
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +262,7 @@
                         <!-- /.modal -->
                         @endif
                       @endforeach
-                  @endforeach
+                    @endforeach
                   </tbody>
                 </table>
               </div>

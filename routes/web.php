@@ -112,16 +112,20 @@ Route::get('/ambil_jalan', 'App\Http\Controllers\PembelianController@ambil_jalan
 Route::post('/cek_ongkir', 'App\Http\Controllers\PembelianController@cek_ongkir');
 
 Route::get('/voucher', 'App\Http\Controllers\VoucherController@voucher');
+Route::get('/pilih_tipe_voucher', 'App\Http\Controllers\VoucherController@pilih_tipe_voucher');
+// Route::get('/pilih_target_kategori_voucher', 'App\Http\Controllers\VoucherController@pilih_target_kategori_voucher');
 Route::post('/PostTambahVoucher', 'App\Http\Controllers\VoucherController@PostTambahVoucher');
 Route::get('/hapus_voucher/{voucher_id}', 'App\Http\Controllers\VoucherController@HapusVoucher');
 
-Route::get('/ambil_voucher', 'App\Http\Controllers\PembelianController@ambil_voucher');
+Route::get('/ambil_voucher_pembelian', 'App\Http\Controllers\PembelianController@ambil_voucher_pembelian');
+
 Route::post('/PostBeliProduk', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
 Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
 
 Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
 Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
+Route::post('/update_status2_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status2_pembelian');
 
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
 // Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');

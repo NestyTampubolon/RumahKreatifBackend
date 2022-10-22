@@ -31,12 +31,12 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
-                        <th align="center">Nama Toko</th>
-                        <th align="center">Atas Nama</th>
-                        <th align="center">Nama Bank</th>
-                        <th align="center">Nomor Rekening</th>
+                        <th>Nama Toko</th>
+                        <th>Atas Nama</th>
+                        <th>Nama Bank</th>
+                        <th>Nomor Rekening</th>
                     </tr>
                   </thead>
                   <tbody>

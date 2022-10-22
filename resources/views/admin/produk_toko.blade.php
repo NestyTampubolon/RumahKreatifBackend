@@ -35,13 +35,13 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
-                        <th align="center">Nama Produk</th>
-                        <th align="center">Kategori Produk</th>
-                        <th align="center">Nama Toko</th>
-                        <th align="center">Spesifikasi Produk</th>
-                        <th align="center">Stok</th>
+                        <th>Nama Produk</th>
+                        <th>Kategori Produk</th>
+                        <th>Nama Toko</th>
+                        <th>Spesifikasi Produk</th>
+                        <th>Stok</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 <!-- Brand Logo -->
-<a href="index3.html" class="brand-link" style="background-color: #f8f9fa">
+<a href="#" class="brand-link" style="background-color: #f8f9fa">
     <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="Logo" class="brand-image">
     <span class="brand-text font-weight-light" style="color:black">Rumah Kreatif Toba</span>
 </a>
@@ -67,7 +67,7 @@
         <li class="nav-item">
             <a href="{{ url('/verifikasi_user') }}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
-                <p>User</p>
+                <p>Verifikasi User</p>
             </a>
         </li>
         <li class="nav-header">TOKO</li>

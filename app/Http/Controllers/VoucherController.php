@@ -9,29 +9,75 @@ use DB;
 class VoucherController extends Controller
 {
     public function voucher() {
-        $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '>=', date('Y-m-d'))
-        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $vouchers = DB::table('vouchers')->where('is_deleted', 0)->orderBy('nama_voucher', 'desc')->get();
+        
+        $categories = DB::table('categories')->orderBy('nama_kategori', 'asc')->get();
 
-        return view('admin.voucher')->with('vouchers', $vouchers);
+        return view('admin.voucher')->with('vouchers', $vouchers)->with('categories', $categories);
     }
 
+    public function pilih_tipe_voucher() {
+        $tipe_voucher = $_GET['tipe'];
+        
+        return response()->json($tipe_voucher);
+    }
+
+    // public function pilih_target_kategori_voucher() {
+    //     $target_kategori_voucher = $_GET['target_kategori_voucher'];
+        
+    //     return response()->json($target_kategori_voucher);
+    // }
+
     public function PostTambahVoucher(Request $request) {
+        $request -> validate([
+            'nama_voucher' => 'required',    
+            'tipe_voucher' => 'required',
+            'target_kategori' => 'required',
+            'potongan' => 'required|integer',    
+            'minimal_pengambilan' => 'required|integer',    
+            'maksimal_pemotongan' => 'required|integer',    
+            'tanggal_berlaku' => 'required',    
+            'tanggal_batas_berlaku' => 'required',    
+        ]);
+
         $nama_voucher = $request -> nama_voucher;
+        $tipe_voucher = $request -> tipe_voucher;
+        $target_kategori = $request -> target_kategori;
         $potongan = $request -> potongan;
         $minimal_pengambilan = $request -> minimal_pengambilan;
         $maksimal_pemotongan = $request -> maksimal_pemotongan;
         $tanggal_berlaku = $request -> tanggal_berlaku;
         $tanggal_batas_berlaku = $request -> tanggal_batas_berlaku;
 
-        DB::table('vouchers')->insert([
-            'nama_voucher' => $nama_voucher,
-            'potongan' => $potongan,
-            'minimal_pengambilan' => $minimal_pengambilan,
-            'maksimal_pemotongan' => $maksimal_pemotongan,
-            'tanggal_berlaku' => $tanggal_berlaku,
-            'tanggal_batas_berlaku' => $tanggal_batas_berlaku,
-            'is_deleted' => 0,
-        ]);
+        if($tipe_voucher == "pembelian"){
+            DB::table('vouchers')->insert([
+                'nama_voucher' => $nama_voucher,
+                'tipe_voucher' => $tipe_voucher,
+                'target_kategori' => implode(", ", $target_kategori),
+                'potongan' => $potongan,
+                'minimal_pengambilan' => $minimal_pengambilan,
+                'maksimal_pemotongan' => $maksimal_pemotongan,
+                'tanggal_berlaku' => $tanggal_berlaku,
+                'tanggal_batas_berlaku' => $tanggal_batas_berlaku,
+                'is_deleted' => 0,
+            ]);
+        }
+        
+        else if($tipe_voucher == "ongkos_kirim"){
+            DB::table('vouchers')->insert([
+                'nama_voucher' => $nama_voucher,
+                'tipe_voucher' => $tipe_voucher,
+                'target_kategori' => implode(",", $target_kategori),
+                'potongan' => $potongan,
+                'minimal_pengambilan' => $minimal_pengambilan,
+                'maksimal_pemotongan' => $potongan,
+                'tanggal_berlaku' => $tanggal_berlaku,
+                'tanggal_batas_berlaku' => $tanggal_batas_berlaku,
+                'is_deleted' => 0,
+            ]);
+        }
 
         return redirect('./voucher');
     }

@@ -20,6 +20,8 @@ class CreatePurchasesTable extends Migration
             $table->string('alamat_purchase')->nullable();
             $table->string('status_pembelian');
             $table->string('no_resi')->nullable();
+            $table->string('courier_code')->nullable();
+            $table->string('service')->nullable();
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');

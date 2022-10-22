@@ -35,7 +35,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
                         <th align="center">ID User</th>
                         <th align="center">Username</th>
@@ -46,51 +46,51 @@
                   </thead>
                   <tbody>
                     @foreach($verify_users as $verify_users)
-                    <tr>
-                        <td>{{$verify_users->user_id}}</td>
-                        <td>{{$verify_users->username}}</td>
-                        <td>{{$verify_users->email}}</td>
-                        @if($verify_users->is_verified==1)
-                            <td align="center"><small class="badge badge-success">Verified</small></td>
-                        @else
-                            <td align="center"><small class="badge badge-danger">No Verified</small></td>
-                        @endif
-                        <td align="center">
-                          <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
-                        </td>
-                    </tr>
-                    
-                    <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                  <h4 class="modal-title">Cek User</h4>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                              </div>
-                              <div class="modal-body">
-                                  <center><a href="./asset/u_file/foto_ktp/{{$verify_users->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
-                                  <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_users->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
-                                  <center><a>{{$verify_users->name}}</a></center>
-                                  <center><a>{{$verify_users->no_hp}}</a></center>
-                                  <center><a>{{$verify_users->birthday}}</a></center>
-                                  <center><a>{{$verify_users->gender}}</a></center>
-                              </div>
-                              <div class="modal-footer justify-content-between">
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                  @if($verify_users->is_verified==1)
+                      <tr>
+                          <td>{{$verify_users->user_id}}</td>
+                          <td>{{$verify_users->username}}</td>
+                          <td>{{$verify_users->email}}</td>
+                          @if($verify_users->is_verified==1)
+                              <td align="center"><small class="badge badge-success">Verified</small></td>
+                          @else
+                              <td align="center"><small class="badge badge-danger">No Verified</small></td>
+                          @endif
+                          <td align="center">
+                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
+                          </td>
+                      </tr>
+                      
+                      <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">
+                          <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Cek User</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <center><a href="./asset/u_file/foto_ktp/{{$verify_users->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
+                                    <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_users->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
+                                    <center><a>{{$verify_users->name}}</a></center>
+                                    <center><a>{{$verify_users->no_hp}}</a></center>
+                                    <center><a>{{$verify_users->birthday}}</a></center>
+                                    <center><a>{{$verify_users->gender}}</a></center>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    @if($verify_users->is_verified==1)
 
-                                  @else
-                                  <a href="./verify_user/{{$verify_users->verify_id}}" class="btn btn-primary">Verify</a>
-                                  @endif
+                                    @else
+                                    <a href="./verify_user/{{$verify_users->verify_id}}" class="btn btn-primary">Verify</a>
+                                    @endif
+                                </div>
                               </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
+                              <!-- /.modal-content -->
+                          </div>
+                          <!-- /.modal-dialog -->
+                      </div>
+                      <!-- /.modal -->
                     @endforeach
                   </tbody>
                 </table>

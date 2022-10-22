@@ -47,11 +47,11 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
-                        <th align="center">Nama Kategori</th>
-                        <th align="center">Nama Tipe Spesifikasi</th>
-                        <th align="center" colspan="1">Action</th>
+                        <th>Nama Kategori</th>
+                        <th>Nama Tipe Spesifikasi</th>
+                        <th colspan="1">Action</th>
                     </tr>
                   </thead>
                   <tbody>

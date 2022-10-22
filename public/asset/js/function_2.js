@@ -21,3 +21,77 @@ $("#tambah_produk_keranjang").change(function (data) {
         }
     });
 });
+
+$("#tipe_voucher").change(function (data) {
+    console.log($(this).val());
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/pilih_tipe_voucher",
+        data: { tipe: $(this).val() },
+        success: function (data) {
+            console.log(data)
+
+            $("#div_checkbox_categories").show();
+
+            if(data == "pembelian"){
+                $("#potongan_div").show();
+                $("#minimal_pengambilan_div").show();
+                $("#potongan").remove();
+                $("#potongan_div").append($('<input>', {
+                    type: "number",
+                    class: "form-control",
+                    name: "potongan",
+                    id: "potongan",
+                    min: 0,
+                    max: 100,
+                    placeholder: "Masukkan potongan yang diberikan voucher. (%)",
+                    required: "required",
+                }))
+                
+                $("#maksimal_pemotongan_div").show();
+                $("#maksimal_pemotongan").remove();
+                $("#maksimal_pemotongan_div").append($('<input>', {
+                    type: "number",
+                    class: "form-control",
+                    name: "maksimal_pemotongan",
+                    id: "maksimal_pemotongan",
+                    min: 0,
+                    placeholder: "Masukkan maksimal potongan belanjaan yang didapat. (Rp)",
+                    required: "required",
+                }))
+                $("#tanggal_voucher").show();
+            }
+
+            if(data == "ongkos_kirim"){
+                $("#potongan_div").show();
+                $("#minimal_pengambilan_div").show();
+                $("#potongan").remove();
+                $("#potongan_div").append($('<input>', {
+                    type: "number",
+                    class: "form-control",
+                    name: "potongan",
+                    id: "potongan",
+                    placeholder: "Masukkan potongan yang diberikan voucher. (Rp)",
+                    required: "required",
+                }))
+                
+                $("#maksimal_pemotongan_div").hide();
+                $("#tanggal_voucher").show();
+            }
+        }
+    });
+});
+
+// $(".checkbox_categories").change(function (data) {
+//     console.log($(this).val());
+//     $.ajax({
+//         type: "GET",
+//         dataType: "json",
+//         url: "/pilih_target_kategori_voucher",
+//         data: { target_kategori_voucher: $(this).val() },
+//         success: function (data) {
+//             console.log(data)
+//         }
+//     });
+// });

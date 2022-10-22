@@ -35,13 +35,13 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+                  <thead align="center">
                     <tr>
-                        <th align="center">Nama Toko</th>
-                        <th align="center">Username</th>
-                        <th align="center">Email</th>
-                        <th align="center">Status</th>
-                        <th align="center">Action</th>
+                        <th>Nama Toko</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>

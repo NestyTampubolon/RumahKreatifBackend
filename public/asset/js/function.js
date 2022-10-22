@@ -74,20 +74,20 @@ $("#city").change(function (data) {
     });
 });
 
-$("#voucher").change(function (data) {
+$("#voucher_pembelian").change(function (data) {
     console.log($(this).val());
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/ambil_voucher",
+        url: "/ambil_voucher_pembelian",
         data: { voucher: $(this).val(), merchant_id: $merchant_id },
         success: function (data) {
             console.log(data)
 
             $("#total_harga_checkout").empty();
 
-            $("#total_harga_checkout").append($('<td>', { text: "Total:", }))
-            $("#total_harga_checkout").append($('<td>', { text: data, }))
+            // $("#total_harga_checkout").append($('<td>', { text: "Total:", }))
+            $("#total_harga_checkout").append($('<a>', { text: data, }))
         }
     });
 });
@@ -104,7 +104,7 @@ $("#ambil_ditempat").change(function (data) {
             
             $("#alamat_table").hide();
 
-            $("#disabled_alamat").remove();
+            // $("#disabled_alamat").remove();
             $("#province_address_row").hide();
             $("#province_address").empty();
             $("#province_address").append('<option value="" disabled selected>Pilih Provinsi</option>');
@@ -116,6 +116,8 @@ $("#ambil_ditempat").change(function (data) {
             $("#subdistrict_address").append('<option value="" disabled selected>Pilih Alamat Kecamatan</option>');
 
             $("#pengiriman_table").hide();
+
+            $("#service_row").hide();
 
             $("#checkout").empty();
            
@@ -139,6 +141,7 @@ $("#pesanan_dikirim").change(function (data) {
 
             $("#alamat_table").show();
             
+            $("#disabled_alamat").remove();
             $("#street_address").append('<option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>');
 
             $("#checkout").empty();
@@ -193,10 +196,8 @@ $("#street_address").change(function (data) {
             // }))
             
             $("#pengiriman_table").show();
+            $("#courier").append($('<option>', { value: "pos", text: "POS Indonesia", }))
             $("#courier").append($('<option>', { value: "jne", text: "JNE", }))
-            $("#courier").append($('<option>', { value: "sicepat", text: "SICEPAT", }))
-            $("#courier").append($('<option>', { value: "anteraja", text: "ANTERAJA", }))
-            $("#courier").append($('<option>', { value: "tiki", text: "TIKI", }))
             $("#courier").append($('<option>', { value: "jnt", text: "J&T", }))
             
             $("#servis_row").hide();
@@ -214,74 +215,50 @@ $("#courier").change(function (data) {
         complete: function (data) {
             console.log(data);
             $("#checkout").empty();
-           
-            $("#checkout").append($('<button>', {
-                class: "btn btn-primary btn-order btn-block",
-                text: "BELI SEKARANG",
-            }))
 
-            $("#servis").empty();
-            $("#servis").append('<option value="" disabled selected>Pilih Servis</option>');
-
-            $("#ongkir").empty();
+            $("#service").empty();
+            $("#service").append('<option value="" disabled selected>Pilih Servis</option>');
 
             data.then((result) => {
                 var _data = $.parseJSON(result);
                 _data["rajaongkir"]["results"].forEach((costs, indexC) => {
 
                     costs["costs"].forEach((cost, indexCC)=>{
-                        $("#servis_row").show();
-                        $("#servis").append($('<option>', { value: cost["service"], text: cost["description"], }))
-
-                        $("#ongkir").append($('<a>', {
-                            colspan: 2,
-                            id: "ongkir_info",
-                            text: cost["description"] + "( "+ cost["service"] + " )",
-                        }))
-
+                      
                         cost["cost"].forEach((price)=>{
-                            $("#ongkir_info").append($('<a>', {
-                                text: price["value"] + "( "+ price["etd"] + " )",
+                            $("#service_row").show();
+                            $("#service").append($('<option>', {
+                                value: cost["service"],
+                                text: cost["description"] + " ( " + price["etd"] + " hari )",
+                                tarif: price["value"],
                             }))
+
+                            $("#total_harga_checkout").empty();
+
+                            $("#total_harga_checkout").append($('<a>', { text: "Rp. "+ format_rupiah(parseInt($total_harga_checkout)), }))
+
+                            $('#service').change(function() {
+
+                                $("#checkout").empty();
+                                $("#checkout").append($('<button>', {
+                                    class: "btn btn-primary btn-order btn-block",
+                                    text: "BELI SEKARANG",
+                                }))
+
+                                var ongkir = $(this).find('option:selected').attr('tarif')
+                                
+                                $("#total_harga_checkout").empty();
+
+                                $("#total_harga_checkout").append($('<a>', { text: "Rp. "+ format_rupiah(parseInt($total_harga_checkout) + parseInt(ongkir)), }))
+                            })
+                        
+                            function format_rupiah(nominal){
+                                var  reverse = nominal.toString().split('').reverse().join(''),
+                                     ribuan = reverse.match(/\d{1,3}/g);
+                                 return ribuan	= ribuan.join('.').split('').reverse().join('');
+                            }
                         });
                     });
-
-
-
-                    // jQuery('<div>', {
-                    //     id: costs["code"],
-                    // }).appendTo('#prices');
-
-                    // jQuery('<p>', {
-                    //     text: costs["name"] + "( "+ costs["code"] + " )",
-                    // }).appendTo("#" + costs["code"]);
-
-                    // jQuery('<ul>', {
-                    //     id: costs["code"] + "-" + indexC,
-                    // }).appendTo("#" + costs["code"]);
-
-                    // costs["costs"].forEach((cost, indexCC)=>{
-                    //     console.log(cost["cost"]);
-                    //     jQuery('<li>', {
-                    //         id: costs["code"] + "-" + cost["service"],
-                    //         text: cost["description"] + "( "+ cost["service"] + " )",
-                    //     }).appendTo("#" + costs["code"] + "-" + indexC);
-
-                    //     jQuery('<ul>', {
-                    //         id: costs["code"] + "-" + cost["service"] + "-" + indexCC,
-                    //     }).appendTo("#" + costs["code"] + "-" + cost["service"]);
-
-                    //     console.log(cost["cost"]);
-                    //     cost["cost"].forEach((price)=>{
-                    //         console.log(price);
-                    //         jQuery('<li>', {
-                    //             text: price["value"] + "( "+ price["etd"] + " )",
-                    //         }).appendTo("#" + costs["code"] + "-" + cost["service"] + "-" + indexCC);
-                    //     });
-                    // });
-
-
-
                 });
             })
         }

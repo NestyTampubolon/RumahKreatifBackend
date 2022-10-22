@@ -92,12 +92,16 @@
                                         </tr>
                                     </thead>
 
-                                    @foreach($carts as $carts)
+                                    @foreach($carts as $carts1)
+                                    <?php
+                                        $subtotal = $carts1->price * $carts1->jumlah_masuk_keranjang;
+                                        $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
+                                    ?>
                                     <tr>
-                                        <td><a href="#">{{$carts->product_name}}</a></td>
+                                        <td><a href="../lihat_produk/{{$carts1->product_id}}">{{$carts1->product_name}}</a></td>
                                         <td>
-                                            <p id="subtotal_harga_produk">
-                                                {{$subtotal_harga_produk}}
+                                            <p id="subtotal_harga_produk_{{$carts1->product_id}}">
+                                                <a>{{$subtotal_harga_produk}}</a>
                                             </p>
                                         </td>
                                     </tr>
@@ -111,27 +115,104 @@
                                         <td>Gunakan Voucher:</td>
                                         <td></td>
                                     </tr>
+                                    <?php
+                                        $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->count();
+                                        
+                                        $jumlah_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->count();
+                                        
+                                        $jumlah_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->count();
+                                    ?>
+                                    @foreach($pembelian_vouchers as $pembelian_vouchers1)
+                                        <?php
+                                            $target_kategori_cart = explode(",", $pembelian_vouchers1->target_kategori); 
+                                        
+                                            $cek_target_kategori_cart = DB::table('carts')->select('carts.product_id')->where('category_id', $target_kategori_cart)->where('merchant_id', $merchant_id)
+                                            ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+                                        ?>
+                                    @endforeach
+                                    @if($jumlah_vouchers > 0)
+                                        @if($jumlah_pembelian_vouchers > 0 && $cek_target_kategori_cart > 0)
+                                        <tr>
+                                            <td>
+                                                <select name="voucher_pembelian" id="voucher_pembelian" class="custom-select form-control" required>
+                                                    <option value="" disabled selected>Pilih Voucher Pembelian</option>
+                                                    @foreach($pembelian_vouchers as $pembelian_vouchers2)
+                                                        @if($total_harga->total_harga >= $pembelian_vouchers2->minimal_pengambilan)
+
+                                                            @foreach($carts as $carts2)
+                                                            <?php $target_kategori = explode(",", $pembelian_vouchers2->target_kategori); ?>
+                                                                @foreach($target_kategori as $target_kategori)
+                                                                    <?php
+                                                                        $cek_kategori = DB::table('carts')->select('carts.product_id')->where('category_id', $carts2->category_id)->where('merchant_id', $merchant_id)
+                                                                        ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+                                                                    ?>
+                                                                @endforeach
+                                                            @endforeach 
+                                                            <!-- <option value="{{$pembelian_vouchers2->voucher_id}}">{{$cek_kategori}}</option> -->
+                                                            @if($cek_kategori > 0)
+                                                                <?php $target_kategori2 = explode(",", $pembelian_vouchers2->target_kategori); ?>
+                                                                @foreach($target_kategori2 as $target_kategori2)
+                                                                    @if($carts2->category_id == $target_kategori2)
+                                                                    <option value="{{$pembelian_vouchers2->voucher_id}}">{{$pembelian_vouchers2->nama_voucher}} ({{$pembelian_vouchers2->potongan}}%)</option>
+                                                                    @else
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        @else
+                                        <tr>
+                                            <td>
+                                                <input class="form-control" value="Tidak ada voucher pembelian." disabled>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        @endif
+
+                                        <!-- @if($jumlah_ongkos_kirim_vouchers > 0)
+                                        <tr>
+                                            <td>
+                                                <select name="voucher_ongkos_kirim" id="voucher_ongkos_kirim" class="custom-select form-control" required>
+                                                    <option value="" disabled selected>Pilih Voucher Ongkos Kirim</option>
+                                                    @foreach($ongkos_kirim_vouchers as $ongkos_kirim_vouchers)
+                                                        <?php
+                                                            $potongan_ongkir = "Rp " . number_format($ongkos_kirim_vouchers->potongan,2,',','.');
+                                                        ?>
+                                                        @if($total_harga->total_harga >= $ongkos_kirim_vouchers->minimal_pengambilan)
+                                                            @if($ongkos_kirim_vouchers->tipe_voucher == "ongkos_kirim")
+                                                            <option value="{{$ongkos_kirim_vouchers->voucher_id}}">{{$ongkos_kirim_vouchers->nama_voucher}} ({{$potongan_ongkir}})</option>
+                                                            @else
+                                                            <option value="{{$ongkos_kirim_vouchers->voucher_id}}">{{$ongkos_kirim_vouchers->nama_voucher}} ({{$ongkos_kirim_vouchers->potongan}})</option>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        @else
+                                        <tr>
+                                            <td>
+                                                <input class="form-control" value="Tidak ada voucher ongkos kirim yang bisa diambil." disabled>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        @endif -->
+                                    @else
                                     <tr>
                                         <td>
-                                            <?php
-                                                $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-                                                ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->count();
-                                            ?>
-                                            @if($jumlah_vouchers > 0)
-                                            <select name="voucher" id="voucher" class="custom-select form-control" required>
-                                                <option value="" disabled selected>Pilih Voucher</option>
-                                                @foreach($vouchers as $vouchers)
-                                                @if($total_harga->total_harga >= $vouchers->minimal_pengambilan)
-                                                    <option value="{{$vouchers->voucher_id}}">{{$vouchers->nama_voucher}} ({{$vouchers->potongan}}%)</option>
-                                                @endif
-                                                @endforeach
-                                            </select>
-                                            @else
-                                                <input class="form-control" value="Tidak ada voucher yang bisa diambil." disabled>
-                                            @endif
+                                            <input class="form-control" value="Tidak ada voucher yang bisa diambil." disabled>
                                         </td>
                                         <td></td>
                                     </tr>
+                                    @endif
                                 </tbody>
                             </table>
 
@@ -148,9 +229,9 @@
                                         </td>
                                         <td></td>
                                     </tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td>
-                                            <input type="radio" id="pesanan_dikirim" name="metode_pembelian" value="pesanan_dikirim" disabled required>
+                                            <input type="radio" id="pesanan_dikirim" name="metode_pembelian" value="pesanan_dikirim" disablde required>
                                             <label for="pesanan_dikirim">Pesanan Dikirim</label>
                                         </td>
                                         <td></td>
@@ -168,8 +249,8 @@
                                     <tr class="">
                                         <td colspan="2">
                                             <label>Jalan *</label>
-                                            <select name="street_address" id="street_address" class="custom-select form-control">
-                                                <!-- <option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option> -->
+                                            <select name="alamat_purchase" id="street_address" class="custom-select form-control">
+                                                <option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>
                                                 @foreach($user_address as $user_address)
                                                     <option value="{{$user_address->user_address_id}}">{{$user_address->user_street_address}}</option>
                                                 @endforeach
@@ -219,10 +300,10 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr class="summary-shipping-estimate" id="servis_row">
+                                    <tr class="summary-shipping-estimate" id="service_row">
                                         <td colspan="2">
                                             <label>Servis *</label>
-                                            <select name="servis" id="servis" class="custom-select form-control">
+                                            <select name="service" id="service" class="custom-select form-control">
                                                 <option value="" disabled selected>Pilih Servis</option>
                                             </select>
                                         </td>
@@ -232,21 +313,24 @@
 
                             <table class="table table-summary">
                                 <tbody>
-                                    <tr class="summary-total" id="total_harga_checkout">
+                                    <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>
+                                        <td id="total_harga_checkout">
                                             <?php
-                                                $total_harga_checkout = "Rp." . number_format($total_harga->total_harga,2,',','.');
+                                                $rp_total_harga_checkout = "Rp." . number_format($total_harga->total_harga,0,',','.');
                                             ?>
-                                            {{$total_harga_checkout}}
+                                            {{$rp_total_harga_checkout}}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div id="checkout"></div>
                         </div>
-                        <div id="ongkir">
-                        </div>
+
+                        <!-- <div id="ongkir">
+                        </div> -->
+
+                        
                     </aside>
                 @elseif($cek_cart == 0)
                 
@@ -272,6 +356,7 @@
     $province_id = <?php echo $merchant_address->province_id ?>;
     $city_id = <?php echo $merchant_address->city_id ?>;
     $subdistrict_id = <?php echo $merchant_address->subdistrict_id ?>;
+    $total_harga_checkout = <?php echo $total_harga->total_harga ?>;
     
     $("#alamat_table").hide();
 
@@ -280,7 +365,9 @@
     $("#subdistrict_address_row").hide();
 
     $("#pengiriman_table").hide();
-    $("#servis_row").hide();
+    $("#service_row").hide();
+
+    
 </script>
 <script src="{{ URL::asset('asset/js/function.js') }}"></script>
 

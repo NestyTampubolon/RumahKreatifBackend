@@ -10,6 +10,12 @@ use Session;
 class PembelianController extends Controller
 {
     public function checkout($merchant_id) {
+        date_default_timezone_set('Asia/Jakarta');
+
+        // set logout saat habis session dan auth
+        if(!Auth::check()){
+            return redirect("./logout");
+        }
 
         $user_id = Auth::user()->id;
 
@@ -41,6 +47,20 @@ class PembelianController extends Controller
         $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
 
+        $pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
+        
+
+        // foreach($pembelian_vouchers as $pembelian_vouchers_cart){
+        //     $target_kategori_cart = explode(",", $pembelian_vouchers_cart->target_kategori); 
+        
+        //     $cek_target_kategori_cart = DB::table('carts')->select('carts.product_id')->where('category_id', $target_kategori)->where('merchant_id', $merchant_id)
+        //     ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+        // }
+
+        $ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
+
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
         ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
@@ -52,21 +72,41 @@ class PembelianController extends Controller
         $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('subdistrict_id', 'asc')->get();
 
         return view('user.pembelian.checkout')->with('merchant_id', $merchant_id)->with('cek_cart', $cek_cart)->with('carts', $carts)
+        ->with('pembelian_vouchers', $pembelian_vouchers)->with('ongkos_kirim_vouchers', $ongkos_kirim_vouchers)
         ->with('vouchers', $vouchers)->with('total_harga', $total_harga)->with('total_berat', $total_berat)
         ->with('merchant_address', $merchant_address)->with('user_address', $user_address);
     }
     
-    public function ambil_voucher() {
+    public function ambil_voucher_pembelian() {
         $user_id = Auth::user()->id;
         $voucher = $_GET['voucher'];
         $merchant_id = $_GET['merchant_id'];
         
         $voucher_dipilih = DB::table('vouchers')->where('voucher_id', $voucher)->first();
+
+        $target_kategori = explode(",", $voucher_dipilih->target_kategori);
+
+        foreach($target_kategori as $target_kategori){
+            $subtotal_harga_produk = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as subtotal_harga_produk'))->where('category_id', $target_kategori)
+            ->where('user_id', $user_id)->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+
+            $potongan_subtotal[] = (int)$subtotal_harga_produk->subtotal_harga_produk * $voucher_dipilih->potongan / 100;
+        }
+        
+        $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+
+        if($jumlah_potongan_subtotal <= $voucher_dipilih->maksimal_pemotongan){
+            $potongan = $jumlah_potongan_subtotal;
+        }
+
+        else if($jumlah_potongan_subtotal > $voucher_dipilih->maksimal_pemotongan){
+            $potongan = $voucher_dipilih->maksimal_pemotongan;
+        }
         
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
         ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
-        $potongan = (int)$total_harga->total_harga * $voucher_dipilih->potongan / 100;
+        // $potongan = (int)$total_harga->total_harga * $voucher_dipilih->potongan / 100;
 
         if($potongan > $voucher_dipilih->maksimal_pemotongan){
             $potongan = $voucher_dipilih->maksimal_pemotongan;
@@ -74,7 +114,7 @@ class PembelianController extends Controller
 
         $total_harga_fix = (int)$total_harga->total_harga - $potongan;
 
-        $total_harga_checkout = "Rp." . number_format($total_harga_fix,2,',','.');  
+        $total_harga_checkout = "Rp." . number_format($total_harga_fix,0,',','.');  
         
         return response()->json($total_harga_checkout);
     }
@@ -109,7 +149,7 @@ class PembelianController extends Controller
         $collection = json_decode($response, true);
         $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
             return $r['subdistrict_id'] == $subdistrict_id;
-          });
+        });
         
         foreach ($filters as $filter){
             $filtered = $filter;
@@ -139,7 +179,6 @@ class PembelianController extends Controller
                 "key: 41df939eff72c9b050a81d89b4be72ba"
             ),
         ));
-        
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -152,11 +191,14 @@ class PembelianController extends Controller
         
         $merchant_id = $request -> merchant_id;
         
+        $voucher_pembelian = $request -> voucher_pembelian;
+        
         $metode_pembelian = $request -> metode_pembelian;
         $alamat_purchase = $request -> alamat_purchase;
         $jumlah_pembelian_produk = $request -> jumlah_pembelian_produk;
         
-        $voucher = $request -> voucher;
+        $courier_code = $request -> courier;
+        $service = $request -> service;
         
         DB::table('checkouts')->insert([
             'user_id' => $user_id,
@@ -164,28 +206,33 @@ class PembelianController extends Controller
 
         $checkout_id = DB::table('checkouts')->select('checkout_id')->orderBy('checkout_id', 'desc')->first();
 
-        if($voucher){
+        if($voucher_pembelian){
             DB::table('claim_vouchers')->insert([
                 'checkout_id' => $checkout_id->checkout_id,
-                'voucher_id' => $voucher,
+                'voucher_id' => $voucher_pembelian,
             ]);
         }
 
-        if($metode_pembelian = "ambil_ditempat"){
-            $status_pembelian = "status1_ambil";
-            $alamat_purchase = "";
+        if($metode_pembelian == "ambil_ditempat"){
+            DB::table('purchases')->insert([
+                'user_id' => $user_id,
+                'checkout_id' => $checkout_id->checkout_id,
+                'alamat_purchase' => "",
+                'status_pembelian' => "status1_ambil",
+            ]);
         }
         
-        else if($metode_pembelian = "pesanan_dikirim"){
-            $status_pembelian = "status1";
+        if($metode_pembelian == "pesanan_dikirim"){
+            DB::table('purchases')->insert([
+                'user_id' => $user_id,
+                'checkout_id' => $checkout_id->checkout_id,
+                'alamat_purchase' => $alamat_purchase,
+                'status_pembelian' => "status1",
+                'courier_code' => $courier_code,
+                'service' => $service,
+            ]);
         }
         
-        DB::table('purchases')->insert([
-            'user_id' => $user_id,
-            'checkout_id' => $checkout_id->checkout_id,
-            'alamat_purchase' => $alamat_purchase,
-            'status_pembelian' => $status_pembelian,
-        ]);
         
         $purchase_id = DB::table('purchases')->select('purchase_id')->orderBy('purchase_id', 'desc')->first();
 
@@ -208,7 +255,6 @@ class PembelianController extends Controller
             DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_purchase->product_id)->delete();
         }
 
-
         return redirect('../daftar_pembelian');
     }
 
@@ -223,7 +269,7 @@ class PembelianController extends Controller
 
             $cek_purchase = DB::table('product_purchases')->select('product_purchases.purchase_id')->where('merchant_id', $toko)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('purchase_id')->get();
+            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.purchase_id', 'desc')->groupBy('purchase_id')->get();
 
             $jumlah_purchases = DB::table('product_purchases')->where('merchant_id', $toko)
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('purchase_id')->count();
@@ -255,14 +301,180 @@ class PembelianController extends Controller
             $cek_admin_id = DB::table('users')->where('id', $user_id)->where('is_admin', 1)->first();
 
             if($cek_admin_id){
-                $checkouts = DB::table('checkouts')
-                ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
+                $checkouts = DB::table('checkouts')->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->get();
+                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
                 $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
                 $profiles = DB::table('profiles')->get();
+
+
+                // foreach($purchases as $purchases2){
+                //     $purchases_address = DB::table('user_address')->get();
+
+                //     $merchant_purchase = DB::table('product_purchases')->select('merchant_id')
+                //     ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->get();
+
+                    
+
+                //     foreach($merchant_purchase as $merchant_purchase){
+                //         $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->count();
+
+                //         $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->get();
+
+                //         foreach($merchant_address as $merchant_address2){
+                //             $curl = curl_init();
+                    
+                //             $param = $merchant_address2->city_id;
+                //             $subdistrict_id = $merchant_address2->subdistrict_id;
+                            
+                //             curl_setopt_array($curl, array(
+                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                //                 CURLOPT_RETURNTRANSFER => true,
+                //                 CURLOPT_ENCODING => "",
+                //                 CURLOPT_MAXREDIRS => 10,
+                //                 CURLOPT_TIMEOUT => 30,
+                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                //                 CURLOPT_CUSTOMREQUEST => "GET",
+                //                 CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+                //             ));
+
+                //             $response = curl_exec($curl);
+                //             $collection = json_decode($response, true);
+                //             $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                //                 return $r['subdistrict_id'] == $subdistrict_id;
+                //             });
+                            
+                //             foreach ($filters as $filter){
+                //                 $lokasi_toko = $filter;
+                //             }
+                            
+                //             $err = curl_error($curl);
+                //             curl_close($curl);
+                            
+                //         }
+                //     }
+
+                //     $cek_user_address = DB::table('purchases')->where('purchases.user_id', $user_id)
+                //     ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->count();
+
+                //     $user_address = DB::table('purchases')->where('purchases.user_id', $user_id)
+                //     ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->get();
+
+                //     $curl_2 = curl_init();
+
+                //     if($cek_user_address != 0){
+                //         foreach($user_address as $user_address){
+                //             $param = $user_address->city_id;
+                //             $subdistrict_id = $user_address->subdistrict_id;
+                            
+                //             curl_setopt_array($curl_2, array(
+                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                //                 CURLOPT_RETURNTRANSFER => true,
+                //                 CURLOPT_ENCODING => "",
+                //                 CURLOPT_MAXREDIRS => 10,
+                //                 CURLOPT_TIMEOUT => 30,
+                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                //                 CURLOPT_CUSTOMREQUEST => "GET",
+                //                 CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+                //             ));
+
+                //             $response = curl_exec($curl_2);
+                //             $collection = json_decode($response, true);
+                //             $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                //                 return $r['subdistrict_id'] == $subdistrict_id;
+                //             });
+                            
+                //             foreach ($filters as $filter){
+                //                 $lokasi_pembeli = $filter;
+                //             }
+                            
+                //             $err = curl_error($curl_2);
+                //             curl_close($curl_2);                
+
+                //             $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
+                //             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                //             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
+
+
+                //             $curl_3 = curl_init();
+                            
+                //             $param = $merchant_address2->city_id;
+                //             $merchant_subdistrict_id = $merchant_address2->subdistrict_id;
+                //             $purchases_subdistrict_id = $user_address->subdistrict_id;
+                //             $courier_code = $purchases->courier_code;
+                //             $service = $purchases->service;
+
+                //             curl_setopt_array($curl_3, array(
+                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+                //                 CURLOPT_RETURNTRANSFER => true,
+                //                 CURLOPT_ENCODING => "",
+                //                 CURLOPT_MAXREDIRS => 10,
+                //                 CURLOPT_TIMEOUT => 30,
+                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                //                 CURLOPT_CUSTOMREQUEST => "POST",
+                //                 CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchases->courier_code",
+                //                 CURLOPT_HTTPHEADER => array(
+                //                     "content-type: application/x-www-form-urlencoded",
+                //                     "key: 41df939eff72c9b050a81d89b4be72ba"
+                //                 ),
+                //             ));
+                    
+                //             $response = curl_exec($curl_3);
+                //             $collection = json_decode($response, true);                
+
+                //             if($courier_code != "" || $service != ""){
+                //                 $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
+                //                     return $r['code'] == $courier_code;
+                //                 });
+                //                 foreach ($filters as $filter){
+                //                     $courier_array = $filter;
+                //                 }
+                                
+                //                 $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
+                //                     return $s['service'] == $service;
+                //                 });
+                //                 foreach ($filters2 as $filter2){
+                //                     $service_array = $filter2;
+                //                 }
+
+                //                 $filters3 =  array_filter($service_array['cost']);
+                //                 foreach ($filters3 as $filter3){
+                //                     $ongkir = $filter3;
+                //                 }
+
+                //                 $courier_name = $courier_array["name"];
+                //                 $service_name = $service_array["description"];
+                //             }
+                            
+                //             else{
+                //                 $ongkir = 0;
+                //                 $courier_name = "";
+                //                 $service_name = "";
+                //             }
+
+                //             $err = curl_error($curl_3);
+                //             curl_close($curl_3);
+                //         }
+                        
+                //     }
+
+                //     else if($cek_user_address == 0){
+                //         $lokasi_pembeli = "";
+                //         $ongkir = 0;
+                //         $courier_name = "";
+                //         $service_name = "";
+                //     }
+                // }
+
+
+
+                
+                
+                
+
+
                 
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
@@ -282,11 +494,40 @@ class PembelianController extends Controller
                 $checkouts = DB::table('checkouts')->where('user_id', $user_id)
                 ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->get();
-
+                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                
                 $purchases = DB::table('purchases')->where('user_id', $user_id)
                 ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
+
+                
+
+
+                // foreach($claim_vouchers as $claim_vouchers_get){
+                //     $target_kategori = explode(",", $claim_vouchers_get->target_kategori);
+                    
+                //     foreach($target_kategori as $target_kategori){
+                //         foreach($purchases as $purchases_get){
+                //         $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                //         ->where('purchases.checkout_id', $purchases_get->checkout_id)->where('category_id', $target_kategori)
+                //         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                //         ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                //         ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->get();
+
+                //             foreach($subtotal_harga_produk as $subtotal_harga_produk_get){
+                //                 $potongan_subtotal[] = (int)$subtotal_harga_produk_get->total_harga_pembelian * $claim_vouchers_get->potongan / 100;
+                //             }
+                //         }
+                //         $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                //         dd($jumlah_potongan_subtotal);
+                //     }
+                // }
+
+
+
+
+
+
                 $cek_purchases = DB::table('purchases')->where('user_id', $user_id)->first();
                 
                 $profile = DB::table('profiles')->where('user_id', $user_id)
@@ -340,9 +581,176 @@ class PembelianController extends Controller
             
             $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
 
+
+
+            // $checkouts = DB::table('checkouts')->where('user_id', $user_id)
+            // ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
+            
+            // $claim_vouchers = DB::table('claim_vouchers')->get();
+
+            $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
+
+            $profile = DB::table('profiles')->where('user_id', $purchases->user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
+
+            $purchases_address = DB::table('user_address')->where('user_id', $purchases->user_id)->first();
+
+            $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
+            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
+
+            $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->count();
+
+            $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->first();
+
+
+            $curl = curl_init();
+            
+            $param = $merchant_address->city_id;
+            $subdistrict_id = $merchant_address->subdistrict_id;
+            
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+            ));
+
+            $response = curl_exec($curl);
+            $collection = json_decode($response, true);
+            $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                return $r['subdistrict_id'] == $subdistrict_id;
+            });
+            
+            foreach ($filters as $filter){
+                $lokasi_toko = $filter;
+            }
+            
+            $err = curl_error($curl);
+            curl_close($curl);
+            
+
+            $cek_user_address = DB::table('purchases')->where('purchases.user_id', $purchases->user_id)->where('purchase_id', $purchase_id)
+            ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->count();
+
+            $user_address = DB::table('purchases')->where('purchases.user_id', $purchases->user_id)->where('purchase_id', $purchase_id)
+            ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->first();
+
+            $curl_2 = curl_init();
+
+            if($cek_user_address != 0){
+                $param = $user_address->city_id;
+                $subdistrict_id = $user_address->subdistrict_id;
+                
+                curl_setopt_array($curl_2, array(
+                    CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+                ));
+
+                $response = curl_exec($curl_2);
+                $collection = json_decode($response, true);
+                $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                    return $r['subdistrict_id'] == $subdistrict_id;
+                });
+                
+                foreach ($filters as $filter){
+                    $lokasi_pembeli = $filter;
+                }
+                
+                $err = curl_error($curl_2);
+                curl_close($curl_2);                
+
+                $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $purchases->user_id)->where('product_purchases.purchase_id', $purchase_id)
+                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
+
+
+                $curl_3 = curl_init();
+                
+                $param = $merchant_address->city_id;
+                $merchant_subdistrict_id = $merchant_address->subdistrict_id;
+                $purchases_subdistrict_id = $user_address->subdistrict_id;
+                $courier_code = $purchases->courier_code;
+                $service = $purchases->service;
+
+                curl_setopt_array($curl_3, array(
+                    CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchases->courier_code",
+                    CURLOPT_HTTPHEADER => array(
+                        "content-type: application/x-www-form-urlencoded",
+                        "key: 41df939eff72c9b050a81d89b4be72ba"
+                    ),
+                ));
+        
+                $response = curl_exec($curl_3);
+                $collection = json_decode($response, true);                
+
+                if($courier_code != "" || $service != ""){
+                    $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
+                        return $r['code'] == $courier_code;
+                    });
+                    foreach ($filters as $filter){
+                        $courier_array = $filter;
+                    }
+                    
+                    $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
+                        return $s['service'] == $service;
+                    });
+                    foreach ($filters2 as $filter2){
+                        $service_array = $filter2;
+                    }
+
+                    $filters3 =  array_filter($service_array['cost']);
+                    foreach ($filters3 as $filter3){
+                        $ongkir = $filter3;
+                    }
+
+                    $courier_name = $courier_array["name"];
+                    $service_name = $service_array["description"];
+                }
+                
+                else{
+                    $ongkir = 0;
+                    $courier_name = "";
+                    $service_name = "";
+                }
+
+                $err = curl_error($curl_3);
+                curl_close($curl_3);
+                
+            }
+
+            else if($cek_user_address == 0){
+                $lokasi_pembeli = "";
+                $ongkir = 0;
+                $courier_name = "";
+                $service_name = "";
+            }
+
+            // dd($user_address);
+
+
             return view('user.toko.detail_pembelian')->with('product_purchases', $product_purchases)->with('product_specifications', $product_specifications)
-            ->with('purchases', $purchase)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile)->with('total_harga', $total_harga);
+            ->with('purchases', $purchase)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile)->with('total_harga', $total_harga)
+            ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
+            ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)
+            ->with('ongkir', $ongkir)->with('courier_name', $courier_name)->with('service_name', $service_name);
         }
+
 
         else{
             $user_id = Auth::user()->id;
@@ -354,14 +762,17 @@ class PembelianController extends Controller
             }
 
             else{
+
                 $checkouts = DB::table('checkouts')->where('user_id', $user_id)
                 ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->get();
+                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
 
                 $profile = DB::table('profiles')->where('user_id', $user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
                 
                 $purchases = DB::table('purchases')->where('user_id', $user_id)->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
+
+                $purchases_address = DB::table('user_address')->where('user_id', $purchases->user_id)->first();
 
                 $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
@@ -370,7 +781,6 @@ class PembelianController extends Controller
 
                 $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->first();
 
-                
 
                 $curl = curl_init();
                 
@@ -401,7 +811,120 @@ class PembelianController extends Controller
                 $err = curl_error($curl);
                 curl_close($curl);
                 
+                $cek_user_address = DB::table('purchases')->where('purchases.user_id', $user_id)->where('purchase_id', $purchase_id)
+                ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->count();
 
+                $user_address = DB::table('purchases')->where('purchases.user_id', $user_id)->where('purchase_id', $purchase_id)
+                ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->first();
+
+                $curl_2 = curl_init();
+
+                if($cek_user_address != 0){
+                    $param = $user_address->city_id;
+                    $subdistrict_id = $user_address->subdistrict_id;
+                    
+                    curl_setopt_array($curl_2, array(
+                        CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+                    ));
+
+                    $response = curl_exec($curl_2);
+                    $collection = json_decode($response, true);
+                    $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                        return $r['subdistrict_id'] == $subdistrict_id;
+                    });
+                    
+                    foreach ($filters as $filter){
+                        $lokasi_pembeli = $filter;
+                    }
+                    
+                    $err = curl_error($curl_2);
+                    curl_close($curl_2);                
+
+                    $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
+                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
+
+
+                    $curl_3 = curl_init();
+                    
+                    $param = $merchant_address->city_id;
+                    $merchant_subdistrict_id = $merchant_address->subdistrict_id;
+                    $purchases_subdistrict_id = $user_address->subdistrict_id;
+                    $courier_code = $purchases->courier_code;
+                    $service = $purchases->service;
+
+                    curl_setopt_array($curl_3, array(
+                        CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                        CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchases->courier_code",
+                        CURLOPT_HTTPHEADER => array(
+                            "content-type: application/x-www-form-urlencoded",
+                            "key: 41df939eff72c9b050a81d89b4be72ba"
+                        ),
+                    ));
+            
+                    $response = curl_exec($curl_3);
+                    $collection = json_decode($response, true);                
+
+                    if($courier_code != "" || $service != ""){
+                        $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
+                            return $r['code'] == $courier_code;
+                        });
+                        foreach ($filters as $filter){
+                            $courier_array = $filter;
+                        }
+                        
+                        $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
+                            return $s['service'] == $service;
+                        });
+                        foreach ($filters2 as $filter2){
+                            $service_array = $filter2;
+                        }
+
+                        $filters3 =  array_filter($service_array['cost']);
+                        foreach ($filters3 as $filter3){
+                            $ongkir = $filter3;
+                        }
+
+                        $courier_name = $courier_array["name"];
+                        $service_name = $service_array["description"];
+                    }
+                    
+                    else{
+                        $ongkir = 0;
+                        $courier_name = "";
+                        $service_name = "";
+                    }
+
+                    $err = curl_error($curl_3);
+                    curl_close($curl_3);
+                    
+                }
+
+                else if($cek_user_address == 0){
+                    $lokasi_pembeli = "";
+                    $ongkir = 0;
+                    $courier_name = "";
+                    $service_name = "";
+                }
+                
+                
+
+                // dd($ongkir["costs"]);
+                // dd($courier_array["name"]);
+                // dd($service_array["description"]);
 
                 $product_purchases = DB::table('product_purchases')->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
                 ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
@@ -427,9 +950,10 @@ class PembelianController extends Controller
         
                 return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
                 ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
+                ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)
                 ->with('product_purchases', $product_purchases)->with('profile', $profile)->with('product_specifications', $product_specifications)
                 ->with('purchases', $purchases)->with('total_harga', $total_harga)->with('total_harga_semula', $total_harga_semula)
-                ->with('cek_proof_of_payment', $cek_proof_of_payment);
+                ->with('cek_proof_of_payment', $cek_proof_of_payment)->with('ongkir', $ongkir)->with('courier_name', $courier_name)->with('service_name', $service_name);
                 
             }
         }
@@ -451,18 +975,12 @@ class PembelianController extends Controller
         return redirect()->back();
     }
 
-    public function update_status_pembelian($purchase_id) {
+    public function update_status_pembelian(Request $request, $purchase_id) {
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
 
         if($purchases->status_pembelian == "status1"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status2',
-            ]);
-        }
-
-        else if($purchases->status_pembelian == "status2"){
-            DB::table('purchases')->where('purchase_id', $purchase_id)->update([
-                'status_pembelian' => 'status3',
             ]);
         }
 
@@ -506,6 +1024,23 @@ class PembelianController extends Controller
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status5_ambil',
             ]);
+        }
+
+        return redirect()->back();
+    }
+
+    public function update_status2_pembelian(Request $request, $purchase_id) {
+        $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
+        
+        if($purchases->status_pembelian == "status2"){
+            $no_resi = $request->no_resi;
+
+            if($no_resi){
+                DB::table('purchases')->where('purchase_id', $purchase_id)->update([
+                    'no_resi' => $no_resi,
+                    'status_pembelian' => 'status3',
+                ]);
+            }
         }
 
         return redirect()->back();

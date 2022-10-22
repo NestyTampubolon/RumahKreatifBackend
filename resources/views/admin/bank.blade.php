@@ -35,9 +35,10 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                        <th align="center">Nama Bank</th>
-                        <th align="center" colspan="2">Action</th>
+                  <thead align="center">
+                    <tr>
+                        <th>Nama Bank</th>
+                        <th colspan="2">Action</th>
                     </tr>
                   </thead>
                   <tbody>

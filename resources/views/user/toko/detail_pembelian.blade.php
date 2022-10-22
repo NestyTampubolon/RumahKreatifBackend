@@ -12,110 +12,180 @@
 
 @else
 <div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    @if($purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
+                        <p class="">Penjualan Telah Dibayar. PENJUALAN BERHASIL.</p>
+                    @endif
+
+                    @if($purchases->status_pembelian == "status4")
+                        <?php
+                            $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir["value"]),2,',','.');
+                        ?>
+                        <p class="">
+                            Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN. 
+                            <b><a id="total_harga_produk"></a>{{$total_harga_status4}}</b>    
+                            DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.
+                        </p>
+                    @endif
+                    
+                    @if($purchases->status_pembelian == "status4_ambil_a")
+                        <p class="">TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.</p>
+                    @endif
+                        
+                    @if($purchases->status_pembelian == "status4_ambil_b")
+                        <?php
+                            $total_harga_status4_ambil_b = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
+                        ?>
+                        <p class="">
+                            Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
+                            <b><a id="total_harga_produk">{{$total_harga_status4_ambil_b}}</a></b>    
+                            DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.
+                        </p>
+                    @endif
+
+                    @if($purchases->status_pembelian == "status3")
+                        <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.</p>
+                    @endif
+                    
+                    @if($purchases->status_pembelian == "status3_ambil")
+                        <p class="">SILAHKAN TUNGGU PELANGGAN MENGAMBIL PESANAN.</p>
+                    @endif
+
+                    @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
+                        <p class="">Ada Pesanan. SILAHKAN PROSES PESANAN.</p>
+                    @endif
+
+                    @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1")
+                    
+                    @endif
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+        </div><!-- End .col-lg-6 -->
+    </div><!-- End .row -->
+
+    @if($purchases->status_pembelian == "status4")
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        @if($purchases->status_pembelian == "status5" || $purchases->status_pembelian == "status5_ambil")
-                            <p class="">Penjualan Telah Dibayar. PENJUALAN BERHASIL.</p>
-                        @endif
-
-                        @if($purchases->status_pembelian == "status4")
-                            <p class="">Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN.</p>
-                        @endif
-                        
-                        @if($purchases->status_pembelian == "status4_ambil_a")
-                            <p class="">TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.</p>
-                        @endif
-                         
-                        @if($purchases->status_pembelian == "status4_ambil_b")
+                        <h6 class="">Detail Bayaran :</h6>
+                        <p>
                             <?php
-                                $total_harga = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
+                                $total_harga_detail_bayaran_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
+                                $ongkir = "Rp." . number_format(floor((int)$ongkir["value"]),2,',','.');
                             ?>
-                            <p class="">Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
-                            <b><a id="total_harga_produk">{{$total_harga}}</a></b>    
-                            DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.</p>
-                        @endif
-
-                        @if($purchases->status_pembelian == "status3")
-                            <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.</p>
-                        @endif
-                        
-                        @if($purchases->status_pembelian == "status3_ambil")
-                            <p class="">SILAHKAN TUNGGU PELANGGAN MENGAMBIL PESANAN.</p>
-                        @endif
-
-                        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil")
-                            <p class="">Ada Pesanan. SILAHKAN PROSES PESANAN.</p>
-                        @endif
-
-                        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1")
-                        
-                        @endif
+                            Total Pembelian Produk =  <a id="total_harga_produk_kirim_no_ongkir">{{$total_harga_detail_bayaran_status4}}</a><br>
+                            Ongkos Kirim =  <a id="ongkir">{{$ongkir}}</a> <a>[{{$courier_name}}] [{{$service_name}}]</a><br>
+                        </p>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
             </div><!-- End .col-lg-6 -->
         </div><!-- End .row -->
+    @endif
 
-        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil"
-        || $purchases->status_pembelian == "status3_ambil" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-dashboard">
-                    <div class="card-body">
-                        @if($purchases->status_pembelian == "status2")
-                        <p class="">Jika pesanan telah dikirim dan sedang dalam perjalanan. SILAHKAN KONFIRMASI PESANAN.</p>
-                        @endif
+    @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status2_ambil"
+    || $purchases->status_pembelian == "status3_ambil" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    @if($purchases->status_pembelian == "status2")
+                    <p class="">Jika pesanan telah dikirim dan sedang dalam perjalanan.</p>
+                    <p class="">MASUKAN NOMOR RESI. KEMUDIAN SILAHKAN KONFIRMASI PESANAN.</p>
+                    
+                    <form action="../update_status2_pembelian/{{$purchases->purchase_id}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                        <input type="text" name="no_resi" class="form-control" placeholder="Nomor Resi" required>
                         
-                        @if($purchases->status_pembelian == "status2_ambil")
-                        <p class="">Jika pesanan telah disiapkan. SILAHKAN KONFIRMASI PESANAN.</p>
-                        @endif
-                        
-                        @if($purchases->status_pembelian == "status3_ambil")
-                        <p class="">Jika pesanan telah diambil pelanggan. SILAHKAN KONFIRMASI PESANAN.</p>
-                        @endif
-                        
-                        @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
-                        <p class="">Jika bayaran telah diterima. SILAHKAN KONFIRMASI.</p>
-                        @endif
+                        <button type="submit" class="btn btn-primary btn-round">
+                            <span>KIRIM</span>
+                        </button>
+                    </form>
+                    @endif
+                    
+                    @if($purchases->status_pembelian == "status2_ambil")
+                    <p class="">Jika pesanan telah disiapkan. SILAHKAN KONFIRMASI PESANAN.</p>
+                    @endif
+                    
+                    @if($purchases->status_pembelian == "status3_ambil")
+                    <p class="">Jika pesanan telah diambil pelanggan. SILAHKAN KONFIRMASI PESANAN.</p>
+                    @endif
+                    
+                    @if($purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
+                    <p class="">Jika bayaran telah diterima. SILAHKAN KONFIRMASI.</p>
+                    @endif
 
+                    @if($purchases->status_pembelian == "status2_ambil" || $purchases->status_pembelian == "status3_ambil"
+                    || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status4_ambil_b")
                         <a href="../update_status_pembelian/{{$purchases->purchase_id}}" class="btn btn-primary btn-round">
                             <span>KONFIRMASI</span>
                         </a>
-                    </div><!-- End .card-body -->
-                </div><!-- End .card-dashboard -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
-        @endif
-        
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-dashboard">
-                    <div class="card-body" align="center">
-                        @if($profile->id == $purchases->user_id)
-                            <p class=""><b>{{$profile->name}}</b></p>
-                        @endif
-                    </div><!-- End .card-body -->
-                </div><!-- End .card-dashboard -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
-        
-        @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status3" 
-        || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-dashboard">
-                    <div class="card-body">
-                        <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6>
-                        <p></p>
-                    </div><!-- End .card-body -->
-                </div><!-- End .card-dashboard -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
+                    @endif
 
-        @else
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+        </div><!-- End .col-lg-6 -->
+    </div><!-- End .row -->
+    @endif
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body" align="center">
+                    @if($profile->id == $purchases->user_id)
+                        <p class=""><b>{{$profile->name}}</b></p>
+                    @endif
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+        </div><!-- End .col-lg-6 -->
+    </div><!-- End .row -->
+    
+    @if($purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status3" 
+    || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
+    @if($cek_user_address > 0)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                <h3 class="card-title">Lokasi Pengiriman </h3>
+                    <table>
+                        <tr>
+                            <td>Provinsi</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$lokasi_pembeli["province"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Kota</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$lokasi_pembeli["city"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Kecamatan</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td>{{$lokasi_pembeli["subdistrict_name"]}} </td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>&emsp; : &emsp;</td>
+                            <td> {{$user_address->user_street_address}} </td>
+                        </tr>
+                    </table>
+                    <!-- <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6> -->
+                    <p></p>
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+        </div><!-- End .col-lg-6 -->
+    </div><!-- End .row -->
+    @elseif($cek_user_address == 0)
 
-        @endif
+    @endif
+
+    @else
+
+    @endif
 
     <div class="row">
     @foreach($product_purchases as $product_purchases)
