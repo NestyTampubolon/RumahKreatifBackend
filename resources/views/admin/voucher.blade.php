@@ -97,7 +97,7 @@
                         <td align="center" width="100px">
                           @if(date('Y-m-d') > $vouchers->tanggal_batas_berlaku)
                             <a>Batas Berlaku Habis</a>
-                          @elseif(date('Y-m-d') < $vouchers->tanggal_batas_berlaku)
+                          @elseif(date('Y-m-d') <= $vouchers->tanggal_batas_berlaku)
                             <a href="./hapus_voucher/{{$vouchers->voucher_id}}" class="btn btn-block btn-danger">Hapus</a>
                           @endif
                         </td>

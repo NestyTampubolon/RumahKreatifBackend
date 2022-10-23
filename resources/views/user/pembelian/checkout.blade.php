@@ -125,23 +125,25 @@
                                         $jumlah_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
                                         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->count();
                                     ?>
-                                    @foreach($pembelian_vouchers as $pembelian_vouchers1)
-                                        <?php
+                                    <?php
+                                        foreach($pembelian_vouchers as $pembelian_vouchers1){
                                             $target_kategori_cart = explode(",", $pembelian_vouchers1->target_kategori); 
-                                        
-                                            $cek_target_kategori_cart = DB::table('carts')->select('carts.product_id')->where('category_id', $target_kategori_cart)->where('merchant_id', $merchant_id)
-                                            ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
-                                        ?>
-                                    @endforeach
+                                            
+                                            foreach($target_kategori_cart as $target_kategori_cart){
+                                                $cek_target_kategori_cart[] = DB::table('carts')->select('carts.product_id')->where('category_id', $target_kategori_cart)->where('merchant_id', $merchant_id)
+                                                ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
+                                            }
+                                        }
+                                    ?>
                                     @if($jumlah_vouchers > 0)
                                         @if($jumlah_pembelian_vouchers > 0 && $cek_target_kategori_cart > 0)
-                                        <tr>
-                                            <td>
+                                        <tr id="voucher_pembelian_tr">
+                                            <td id="voucher_pembelian_td">
                                                 <select name="voucher_pembelian" id="voucher_pembelian" class="custom-select form-control" required>
                                                     <option value="" disabled selected>Pilih Voucher Pembelian</option>
                                                     @foreach($pembelian_vouchers as $pembelian_vouchers2)
                                                         @if($total_harga->total_harga >= $pembelian_vouchers2->minimal_pengambilan)
-
+                                                        
                                                             @foreach($carts as $carts2)
                                                             <?php $target_kategori = explode(",", $pembelian_vouchers2->target_kategori); ?>
                                                                 @foreach($target_kategori as $target_kategori)
@@ -151,13 +153,14 @@
                                                                     ?>
                                                                 @endforeach
                                                             @endforeach 
-                                                            <!-- <option value="{{$pembelian_vouchers2->voucher_id}}">{{$cek_kategori}}</option> -->
+                                                            
                                                             @if($cek_kategori > 0)
                                                                 <?php $target_kategori2 = explode(",", $pembelian_vouchers2->target_kategori); ?>
                                                                 @foreach($target_kategori2 as $target_kategori2)
                                                                     @if($carts2->category_id == $target_kategori2)
                                                                     <option value="{{$pembelian_vouchers2->voucher_id}}">{{$pembelian_vouchers2->nama_voucher}} ({{$pembelian_vouchers2->potongan}}%)</option>
                                                                     @else
+
                                                                     @endif
                                                                 @endforeach
                                                             @endif
