@@ -118,6 +118,7 @@ Route::post('/PostTambahVoucher', 'App\Http\Controllers\VoucherController@PostTa
 Route::get('/hapus_voucher/{voucher_id}', 'App\Http\Controllers\VoucherController@HapusVoucher');
 
 Route::get('/ambil_voucher_pembelian', 'App\Http\Controllers\PembelianController@ambil_voucher_pembelian');
+Route::get('/ambil_voucher_ongkos_kirim', 'App\Http\Controllers\PembelianController@ambil_voucher_ongkos_kirim');
 
 Route::post('/PostBeliProduk', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');

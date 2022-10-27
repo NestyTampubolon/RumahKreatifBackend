@@ -32,9 +32,8 @@ $("#tipe_voucher").change(function (data) {
         success: function (data) {
             console.log(data)
 
-            $("#div_checkbox_categories").show();
-
             if(data == "pembelian"){
+                $("#div_checkbox_categories").show();
                 $("#potongan_div").show();
                 $("#minimal_pengambilan_div").show();
                 $("#potongan").remove();
@@ -64,6 +63,8 @@ $("#tipe_voucher").change(function (data) {
             }
 
             if(data == "ongkos_kirim"){
+                $("#div_checkbox_categories").hide();
+
                 $("#potongan_div").show();
                 $("#minimal_pengambilan_div").show();
                 $("#potongan").remove();

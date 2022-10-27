@@ -44,25 +44,39 @@ class PembelianController extends Controller
         $carts = DB::table('carts')->where('user_id', $user_id)->where('merchant_id', $merchant_id)
         ->join('products', 'carts.product_id', '=', 'products.product_id')->get();
 
+        $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
+        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
+
+        foreach($carts as $cek_cart_voucher){
+            $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+            ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
+            ->orderBy('nama_voucher', 'asc')->first();
+
+            $get_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+            ->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
+
+
+            
+            $cek_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+            ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->first();
+
+            $get_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+            ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
+
+        }
+
         $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
 
-        $pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
-        
-
-        // foreach($pembelian_vouchers as $pembelian_vouchers_cart){
-        //     $target_kategori_cart = explode(",", $pembelian_vouchers_cart->target_kategori); 
-        
-        //     $cek_target_kategori_cart = DB::table('carts')->select('carts.product_id')->where('category_id', $target_kategori)->where('merchant_id', $merchant_id)
-        //     ->join('products', 'carts.product_id', '=', 'products.product_id')->count();
-        // }
+        // $pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
 
         $ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
-
-        $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
-        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
         $total_berat = DB::table('carts')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('merchant_id', $merchant_id)
         ->join('products', 'carts.product_id', '=', 'products.product_id')->first();
@@ -72,15 +86,18 @@ class PembelianController extends Controller
         $user_address = DB::table('user_address')->where('user_id', $user_id)->where('is_deleted', 0)->orderBy('subdistrict_id', 'asc')->get();
 
         return view('user.pembelian.checkout')->with('merchant_id', $merchant_id)->with('cek_cart', $cek_cart)->with('carts', $carts)
-        ->with('pembelian_vouchers', $pembelian_vouchers)->with('ongkos_kirim_vouchers', $ongkos_kirim_vouchers)
+        ->with('ongkos_kirim_vouchers', $ongkos_kirim_vouchers)
         ->with('vouchers', $vouchers)->with('total_harga', $total_harga)->with('total_berat', $total_berat)
-        ->with('merchant_address', $merchant_address)->with('user_address', $user_address);
+        ->with('merchant_address', $merchant_address)->with('user_address', $user_address)
+        ->with('cek_pembelian_vouchers', $cek_pembelian_vouchers)->with('get_pembelian_vouchers', $get_pembelian_vouchers)
+        ->with('cek_ongkos_kirim_vouchers', $cek_ongkos_kirim_vouchers)->with('get_ongkos_kirim_vouchers', $get_ongkos_kirim_vouchers);
     }
     
     public function ambil_voucher_pembelian() {
         $user_id = Auth::user()->id;
         $voucher = $_GET['voucher'];
         $merchant_id = $_GET['merchant_id'];
+        $total_harga_checkout = $_GET['total_harga_checkout'];
         
         $voucher_dipilih = DB::table('vouchers')->where('voucher_id', $voucher)->first();
 
@@ -102,21 +119,27 @@ class PembelianController extends Controller
         else if($jumlah_potongan_subtotal > $voucher_dipilih->maksimal_pemotongan){
             $potongan = $voucher_dipilih->maksimal_pemotongan;
         }
-        
-        $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
-        ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
-        
-        // $potongan = (int)$total_harga->total_harga * $voucher_dipilih->potongan / 100;
 
         if($potongan > $voucher_dipilih->maksimal_pemotongan){
             $potongan = $voucher_dipilih->maksimal_pemotongan;
         }
 
-        $total_harga_fix = (int)$total_harga->total_harga - $potongan;
+        $total_harga_fix = (int)$total_harga_checkout - $potongan;
 
-        $total_harga_checkout = "Rp." . number_format($total_harga_fix,0,',','.');  
+        $total_harga_checkout = "Rp." . number_format($total_harga_fix,0,',','.');
         
-        return response()->json($total_harga_checkout);
+        return response()->json($total_harga_fix);
+    }
+
+    public function ambil_voucher_ongkos_kirim() {
+        $user_id = Auth::user()->id;
+        $voucher_ongkir = $_GET['voucher_ongkir'];
+        
+        $voucher_dipilih = DB::table('vouchers')->where('voucher_id', $voucher_ongkir)->first();
+
+        $potongan = $voucher_dipilih->potongan;
+        
+        return response()->json($potongan);
     }
     
     public function pilih_metode_pembelian(Request $request) {
@@ -192,6 +215,7 @@ class PembelianController extends Controller
         $merchant_id = $request -> merchant_id;
         
         $voucher_pembelian = $request -> voucher_pembelian;
+        $voucher_ongkos_kirim = $request -> voucher_ongkos_kirim;
         
         $metode_pembelian = $request -> metode_pembelian;
         $alamat_purchase = $request -> alamat_purchase;
@@ -212,6 +236,13 @@ class PembelianController extends Controller
                 'voucher_id' => $voucher_pembelian,
             ]);
         }
+
+        // if($voucher_ongkos_kirim){
+        //     DB::table('claim_vouchers')->insert([
+        //         'checkout_id' => $checkout_id->checkout_id,
+        //         'voucher_id' => $voucher_ongkos_kirim,
+        //     ]);
+        // }
 
         if($metode_pembelian == "ambil_ditempat"){
             DB::table('purchases')->insert([
@@ -303,7 +334,7 @@ class PembelianController extends Controller
             if($cek_admin_id){
                 $checkouts = DB::table('checkouts')->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
                 $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
@@ -494,7 +525,7 @@ class PembelianController extends Controller
                 $checkouts = DB::table('checkouts')->where('user_id', $user_id)
                 ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
                 $purchases = DB::table('purchases')->where('user_id', $user_id)
                 ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
@@ -766,7 +797,9 @@ class PembelianController extends Controller
                 $checkouts = DB::table('checkouts')->where('user_id', $user_id)
                 ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                
+                $claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->first();
 
                 $profile = DB::table('profiles')->where('user_id', $user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
                 
@@ -948,8 +981,9 @@ class PembelianController extends Controller
 
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
-                return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
+                return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
+                ->with('claim_ongkos_kirim_voucher', $claim_ongkos_kirim_voucher)->with('cek_merchant_address', $cek_merchant_address)
+                ->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
                 ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)
                 ->with('product_purchases', $product_purchases)->with('profile', $profile)->with('product_specifications', $product_specifications)
                 ->with('purchases', $purchases)->with('total_harga', $total_harga)->with('total_harga_semula', $total_harga_semula)

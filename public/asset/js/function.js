@@ -80,19 +80,72 @@ $("#voucher_pembelian").change(function (data) {
         type: "GET",
         dataType: "json",
         url: "/ambil_voucher_pembelian",
-        data: { voucher: $(this).val(), merchant_id: $merchant_id },
+        data: { voucher: $(this).val(), merchant_id: $merchant_id, total_harga_checkout: $total_harga_checkout },
         success: function (data) {
             console.log(data)
 
-            $("#total_harga_checkout").empty();
+            $("#disabled_service").remove();
+            $("#service").append('<option value="" id="disabled_service" disabled selected>Pilih Alamat Pengiriman</option>');
+            
+            $("#disabled_voucher_ongkir").remove();
+            $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
+            $("#voucher_ongkir_table").hide();
 
-            // $("#total_harga_checkout").append($('<td>', { text: "Total:", }))
-            $("#total_harga_checkout").append($('<a>', { text: data, }))
+            function format_rupiah(nominal){
+                var  reverse = nominal.toString().split('').reverse().join(''),
+                     ribuan = reverse.match(/\d{1,3}/g);
+                 return ribuan	= ribuan.join('.').split('').reverse().join('');
+            }
+
+            $total_harga_checkout_mentah = parseInt(data);
+
+            $("#total_harga_checkout").empty();
+            $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(data), }))
+            
+            $("#checkout").empty();
         }
     });
 });
 
-$("#ambil_ditempat").change(function (data) {
+$("#voucher_ongkos_kirim").change(function (data) {
+    console.log($(this).val());
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/ambil_voucher_ongkos_kirim",
+        data: { voucher_ongkir: $(this).val() },
+        success: function (data) {
+            console.log(data)
+
+            function format_rupiah(nominal){
+                var  reverse = nominal.toString().split('').reverse().join(''),
+                     ribuan = reverse.match(/\d{1,3}/g);
+                 return ribuan	= ribuan.join('.').split('').reverse().join('');
+            }
+
+            $potongan_ongkos_kirim = parseInt(data);
+            
+            $ongkir_hasil_potong = parseInt($ongkir) - parseInt($potongan_ongkos_kirim);
+
+            if($ongkir_hasil_potong < 0){
+                $ongkir_hasil_potong = 0;
+            }
+
+            $("#total_harga_checkout").empty();
+            
+            if($total_harga_checkout_mentah == 0){
+                $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt($ongkir_hasil_potong)), }))
+            }
+
+            else{
+                $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout_mentah) + parseInt($ongkir_hasil_potong)), }))
+            }
+            
+        }
+    });
+});
+
+$("#ambil_ditempat").click(function (data) {
     console.log($(this).val());
     $.ajax({
         type: "GET",
@@ -101,10 +154,9 @@ $("#ambil_ditempat").change(function (data) {
         data: { tipe: $(this).val() },
         success: function (data) {
             console.log(data)
-            
+
             $("#alamat_table").hide();
 
-            // $("#disabled_alamat").remove();
             $("#province_address_row").hide();
             $("#province_address").empty();
             $("#province_address").append('<option value="" disabled selected>Pilih Provinsi</option>');
@@ -118,6 +170,25 @@ $("#ambil_ditempat").change(function (data) {
             $("#pengiriman_table").hide();
 
             $("#service_row").hide();
+
+            $("#disabled_voucher_ongkir").remove();
+            $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
+            $("#voucher_ongkir_table").hide();
+
+            function format_rupiah(nominal){
+                var  reverse = nominal.toString().split('').reverse().join(''),
+                     ribuan = reverse.match(/\d{1,3}/g);
+                 return ribuan	= ribuan.join('.').split('').reverse().join('');
+            }
+
+            $("#total_harga_checkout").empty();
+
+            if($total_harga_checkout_mentah == 0){
+                $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah($total_harga_checkout), }))
+            }
+            else{
+                $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah($total_harga_checkout_mentah), }))
+            }
 
             $("#checkout").empty();
            
@@ -142,7 +213,7 @@ $("#pesanan_dikirim").change(function (data) {
             $("#alamat_table").show();
             
             $("#disabled_alamat").remove();
-            $("#street_address").append('<option value="" disabled selected id="disabled_alamat">Pilih Alamat Pengiriman</option>');
+            $("#street_address").append('<option value="" id="disabled_alamat" disabled selected>Pilih Alamat Pengiriman</option>');
 
             $("#checkout").empty();
 
@@ -170,6 +241,12 @@ $("#street_address").change(function (data) {
             $("#courier").empty();
             $("#courier").append('<option value="" disabled selected>Pilih Kurir</option>');
             
+            $("#service_row").hide();
+            
+            $("#disabled_voucher_ongkir").remove();
+            $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
+            $("#voucher_ongkir_table").hide();
+            
             $("#checkout").empty();
 
             $("#province_address").append($('<option>', {
@@ -190,15 +267,9 @@ $("#street_address").change(function (data) {
                 selected: true,
             }))
             
-            // $("#checkout").append($('<div>', {
-            //     class: "btn btn-outline-primary-2 btn-order btn-block",
-            //     text: "CHECKOUT",
-            // }))
-            
             $("#pengiriman_table").show();
             $("#courier").append($('<option>', { value: "pos", text: "POS Indonesia", }))
             $("#courier").append($('<option>', { value: "jne", text: "JNE", }))
-            $("#courier").append($('<option>', { value: "jnt", text: "J&T", }))
             
             $("#servis_row").hide();
         }
@@ -219,6 +290,10 @@ $("#courier").change(function (data) {
             $("#service").empty();
             $("#service").append('<option value="" disabled selected>Pilih Servis</option>');
 
+            $("#disabled_voucher_ongkir").remove();
+            $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
+            $("#voucher_ongkir_table").hide();
+
             data.then((result) => {
                 var _data = $.parseJSON(result);
                 _data["rajaongkir"]["results"].forEach((costs, indexC) => {
@@ -233,11 +308,11 @@ $("#courier").change(function (data) {
                                 tarif: price["value"],
                             }))
 
-                            $("#total_harga_checkout").empty();
-
-                            $("#total_harga_checkout").append($('<a>', { text: "Rp. "+ format_rupiah(parseInt($total_harga_checkout)), }))
-
                             $('#service').change(function() {
+
+                                $("#disabled_voucher_ongkir").remove();
+                                $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
+                                $("#voucher_ongkir_table").show();
 
                                 $("#checkout").empty();
                                 $("#checkout").append($('<button>', {
@@ -246,10 +321,18 @@ $("#courier").change(function (data) {
                                 }))
 
                                 var ongkir = $(this).find('option:selected').attr('tarif')
-                                
+
                                 $("#total_harga_checkout").empty();
 
-                                $("#total_harga_checkout").append($('<a>', { text: "Rp. "+ format_rupiah(parseInt($total_harga_checkout) + parseInt(ongkir)), }))
+                                if($total_harga_checkout_mentah == 0){
+                                    $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt(ongkir)), }))
+                                }
+
+                                else{
+                                    $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout_mentah) + parseInt(ongkir)), }))
+                                }
+                                
+                                $ongkir = parseInt(ongkir);
                             })
                         
                             function format_rupiah(nominal){

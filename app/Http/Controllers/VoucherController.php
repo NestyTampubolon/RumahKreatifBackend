@@ -31,20 +31,8 @@ class VoucherController extends Controller
     // }
 
     public function PostTambahVoucher(Request $request) {
-        $request -> validate([
-            'nama_voucher' => 'required',    
-            'tipe_voucher' => 'required',
-            'target_kategori' => 'required',
-            'potongan' => 'required|integer',    
-            'minimal_pengambilan' => 'required|integer',    
-            'maksimal_pemotongan' => 'required|integer',    
-            'tanggal_berlaku' => 'required',    
-            'tanggal_batas_berlaku' => 'required',    
-        ]);
-
         $nama_voucher = $request -> nama_voucher;
         $tipe_voucher = $request -> tipe_voucher;
-        $target_kategori = $request -> target_kategori;
         $potongan = $request -> potongan;
         $minimal_pengambilan = $request -> minimal_pengambilan;
         $maksimal_pemotongan = $request -> maksimal_pemotongan;
@@ -52,6 +40,19 @@ class VoucherController extends Controller
         $tanggal_batas_berlaku = $request -> tanggal_batas_berlaku;
 
         if($tipe_voucher == "pembelian"){
+            $target_kategori = $request -> target_kategori;
+            
+            $request -> validate([
+                'nama_voucher' => 'required',
+                'tipe_voucher' => 'required',
+                'target_kategori' => 'required',
+                'potongan' => 'required|integer',
+                'minimal_pengambilan' => 'required|integer',
+                'maksimal_pemotongan' => 'required|integer',
+                'tanggal_berlaku' => 'required',
+                'tanggal_batas_berlaku' => 'required',
+            ]);
+
             DB::table('vouchers')->insert([
                 'nama_voucher' => $nama_voucher,
                 'tipe_voucher' => $tipe_voucher,
@@ -66,10 +67,17 @@ class VoucherController extends Controller
         }
         
         else if($tipe_voucher == "ongkos_kirim"){
+            $request -> validate([
+                'nama_voucher' => 'required',
+                'tipe_voucher' => 'required',
+                'potongan' => 'required|integer',
+                'minimal_pengambilan' => 'required|integer',
+                'tanggal_berlaku' => 'required',
+                'tanggal_batas_berlaku' => 'required',    
+            ]);
             DB::table('vouchers')->insert([
                 'nama_voucher' => $nama_voucher,
                 'tipe_voucher' => $tipe_voucher,
-                'target_kategori' => implode(",", $target_kategori),
                 'potongan' => $potongan,
                 'minimal_pengambilan' => $minimal_pengambilan,
                 'maksimal_pemotongan' => $potongan,
