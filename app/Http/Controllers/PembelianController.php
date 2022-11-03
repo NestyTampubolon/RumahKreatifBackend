@@ -47,30 +47,30 @@ class PembelianController extends Controller
         $total_harga = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as total_harga'))->where('user_id', $user_id)
         ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->first();
 
-        foreach($carts as $cek_cart_voucher){
-            $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-            ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
-            ->orderBy('nama_voucher', 'asc')->first();
 
-            $get_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-            ->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
+        // foreach($carts as $cek_cart_voucher){
+        //     $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        //     ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+        //     ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
+        //     ->orderBy('nama_voucher', 'asc')->count();
 
+        // }
+        
+        $get_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+        ->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
+        
+        $cek_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+        ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->first();
 
-            
-            $cek_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-            ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->first();
-
-            $get_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-            ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-            ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
-
-        }
+        $get_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+        ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
 
         $vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->orderBy('nama_voucher', 'asc')->get();
+        
 
         // $pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->orderBy('nama_voucher', 'asc')->get();
@@ -88,8 +88,7 @@ class PembelianController extends Controller
         return view('user.pembelian.checkout')->with('merchant_id', $merchant_id)->with('cek_cart', $cek_cart)->with('carts', $carts)
         ->with('ongkos_kirim_vouchers', $ongkos_kirim_vouchers)
         ->with('vouchers', $vouchers)->with('total_harga', $total_harga)->with('total_berat', $total_berat)
-        ->with('merchant_address', $merchant_address)->with('user_address', $user_address)
-        ->with('cek_pembelian_vouchers', $cek_pembelian_vouchers)->with('get_pembelian_vouchers', $get_pembelian_vouchers)
+        ->with('merchant_address', $merchant_address)->with('user_address', $user_address)->with('get_pembelian_vouchers', $get_pembelian_vouchers)
         ->with('cek_ongkos_kirim_vouchers', $cek_ongkos_kirim_vouchers)->with('get_ongkos_kirim_vouchers', $get_ongkos_kirim_vouchers);
     }
     
@@ -237,12 +236,12 @@ class PembelianController extends Controller
             ]);
         }
 
-        // if($voucher_ongkos_kirim){
-        //     DB::table('claim_vouchers')->insert([
-        //         'checkout_id' => $checkout_id->checkout_id,
-        //         'voucher_id' => $voucher_ongkos_kirim,
-        //     ]);
-        // }
+        if($voucher_ongkos_kirim){
+            DB::table('claim_vouchers')->insert([
+                'checkout_id' => $checkout_id->checkout_id,
+                'voucher_id' => $voucher_ongkos_kirim,
+            ]);
+        }
 
         if($metode_pembelian == "ambil_ditempat"){
             DB::table('purchases')->insert([
@@ -794,16 +793,16 @@ class PembelianController extends Controller
 
             else{
 
-                $checkouts = DB::table('checkouts')->where('user_id', $user_id)
-                ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
-                
-                $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
-                
-                $claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->first();
+                // $checkouts = DB::table('checkouts')->where('user_id', $user_id)
+                // ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
 
                 $profile = DB::table('profiles')->where('user_id', $user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
                 
                 $purchases = DB::table('purchases')->where('user_id', $user_id)->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
+                
+                $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->where('checkout_id', $purchases->checkout_id)->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                
+                $claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->where('checkout_id', $purchases->checkout_id)->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->first();
 
                 $purchases_address = DB::table('user_address')->where('user_id', $purchases->user_id)->first();
 
@@ -981,7 +980,7 @@ class PembelianController extends Controller
 
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
-                return view('user.pembelian.detail_pembelian')->with('checkouts', $checkouts)->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
+                return view('user.pembelian.detail_pembelian')->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
                 ->with('claim_ongkos_kirim_voucher', $claim_ongkos_kirim_voucher)->with('cek_merchant_address', $cek_merchant_address)
                 ->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
                 ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)

@@ -451,12 +451,13 @@
                     <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
                         total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $ongkir["value"]?>);
                     <?php } ?>
-                    <?php 
+                    <?php
+                        if($jumlah_claim_ongkos_kirim_voucher > 0){
+                            
                         $total_potongan_ongkir = $ongkir["value"] - $claim_ongkos_kirim_voucher->potongan;
                         if($total_potongan_ongkir < 0){
                             $total_potongan_ongkir = 0;
                         }
-                        if($jumlah_claim_ongkos_kirim_voucher > 0){ 
                     ?>
                         total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_potongan_ongkir?>);
                     <?php } ?>

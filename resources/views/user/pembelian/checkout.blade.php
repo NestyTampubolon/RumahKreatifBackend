@@ -126,17 +126,29 @@
                                         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->count();
                                     ?>
                                     @if($jumlah_vouchers > 0)
+                                        <?php
+                                            foreach($carts as $cek_cart_voucher){
+                                                $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                                ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+                                                ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
+                                                ->orderBy('nama_voucher', 'asc')->first();
+                                            }
+                                        ?>
                                         @if($jumlah_pembelian_vouchers > 0 && $cek_pembelian_vouchers)
                                         <tr id="voucher_pembelian_tr">
                                             <td id="voucher_pembelian_td">
                                                 <select name="voucher_pembelian" id="voucher_pembelian" class="custom-select form-control" required>
                                                     <option value="" disabled selected>Pilih Voucher Pembelian</option>
-                                                    @foreach($get_pembelian_vouchers as $pembelian_voucher)    
-                                                        <?php $get_target_kategori = explode(",", $pembelian_voucher->target_kategori); ?>
+                                                    @foreach($get_pembelian_vouchers as $pembelian_voucher)
+                                                        <?php
+                                                            $get_target_kategori = explode(",", $pembelian_voucher->target_kategori);
+                                                            $cek_get_target_kategori_voucher = 0;
+                                                        ?>
                                                         @foreach($carts as $carts2)
                                                             @foreach($get_target_kategori as $target_kategori)
-                                                                @if($target_kategori == $carts2->category_id)
+                                                                @if($target_kategori == $carts2->category_id && $cek_get_target_kategori_voucher != $pembelian_voucher->voucher_id)
                                                                 <option value="{{$pembelian_voucher->voucher_id}}">{{$pembelian_voucher->nama_voucher}} ({{$pembelian_voucher->potongan}}%)</option>
+                                                                <?php $cek_get_target_kategori_voucher = $pembelian_voucher->voucher_id; ?>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach

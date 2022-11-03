@@ -776,8 +776,14 @@
         }
     });
 
+    <?php
+        if($cek_merchant_address > 0){
+    ?>
+    $merchant_address_id = <?php echo $merchant_address->merchant_address_id?>
+    <?php
+        }
+    ?>
     
-    $merchant_address_id = <?php echo $merchant_address->merchant_address_id ?>
     
 </script>
 <script src="{{ URL::asset('asset/js/function_2.js') }}"></script>

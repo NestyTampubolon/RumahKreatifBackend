@@ -370,35 +370,41 @@ class ProdukController extends Controller
         $jumlah_review = DB::table('reviews')->where('product_id', $product_id)->count();
 
         
+        if($cek_merchant_address > 0){
 
-        $curl = curl_init();
+            $curl = curl_init();
         
-        $param = $merchant_address->city_id;
-        $subdistrict_id = $merchant_address->subdistrict_id;
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
-        ));
-
-        $response = curl_exec($curl);
-        $collection = json_decode($response, true);
-        $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
-            return $r['subdistrict_id'] == $subdistrict_id;
-          });
-        
-        foreach ($filters as $filter){
-            $lokasi_toko = $filter;
+            $param = $merchant_address->city_id;
+            $subdistrict_id = $merchant_address->subdistrict_id;
+            
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
+            ));
+    
+            $response = curl_exec($curl);
+            $collection = json_decode($response, true);
+            $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
+                return $r['subdistrict_id'] == $subdistrict_id;
+              });
+            
+            foreach ($filters as $filter){
+                $lokasi_toko = $filter;
+            }
+            
+            $err = curl_error($curl);
+            curl_close($curl);
         }
-        
-        $err = curl_error($curl);
-        curl_close($curl);
+
+        else{
+            $lokasi_toko = "";
+        }
         
 
         

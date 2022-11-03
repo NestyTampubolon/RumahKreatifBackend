@@ -176,6 +176,7 @@
 
                                 <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
                             </aside> -->
+
                         @endif
                     @endforeach
                 @endforeach
@@ -183,8 +184,12 @@
             </div><!-- End .container -->
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
-    
 </div><!-- .End .tab-pane -->
+@if(!$cek_carts)
+<div class="col-md-12" align="center">
+    <h6 style="color:darkred"><b>Keranjang Kosong. <a href="./produk">Ayo Belanja.</a></b></h6>
+</div>
+@endif
 
 @endsection
 

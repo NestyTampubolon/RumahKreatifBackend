@@ -149,8 +149,12 @@
                                 @endif
 
                                 @if($product_purchase->category_id != $cek_target_kategori)
+                                    <?php
+                                        $total_harga_pembelian_produk_no_potongan = $total_harga_pembelian_perproduk;
+                                        $total_harga_pembelian_produk_no_potongan_fix = "Rp." . number_format(floor($total_harga_pembelian_produk_no_potongan),2,',','.');
+                                    ?>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                        {{$total_harga_pembelian_produk_fix}}
+                                        {{$total_harga_pembelian_produk_no_potongan_fix}}
                                     </div>
                                 @endif
 
@@ -259,7 +263,7 @@
 @else
 
 <div class="col-md-12" align="center">
-    <h6 style="color:darkred"><b>Anda Tidak Memiliki Pesanan</b></h6>
+    <h6 style="color:darkred"><b>Anda Tidak Memiliki Pesanan. <a href="./produk">Ayo Belanja.</a></b></h6>
 </div>
 
 @endif
