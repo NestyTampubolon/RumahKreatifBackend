@@ -94,6 +94,7 @@
                 <div class="card-body">
                     @if($purchases->status_pembelian == "status2")
                     <p class="">Jika pesanan telah dikirim dan sedang dalam perjalanan.</p>
+                    <p class="">SILAHKAN GUNAKAN KIRIM MELALUI <b>{{$courier_name}} - {{$service_name}}</b> UNTUK PESANAN.</p>
                     <p class="">MASUKAN NOMOR RESI. KEMUDIAN SILAHKAN KONFIRMASI PESANAN.</p>
                     
                     <form action="../update_status2_pembelian/{{$purchases->purchase_id}}" method="post" enctype="multipart/form-data">
