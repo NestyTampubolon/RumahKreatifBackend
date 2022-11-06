@@ -45,22 +45,28 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($verify_users as $verify_users)
+                    @foreach($profile_users as $profile_user)
                       <tr>
-                          <td>{{$verify_users->user_id}}</td>
-                          <td>{{$verify_users->username}}</td>
-                          <td>{{$verify_users->email}}</td>
-                          @if($verify_users->is_verified==1)
-                              <td align="center"><small class="badge badge-success">Verified</small></td>
+                          <td>{{$profile_user->user_id}}</td>
+                          <td>{{$profile_user->username}}</td>
+                          <td>{{$profile_user->email}}</td>
+                          
+                          <?php $verify_user = DB::table('verify_users')->where('user_id', $profile_user->user_id)->first(); ?>
+                          @if($verify_user)
+                              @if($verify_user->is_verified==1)
+                                  <td align="center"><small class="badge badge-success">Verified</small></td>
+                              @else
+                                  <td align="center"><small class="badge badge-danger">No Verified</small></td>
+                              @endif
                           @else
-                              <td align="center"><small class="badge badge-danger">No Verified</small></td>
+                            <td align="center"><small class="badge badge-warning">None</small></td>
                           @endif
                           <td align="center">
-                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$verify_users->user_id}}">Cek</button>
+                            <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$profile_user->user_id}}">Cek</button>
                           </td>
                       </tr>
                       
-                      <div class="modal fade" id="modal-cek-{{$verify_users->user_id}}">
+                      <div class="modal fade" id="modal-cek-{{$profile_user->user_id}}">
                           <div class="modal-dialog modal-lg">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -70,20 +76,28 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <center><a href="./asset/u_file/foto_ktp/{{$verify_users->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
-                                    <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_users->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
-                                    <center><a>{{$verify_users->name}}</a></center>
-                                    <center><a>{{$verify_users->no_hp}}</a></center>
-                                    <center><a>{{$verify_users->birthday}}</a></center>
-                                    <center><a>{{$verify_users->gender}}</a></center>
+                                    @if($verify_user)
+                                      <center><a href="./asset/u_file/foto_ktp/{{$verify_user->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
+                                      <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_user->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
+                                    @endif
+                                    <center><a>{{$profile_user->name}}</a></center>
+                                    <center><a>{{$profile_user->no_hp}}</a></center>
+                                    <center><a>{{$profile_user->birthday}}</a></center>
+                                    @if($profile_user->gender == "L")
+                                      <center><a>Laki Laki</a></center>
+                                    @elseif($profile_user->gender == "P")
+                                      <center><a>Perempuan</a></center>
+                                    @endif
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    @if($verify_users->is_verified==1)
+                                      @if($verify_user)
+                                        @if($verify_user->is_verified==1)
 
-                                    @else
-                                    <a href="./verify_user/{{$verify_users->verify_id}}" class="btn btn-primary">Verify</a>
-                                    @endif
+                                        @else
+                                          <a href="./verify_user/{{$verify_user->verify_id}}" class="btn btn-primary">Verify</a>
+                                        @endif
+                                      @endif
                                 </div>
                               </div>
                               <!-- /.modal-content -->
