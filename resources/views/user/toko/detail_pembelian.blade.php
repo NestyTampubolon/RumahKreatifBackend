@@ -22,7 +22,7 @@
 
                     @if($purchases->status_pembelian == "status4")
                         <?php
-                            $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir["value"]),2,',','.');
+                            $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir),2,',','.');
                         ?>
                         <p class="">
                             Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN. 
@@ -75,7 +75,7 @@
                         <p>
                             <?php
                                 $total_harga_detail_bayaran_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
-                                $ongkir = "Rp." . number_format(floor((int)$ongkir["value"]),2,',','.');
+                                $ongkir = "Rp." . number_format(floor((int)$ongkir),2,',','.');
                             ?>
                             Total Pembelian Produk =  <a id="total_harga_produk_kirim_no_ongkir">{{$total_harga_detail_bayaran_status4}}</a><br>
                             Ongkos Kirim =  <a id="ongkir">{{$ongkir}}</a> <a>[{{$courier_name}}] [{{$service_name}}]</a><br>

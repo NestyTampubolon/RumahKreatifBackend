@@ -249,10 +249,12 @@ class PembelianController extends Controller
                 'checkout_id' => $checkout_id->checkout_id,
                 'alamat_purchase' => "",
                 'status_pembelian' => "status1_ambil",
+                'ongkir' => 0,
             ]);
         }
         
         if($metode_pembelian == "pesanan_dikirim"){
+            $ongkir = $request -> ongkir;
             DB::table('purchases')->insert([
                 'user_id' => $user_id,
                 'checkout_id' => $checkout_id->checkout_id,
@@ -260,6 +262,7 @@ class PembelianController extends Controller
                 'status_pembelian' => "status1",
                 'courier_code' => $courier_code,
                 'service' => $service,
+                'ongkir' => $ongkir,
             ]);
         }
         
@@ -333,179 +336,16 @@ class PembelianController extends Controller
             if($cek_admin_id){
                 $checkouts = DB::table('checkouts')->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
-                $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                // $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+
+                $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+                
+                $claim_ongkos_kirim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
                 $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
                 $profiles = DB::table('profiles')->get();
 
-
-                // foreach($purchases as $purchases2){
-                //     $purchases_address = DB::table('user_address')->get();
-
-                //     $merchant_purchase = DB::table('product_purchases')->select('merchant_id')
-                //     ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->get();
-
-                    
-
-                //     foreach($merchant_purchase as $merchant_purchase){
-                //         $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->count();
-
-                //         $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->get();
-
-                //         foreach($merchant_address as $merchant_address2){
-                //             $curl = curl_init();
-                    
-                //             $param = $merchant_address2->city_id;
-                //             $subdistrict_id = $merchant_address2->subdistrict_id;
-                            
-                //             curl_setopt_array($curl, array(
-                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
-                //                 CURLOPT_RETURNTRANSFER => true,
-                //                 CURLOPT_ENCODING => "",
-                //                 CURLOPT_MAXREDIRS => 10,
-                //                 CURLOPT_TIMEOUT => 30,
-                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                //                 CURLOPT_CUSTOMREQUEST => "GET",
-                //                 CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
-                //             ));
-
-                //             $response = curl_exec($curl);
-                //             $collection = json_decode($response, true);
-                //             $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
-                //                 return $r['subdistrict_id'] == $subdistrict_id;
-                //             });
-                            
-                //             foreach ($filters as $filter){
-                //                 $lokasi_toko = $filter;
-                //             }
-                            
-                //             $err = curl_error($curl);
-                //             curl_close($curl);
-                            
-                //         }
-                //     }
-
-                //     $cek_user_address = DB::table('purchases')->where('purchases.user_id', $user_id)
-                //     ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->count();
-
-                //     $user_address = DB::table('purchases')->where('purchases.user_id', $user_id)
-                //     ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->get();
-
-                //     $curl_2 = curl_init();
-
-                //     if($cek_user_address != 0){
-                //         foreach($user_address as $user_address){
-                //             $param = $user_address->city_id;
-                //             $subdistrict_id = $user_address->subdistrict_id;
-                            
-                //             curl_setopt_array($curl_2, array(
-                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$param,
-                //                 CURLOPT_RETURNTRANSFER => true,
-                //                 CURLOPT_ENCODING => "",
-                //                 CURLOPT_MAXREDIRS => 10,
-                //                 CURLOPT_TIMEOUT => 30,
-                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                //                 CURLOPT_CUSTOMREQUEST => "GET",
-                //                 CURLOPT_HTTPHEADER => array("key: 41df939eff72c9b050a81d89b4be72ba"),
-                //             ));
-
-                //             $response = curl_exec($curl_2);
-                //             $collection = json_decode($response, true);
-                //             $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($subdistrict_id) {
-                //                 return $r['subdistrict_id'] == $subdistrict_id;
-                //             });
-                            
-                //             foreach ($filters as $filter){
-                //                 $lokasi_pembeli = $filter;
-                //             }
-                            
-                //             $err = curl_error($curl_2);
-                //             curl_close($curl_2);                
-
-                //             $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
-                //             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                //             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
-
-
-                //             $curl_3 = curl_init();
-                            
-                //             $param = $merchant_address2->city_id;
-                //             $merchant_subdistrict_id = $merchant_address2->subdistrict_id;
-                //             $purchases_subdistrict_id = $user_address->subdistrict_id;
-                //             $courier_code = $purchases->courier_code;
-                //             $service = $purchases->service;
-
-                //             curl_setopt_array($curl_3, array(
-                //                 CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
-                //                 CURLOPT_RETURNTRANSFER => true,
-                //                 CURLOPT_ENCODING => "",
-                //                 CURLOPT_MAXREDIRS => 10,
-                //                 CURLOPT_TIMEOUT => 30,
-                //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                //                 CURLOPT_CUSTOMREQUEST => "POST",
-                //                 CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchases->courier_code",
-                //                 CURLOPT_HTTPHEADER => array(
-                //                     "content-type: application/x-www-form-urlencoded",
-                //                     "key: 41df939eff72c9b050a81d89b4be72ba"
-                //                 ),
-                //             ));
-                    
-                //             $response = curl_exec($curl_3);
-                //             $collection = json_decode($response, true);                
-
-                //             if($courier_code != "" || $service != ""){
-                //                 $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
-                //                     return $r['code'] == $courier_code;
-                //                 });
-                //                 foreach ($filters as $filter){
-                //                     $courier_array = $filter;
-                //                 }
-                                
-                //                 $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
-                //                     return $s['service'] == $service;
-                //                 });
-                //                 foreach ($filters2 as $filter2){
-                //                     $service_array = $filter2;
-                //                 }
-
-                //                 $filters3 =  array_filter($service_array['cost']);
-                //                 foreach ($filters3 as $filter3){
-                //                     $ongkir = $filter3;
-                //                 }
-
-                //                 $courier_name = $courier_array["name"];
-                //                 $service_name = $service_array["description"];
-                //             }
-                            
-                //             else{
-                //                 $ongkir = 0;
-                //                 $courier_name = "";
-                //                 $service_name = "";
-                //             }
-
-                //             $err = curl_error($curl_3);
-                //             curl_close($curl_3);
-                //         }
-                        
-                //     }
-
-                //     else if($cek_user_address == 0){
-                //         $lokasi_pembeli = "";
-                //         $ongkir = 0;
-                //         $courier_name = "";
-                //         $service_name = "";
-                //     }
-                // }
-
-
-
-                
-                
-                
-
-
-                
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
                 ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
@@ -515,9 +355,9 @@ class PembelianController extends Controller
                 ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
                 ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
         
-                return view('admin.daftar_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('product_purchases', $product_purchases)->with('profiles', $profiles)->with('product_specifications', $product_specifications)
-                ->with('purchases', $purchases);
+                return view('admin.daftar_pembelian')->with('checkouts', $checkouts)->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
+                ->with('claim_ongkos_kirim_vouchers', $claim_ongkos_kirim_vouchers)->with('product_purchases', $product_purchases)
+                ->with('profiles', $profiles)->with('product_specifications', $product_specifications)->with('purchases', $purchases);
             }
 
             else{
@@ -744,10 +584,11 @@ class PembelianController extends Controller
                         $service_array = $filter2;
                     }
 
-                    $filters3 =  array_filter($service_array['cost']);
-                    foreach ($filters3 as $filter3){
-                        $ongkir = $filter3;
-                    }
+                    // $filters3 =  array_filter($service_array['cost']);
+                    // foreach ($filters3 as $filter3){
+                    //     $ongkir = $filter3;
+                    // }
+                    $ongkir = $purchases->ongkir;
 
                     $courier_name = $courier_array["name"];
                     $service_name = $service_array["description"];
@@ -925,10 +766,11 @@ class PembelianController extends Controller
                             $service_array = $filter2;
                         }
 
-                        $filters3 =  array_filter($service_array['cost']);
-                        foreach ($filters3 as $filter3){
-                            $ongkir = $filter3;
-                        }
+                        // $filters3 =  array_filter($service_array['cost']);
+                        // foreach ($filters3 as $filter3){
+                        //     $ongkir = $filter3;
+                        // }
+                        $ongkir = $purchases->ongkir;
 
                         $courier_name = $courier_array["name"];
                         $service_name = $service_array["description"];

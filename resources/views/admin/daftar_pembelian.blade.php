@@ -177,10 +177,10 @@
                                                                 // $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                                                             ?>
                                                         @else
-                                                            @foreach($claim_vouchers as $claim_voucher)
-                                                                @if($claim_voucher->checkout_id == $purchase->checkout_id)
+                                                            @foreach($claim_pembelian_vouchers as $claim_pembelian_voucher)
+                                                                @if($claim_pembelian_voucher->checkout_id == $purchase->checkout_id)
                                                                     <?php                                                
-                                                                        $target_kategori = explode(",", $claim_voucher->target_kategori);
+                                                                        $target_kategori = explode(",", $claim_pembelian_voucher->target_kategori);
 
                                                                         foreach($target_kategori as $target_kategori){
                                                                             
@@ -191,13 +191,13 @@
                                                                             ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
                                                         
                                                                             $potongan_subtotal = [];
-                                                                            $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_voucher->potongan / 100;
+                                                                            $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
 
-                                                                            $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_voucher->potongan / 100;
+                                                                            $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_pembelian_voucher->potongan / 100;
                                                         
                                                                             $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
 
-                                                                            if($jumlah_potongan_subtotal <= $claim_voucher->maksimal_pemotongan){
+                                                                            if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
                                                                                 if($product_purchase->category_id == $target_kategori){
                                                                                     $potongan_harga_barang = $potongan_subtotal_perproduk;
                                                                                 }
@@ -207,9 +207,9 @@
                                                                                 }
                                                                             }
                             
-                                                                            else if($jumlah_potongan_subtotal > $claim_voucher->maksimal_pemotongan){
+                                                                            else if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
                                                                                 if($product_purchase->category_id == $target_kategori){
-                                                                                    $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk->total_harga_pembelian * $claim_voucher->maksimal_pemotongan;
+                                                                                    $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->maksimal_pemotongan;
                                                                                 }
                             
                                                                                 else{
@@ -217,7 +217,7 @@
                                                                                 }
                                                                             }
                                                                             
-                                                                            if($claim_voucher->tipe_voucher == "pembelian"){
+                                                                            if($claim_pembelian_voucher->tipe_voucher == "pembelian"){
                                                                                 $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
                                                                                 $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                                                                             }
@@ -245,6 +245,7 @@
                                                                 @endif
                                                             @endforeach
                                                         @endif
+
                                                         @if($product_purchase->category_id != $cek_target_kategori)
                                                             @if($jumlah_claim_pembelian_voucher == 0)
                                                             <a>Harga: {{$total_harga_pembelian_produk_tanpa_pemotongan}}</a> ||
@@ -262,10 +263,50 @@
                                                 @endforeach<br>
                                                 @if($jumlah_claim_pembelian_voucher == 0)
                                                     <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_tanpa_pemotongan}}</a></center><br>
+                                                    @if($purchase->courier_code != "" && $purchase->service != "")
+                                                      <?php
+                                                        $ongkir = $purchase->ongkir;
+                                                        if($jumlah_claim_ongkos_kirim_voucher != 0){
+                                                          foreach($claim_ongkos_kirim_vouchers as $claim_ongkos_kirim_voucher){
+                                                            if($claim_ongkos_kirim_voucher->checkout_id == $purchase->checkout_id){
+                                                              $ongkir = $purchase->ongkir - (int)$claim_ongkos_kirim_voucher->potongan;
+                                                              if($ongkir < 0 ){
+                                                                $ongkir = 0;
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                        $ongkir_fix = "Rp." . number_format(floor($ongkir),2,',','.');
+                                                        $total_bayar = (int)$total_harga_pembelian->total_harga_pembelian + $ongkir;
+                                                        $total_bayar_fix = "Rp." . number_format(floor($total_bayar),2,',','.');
+                                                      ?>
+                                                      <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
+                                                      <center><a>TOTAL PEMBAYARAN: {{$total_bayar_fix}}</a></center><br>
+                                                    @endif
                                                 @elseif($jumlah_claim_pembelian_voucher > 0)
                                                     <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_fix}}</a></center>
-                                                    <!-- <center><a>TOTAL HARGA PEMBELIAN: </a></center> -->
                                                     <center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: {{$total_harga_pembelian_keseluruhan_tanpa_pemotongan}}</a></center><br>
+
+                                                    @if($purchase->courier_code != "" && $purchase->service != "")
+                                                      <?php
+                                                        $ongkir = $purchase->ongkir;
+                                                        if($jumlah_claim_ongkos_kirim_voucher != 0){
+                                                          foreach($claim_ongkos_kirim_vouchers as $claim_ongkos_kirim_voucher){
+                                                            if($claim_ongkos_kirim_voucher->checkout_id == $purchase->checkout_id){
+                                                              $ongkir = $purchase->ongkir - (int)$claim_ongkos_kirim_voucher->potongan;
+                                                              if($ongkir < 0 ){
+                                                                $ongkir = 0;
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                        $ongkir_fix = "Rp." . number_format(floor($ongkir),2,',','.');
+                                                        $total_bayar_get_voucher = $total_harga_pembelian_keseluruhan + $ongkir;
+                                                        $total_bayar_get_voucher_fix = "Rp." . number_format(floor($total_bayar_get_voucher),2,',','.');
+                                                      ?>
+                                                      <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
+                                                      <center><a>TOTAL PEMBAYARAN: {{$total_bayar_get_voucher_fix}}</a></center><br>
+                                                    @endif
                                                 @endif
                                                 
                                                 @if($proof_of_payments)

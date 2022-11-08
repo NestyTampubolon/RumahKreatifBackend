@@ -140,6 +140,12 @@ $("#voucher_ongkos_kirim").change(function (data) {
             else{
                 $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout_mentah) + parseInt($ongkir_hasil_potong)), }))
             }
+
+            $("#total_harga_checkout").append($('<input>', { 
+                name: "ongkir",
+                value: $ongkir,
+                hidden: "hidden",
+            }))
             
         }
     });
@@ -333,6 +339,12 @@ $("#courier").change(function (data) {
                                 }
                                 
                                 $ongkir = parseInt(ongkir);
+
+                                $("#total_harga_checkout").append($('<input>', { 
+                                    name: "ongkir",
+                                    value: $ongkir,
+                                    hidden: "hidden",
+                                }))
                             })
                         
                             function format_rupiah(nominal){
