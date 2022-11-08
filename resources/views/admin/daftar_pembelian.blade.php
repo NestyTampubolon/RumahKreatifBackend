@@ -1,6 +1,6 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Bank')
+@section('title', 'Admin - Pembelian')
 
 @section('container')
 

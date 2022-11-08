@@ -1,6 +1,6 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Verifikasi User')
+@section('title', 'Admin - User')
 
 @section('container')
 

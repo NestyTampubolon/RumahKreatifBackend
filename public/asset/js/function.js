@@ -309,7 +309,7 @@ $("#courier").change(function (data) {
                         cost["cost"].forEach((price)=>{
                             $("#service_row").show();
                             $("#service").append($('<option>', {
-                                value: cost["service"],
+                                value: cost["description"],
                                 text: cost["description"] + " ( " + price["etd"] + " hari )",
                                 tarif: price["value"],
                             }))

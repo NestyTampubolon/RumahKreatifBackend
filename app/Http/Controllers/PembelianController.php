@@ -570,28 +570,34 @@ class PembelianController extends Controller
                 $collection = json_decode($response, true);                
 
                 if($courier_code != "" || $service != ""){
-                    $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
-                        return $r['code'] == $courier_code;
-                    });
-                    foreach ($filters as $filter){
-                        $courier_array = $filter;
-                    }
+                    // $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
+                    //     return $r['code'] == $courier_code;
+                    // });
+                    // foreach ($filters as $filter){
+                    //     $courier_array = $filter;
+                    // }
                     
-                    $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
-                        return $s['service'] == $service;
-                    });
-                    foreach ($filters2 as $filter2){
-                        $service_array = $filter2;
-                    }
+                    // $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
+                    //     return $s['service'] == $service;
+                    // });
+                    // foreach ($filters2 as $filter2){
+                    //     $service_array = $filter2;
+                    // }
 
                     // $filters3 =  array_filter($service_array['cost']);
                     // foreach ($filters3 as $filter3){
                     //     $ongkir = $filter3;
                     // }
+
+                    if($courier_code == "pos"){ $courier_name = "POS Indonesia (POS)"; }
+                    else if($courier_code == "jne"){ $courier_name = "POS Indonesia"; }
+
+                    $service_name = $service;
+                    
                     $ongkir = $purchases->ongkir;
 
-                    $courier_name = $courier_array["name"];
-                    $service_name = $service_array["description"];
+                    // $courier_name = $courier_array["name"];
+                    // $service_name = $service_array["description"];
                 }
                 
                 else{
@@ -752,28 +758,34 @@ class PembelianController extends Controller
                     $collection = json_decode($response, true);                
 
                     if($courier_code != "" || $service != ""){
-                        $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
-                            return $r['code'] == $courier_code;
-                        });
-                        foreach ($filters as $filter){
-                            $courier_array = $filter;
-                        }
+                        // $filters =  array_filter($collection['rajaongkir']['results'], function($r) use ($courier_code) {
+                        //     return $r['code'] == $courier_code;
+                        // });
+                        // foreach ($filters as $filter){
+                        //     $courier_array = $filter;
+                        // }
                         
-                        $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
-                            return $s['service'] == $service;
-                        });
-                        foreach ($filters2 as $filter2){
-                            $service_array = $filter2;
-                        }
+                        // $filters2 =  array_filter($courier_array['costs'], function($s) use ($service){
+                        //     return $s['service'] == $service;
+                        // });
+                        // foreach ($filters2 as $filter2){
+                        //     $service_array = $filter2;
+                        // }
 
                         // $filters3 =  array_filter($service_array['cost']);
                         // foreach ($filters3 as $filter3){
                         //     $ongkir = $filter3;
                         // }
+
+                        if($courier_code == "pos"){ $courier_name = "POS Indonesia (POS)"; }
+                        else if($courier_code == "jne"){ $courier_name = "POS Indonesia"; }
+
+                        $service_name = $service;
+                        
                         $ongkir = $purchases->ongkir;
 
-                        $courier_name = $courier_array["name"];
-                        $service_name = $service_array["description"];
+                        // $courier_name = $courier_array["name"];
+                        // $service_name = $service_array["description"];
                     }
                     
                     else{

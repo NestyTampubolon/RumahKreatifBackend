@@ -74,8 +74,8 @@ Route::get('/verifikasi', function () {
 });
 Route::post('/PostVerifikasi', 'App\Http\Controllers\VerifikasiController@PostVerifikasi');
 
-Route::get('/verifikasi_user', 'App\Http\Controllers\VerifikasiController@VerifikasiUser');
-Route::get('/verify_user/{verify_id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
+Route::get('/user', 'App\Http\Controllers\VerifikasiController@VerifikasiUser');
+Route::get('/user/{verify_id}', 'App\Http\Controllers\VerifikasiController@VerifyUser');
 
 Route::get('/bank', 'App\Http\Controllers\BankController@bank');
 Route::post('/PostTambahBank', 'App\Http\Controllers\BankController@PostTambahBank');

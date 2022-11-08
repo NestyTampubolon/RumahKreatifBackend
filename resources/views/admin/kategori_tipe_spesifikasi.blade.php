@@ -1,6 +1,6 @@
 @extends('admin/layout/main')
 
-@section('title', 'Admin - Spesifikasi')
+@section('title', 'Admin - Kategori Tipe Spesifikasi')
 
 <style>
   .checkbox_specification_types {

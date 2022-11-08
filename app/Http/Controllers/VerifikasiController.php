@@ -33,7 +33,7 @@ class VerifikasiController extends Controller
     public function VerifikasiUser(Request $request) {
         $profile_users = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
 
-        return view('admin.verifikasi_user')->with('profile_users', $profile_users);
+        return view('admin.user')->with('profile_users', $profile_users);
     }
 
     public function VerifyUser($verify_id) {
@@ -41,7 +41,7 @@ class VerifikasiController extends Controller
             'is_verified' => 1,
         ]);
 
-        return redirect('./verifikasi_user');
+        return redirect('./user');
     }
 
 }
