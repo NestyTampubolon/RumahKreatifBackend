@@ -15,6 +15,7 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id('purchase_id');
+            $table->string('kode_pembelian')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('checkout_id');
             $table->string('alamat_purchase')->nullable();
@@ -22,6 +23,7 @@ class CreatePurchasesTable extends Migration
             $table->string('no_resi')->nullable();
             $table->string('courier_code')->nullable();
             $table->string('service')->nullable();
+            $table->unsignedBigInteger('ongkir');
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');
