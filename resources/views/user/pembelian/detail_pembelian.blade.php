@@ -306,6 +306,7 @@
                             $potongan_subtotal = [];
                             $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
 
+
                             $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_pembelian_voucher->potongan / 100;
         
                             $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
@@ -337,6 +338,49 @@
                             $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                             // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
                     ?>
+
+                    @if($jumlah_claim_pembelian_voucher > 0)
+                        <script>
+                            const rupiah = (number)=>{
+                                return new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR"
+                                }).format(number);
+                            }
+
+                            <?php if($ongkir != 0){ ?>
+                                let total_harga_produk_kirim = document.getElementById("total_harga_produk_kirim");
+                                <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
+                                    total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $ongkir?>);
+                                <?php } ?>
+                                <?php
+                                    if($jumlah_claim_ongkos_kirim_voucher > 0){
+                                        
+                                    $total_potongan_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
+                                    if($total_potongan_ongkir < 0){
+                                        $total_potongan_ongkir = 0;
+                                    }
+                                ?>
+                                    total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_potongan_ongkir?>);
+                                <?php } ?>
+
+                                let total_harga_produk_kirim_no_ongkir = document.getElementById("total_harga_produk_kirim_no_ongkir");
+                                total_harga_produk_kirim_no_ongkir.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
+                                
+                                let ongkir = document.getElementById("ongkir");
+                                <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
+                                    ongkir.innerHTML = rupiah(<?php echo $ongkir?>);
+                                <?php } ?>
+                                <?php if($jumlah_claim_ongkos_kirim_voucher > 0){ ?>
+                                    ongkir.innerHTML = rupiah(<?php echo $total_potongan_ongkir?>);
+                                <?php } ?>
+                            <?php } ?>
+
+                            let total_harga_produk = document.getElementById("total_harga_produk");
+                            total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
+                        </script>
+                    @endif
+                    
                     @if($target_kategori == $product_purchases->category_id)
                     <?php $cek_target_kategori = $product_purchases->category_id; ?>
 
@@ -358,7 +402,7 @@
                                     @endforeach
                                 @endif
                                 </p>
-                                <p>Jmlh: {{$product_purchases->jumlah_pembelian_produk}}</p>
+                                <p>Jumlah: {{$product_purchases->jumlah_pembelian_produk}}</p>
                                 <p>
                                     <?php
                                         // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,2,',','.');     
@@ -436,46 +480,6 @@
 
                 let total_harga_produk = document.getElementById("total_harga_produk");
                 total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian ?>);
-            </script>
-        @elseif($jumlah_claim_pembelian_voucher > 0)
-            <script>
-                const rupiah = (number)=>{
-                    return new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR"
-                    }).format(number);
-                }
-
-                <?php if($ongkir != 0){ ?>
-                    let total_harga_produk_kirim = document.getElementById("total_harga_produk_kirim");
-                    <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
-                        total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $ongkir?>);
-                    <?php } ?>
-                    <?php
-                        if($jumlah_claim_ongkos_kirim_voucher > 0){
-                            
-                        $total_potongan_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
-                        if($total_potongan_ongkir < 0){
-                            $total_potongan_ongkir = 0;
-                        }
-                    ?>
-                        total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_potongan_ongkir?>);
-                    <?php } ?>
-
-                    let total_harga_produk_kirim_no_ongkir = document.getElementById("total_harga_produk_kirim_no_ongkir");
-                    total_harga_produk_kirim_no_ongkir.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
-                    
-                    let ongkir = document.getElementById("ongkir");
-                    <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
-                        ongkir.innerHTML = rupiah(<?php echo $ongkir?>);
-                    <?php } ?>
-                    <?php if($jumlah_claim_ongkos_kirim_voucher > 0){ ?>
-                        ongkir.innerHTML = rupiah(<?php echo $total_potongan_ongkir?>);
-                    <?php } ?>
-                <?php } ?>
-
-                let total_harga_produk = document.getElementById("total_harga_produk");
-                total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
             </script>
         @endif
         

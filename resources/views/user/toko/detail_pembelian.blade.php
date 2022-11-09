@@ -208,7 +208,7 @@
                             @endforeach
                         @endif
                     </p>
-                    <p>Hrg: {{$product_purchases->jumlah_pembelian_produk}}</p>
+                    <p>Jumlah: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>
                         <?php
                             $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,2,',','.');     
