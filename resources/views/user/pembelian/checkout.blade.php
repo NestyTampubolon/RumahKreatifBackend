@@ -127,6 +127,7 @@
                                     ?>
                                     @if($jumlah_vouchers > 0)
                                         <?php
+                                            $cek_pembelian_vouchers = 0;
                                             foreach($get_pembelian_vouchers as $cek_get_pembelian_voucher){
                                                 $cek_target_kategori = explode(",", $cek_get_pembelian_voucher->target_kategori);
                                                 foreach($cek_target_kategori as $cek_target_kategori_get){
@@ -143,7 +144,7 @@
 
                                             }
                                         ?>
-                                        @if($jumlah_pembelian_vouchers > 0 && $cek_pembelian_vouchers)
+                                        @if($jumlah_pembelian_vouchers > 0 && $cek_pembelian_vouchers != 0)
                                         <tr id="voucher_pembelian_tr">
                                             <td id="voucher_pembelian_td">
                                                 <select name="voucher_pembelian" id="voucher_pembelian" class="custom-select form-control" required>
