@@ -62,7 +62,7 @@ class PembelianController extends Controller
         
         $cek_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-        ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->first();
+        ->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->count();
 
         $get_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)

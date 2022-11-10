@@ -122,8 +122,8 @@
                                         $jumlah_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
                                         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "pembelian")->count();
                                         
-                                        $jumlah_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-                                        ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->count();
+                                        // $jumlah_ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                        // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->count();
                                     ?>
                                     @if($jumlah_vouchers > 0)
                                         <?php
@@ -133,7 +133,7 @@
                                                 foreach($cek_target_kategori as $cek_target_kategori_get){
                                                     foreach($carts as $cek_cart_voucher){
                                                         if($cek_target_kategori_get == $cek_cart_voucher->category_id){
-                                                            $cek_pembelian_vouchers = 1;
+                                                            $cek_pembelian_vouchers += 1;
                                                         }
                                                         // $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
                                                         // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
@@ -288,7 +288,7 @@
                                         <td></td>
                                     </tr>
                                     @if($jumlah_vouchers > 0)
-                                        @if($jumlah_ongkos_kirim_vouchers > 0 && $cek_ongkos_kirim_vouchers)
+                                        @if($cek_ongkos_kirim_vouchers > 0)
                                         <tr id="voucher_ongkos_kirim_tr">
                                             <td id="voucher_ongkos_kirim_td">
                                                 <select name="voucher_ongkos_kirim" id="voucher_ongkos_kirim" class="custom-select form-control">
