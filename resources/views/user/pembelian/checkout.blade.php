@@ -127,11 +127,20 @@
                                     ?>
                                     @if($jumlah_vouchers > 0)
                                         <?php
-                                            foreach($carts as $cek_cart_voucher){
-                                                $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
-                                                ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
-                                                ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
-                                                ->orderBy('nama_voucher', 'asc')->first();
+                                            foreach($get_pembelian_vouchers as $cek_get_pembelian_voucher){
+                                                $cek_target_kategori = explode(",", $cek_get_pembelian_voucher->target_kategori);
+                                                foreach($cek_target_kategori as $cek_target_kategori_get){
+                                                    foreach($carts as $cek_cart_voucher){
+                                                        if($cek_target_kategori_get == $cek_cart_voucher->category_id){
+                                                            $cek_pembelian_vouchers = 1;
+                                                        }
+                                                        // $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
+                                                        // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
+                                                        // ->where('target_kategori', $cek_cart_voucher->category_id)->where('tipe_voucher', "pembelian")
+                                                        // ->orderBy('nama_voucher', 'asc')->first();
+                                                    }
+                                                }
+
                                             }
                                         ?>
                                         @if($jumlah_pembelian_vouchers > 0 && $cek_pembelian_vouchers)
