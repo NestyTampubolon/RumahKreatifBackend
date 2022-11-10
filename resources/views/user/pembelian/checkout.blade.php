@@ -133,7 +133,7 @@
                                                 foreach($cek_target_kategori as $cek_target_kategori_get){
                                                     foreach($carts as $cek_cart_voucher){
                                                         if($cek_target_kategori_get == $cek_cart_voucher->category_id){
-                                                            $cek_pembelian_vouchers += 1;
+                                                            $cek_pembelian_vouchers = 1;
                                                         }
                                                         // $cek_pembelian_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
                                                         // ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('minimal_pengambilan', '<', $total_harga->total_harga)
