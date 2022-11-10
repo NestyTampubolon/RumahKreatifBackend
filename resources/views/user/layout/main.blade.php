@@ -11,7 +11,7 @@
     <meta name="description" content="Marketplace Rumah Kreatif Toba">
     <meta name="author" content="p-themes">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('asset/Image/logo_rkt.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('asset/Image/logo_rkt_title.png') }}">
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css') }}">
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{{ URL::asset('asset/Molla/assets/css/bootstrap.min.css') }}">

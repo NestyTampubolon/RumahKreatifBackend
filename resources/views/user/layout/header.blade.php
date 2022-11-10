@@ -52,7 +52,7 @@
                 </button>
 
                 <a href="{{ url('/') }}" class="logo" style="margin:0">
-                    <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="65">
+                    <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="125">
                 </a>
                 <!-- <h5 class="logo" style="color: #800000;">Rumah Kreatif Toba</h5> -->
             </div><!-- End .header-left -->
