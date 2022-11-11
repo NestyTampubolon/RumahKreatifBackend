@@ -778,7 +778,7 @@ class PembelianController extends Controller
                         // }
 
                         if($courier_code == "pos"){ $courier_name = "POS Indonesia (POS)"; }
-                        else if($courier_code == "jne"){ $courier_name = "POS Indonesia"; }
+                        else if($courier_code == "jne"){ $courier_name = "Jalur Nugraha Eka (JNE)"; }
 
                         $service_name = $service;
                         
