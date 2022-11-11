@@ -286,13 +286,13 @@
                                                                 
                                                                 $total_bayar = (int)$total_harga_pembelian->total_harga_pembelian + $ongkir_get_voucher;
                                                               ?>
-                                                            <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_get_voucher_fix}} dari {{$ongkir_fix}}</a></center><br>
+                                                            <center><a>KURIR yang digunakan: {{$courier_name}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_get_voucher_fix}} dari {{$ongkir_fix}}</a></center><br>
                                                             @endif
 
                                                           @endforeach
                                                         @else
                                                           <?php $total_bayar = (int)$total_harga_pembelian->total_harga_pembelian + $ongkir; ?>
-                                                          <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
+                                                          <center><a>KURIR yang digunakan: {{$courier_name}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
                                                         @endif
                                                       <?php
                                                         $total_bayar_ke_penjual = (int)$total_harga_pembelian->total_harga_pembelian + $ongkir;
@@ -322,13 +322,13 @@
                                                                 $ongkir_get_voucher_fix = "Rp." . number_format(floor($ongkir_get_voucher),2,',','.');
                                                                 $total_bayar_get_voucher = $total_harga_pembelian_keseluruhan + $ongkir_get_voucher;
                                                               ?>
-                                                            <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_get_voucher_fix}} dari {{$ongkir_fix}}</a></center><br>
+                                                            <center><a>KURIR yang digunakan: {{$courier_name}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_get_voucher_fix}} dari {{$ongkir_fix}}</a></center><br>
                                                             @endif
 
                                                           @endforeach
                                                         @else
                                                           <?php $total_bayar_get_voucher = (int)$total_harga_pembelian_keseluruhan + $ongkir; ?>
-                                                          <center><a>KURIR yang digunakan: {{$purchase->courier_code}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
+                                                          <center><a>KURIR yang digunakan: {{$courier_name}} - {{$purchase->service}} dengan biaya ONGKOS KIRIM {{$ongkir_fix}}</a></center><br>
                                                         @endif
                                                       <?php
                                                         $total_bayar_ke_penjual = (int)$total_harga_pembelian->total_harga_pembelian + $ongkir;
