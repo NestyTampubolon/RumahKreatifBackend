@@ -226,6 +226,9 @@
                                                                     ?>
                                                                     @if($target_kategori == $product_purchase->category_id)
                                                                         <?php
+                                                                          if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                                                                            $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
+                                                                          }
                                                                           $cek_target_kategori = $product_purchase->category_id; 
                                                                           $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                                                                           $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
