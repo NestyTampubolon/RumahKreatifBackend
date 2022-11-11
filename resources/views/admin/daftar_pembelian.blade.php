@@ -263,6 +263,10 @@
 
                                                     @endif
                                                 @endforeach<br>
+                                                <?php
+                                                  if($purchase->courier_code = "pos"){ $courier_name = "POS Indonesia (POS)"; }
+                                                  elseif($purchase->courier_code = "jne"){ $courier_name = "Jalur Nugraha Eka (JNE)"; }
+                                                ?>
                                                 @if($jumlah_claim_pembelian_voucher == 0)
                                                     <center><a>TOTAL HARGA PEMBELIAN: {{$total_harga_pembelian_keseluruhan_tanpa_pemotongan}}</a></center><br>
                                                     @if($purchase->courier_code != "" && $purchase->service != "")
