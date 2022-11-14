@@ -262,12 +262,52 @@
                             <span>LANJUTKAN</span>
                             <i class="icon-long-arrow-right"></i>
                         </a>
+                        @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
+                            @if($count_proof_of_payment->count_proof_of_payment != 0)
+                                @if($proof_of_payments)
+                                
+                                @else
+                                <a href="#batalkan_pembelian_{{$purchase->purchase_id}}" class="btn btn-outline-dark btn-rounded" data-toggle="modal" href="" style="float:right">
+                                    <span>BATALKAN</span>
+                                </a>
+                                @endif
+                            @endif
+                        @endif
                     </div>
                 </div>
                 
             </div>
         </div>
         @endif
+
+
+        <div class="modal fade" id="batalkan_pembelian_{{$purchase->purchase_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="icon-close"></i></span>
+                        </button>
+
+                        <div class="form-box">
+                            <div class="tab-content" id="tab-content-5">
+                                <div class="tab-pane fade show active">
+                                    
+                                    <label for="isi_review">Apakah anda ingin membatalkan pesanan anda? *</label><br>
+                                    <button type="submit" class="btn btn-outline-primary-2 btn-round" data-dismiss="modal" aria-label="Close">
+                                        <span>TIDAK</span>
+                                    </button>
+                                    <button onclick="window.location.href='./batalkan_pembelian/{{$purchase->purchase_id}}'" class="btn btn-primary btn-round" style="float:right">
+                                        <span>KONFIRMASI</span>
+                                    </button>
+                                </div><!-- .End .tab-pane -->
+                            </div><!-- End .tab-content -->
+                        </div><!-- End .form-box -->
+                    </div><!-- End .modal-body -->
+                </div><!-- End .modal-content -->
+            </div><!-- End .modal-dialog -->
+        </div><!-- End .modal -->
+
     @endforeach
 @endforeach
     

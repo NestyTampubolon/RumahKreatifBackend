@@ -862,6 +862,15 @@ class PembelianController extends Controller
         return redirect()->back();
     }
 
+    public function batalkan_pembelian(Request $request, $purchase_id) {
+
+        DB::table('purchases')->where('purchase_id', $purchase_id)->update([
+            'is_cancelled' => 1,
+        ]);
+
+        return redirect()->back();
+    }
+
     public function update_status_pembelian(Request $request, $purchase_id) {
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
 
@@ -932,4 +941,5 @@ class PembelianController extends Controller
 
         return redirect()->back();
     }
+    
 }

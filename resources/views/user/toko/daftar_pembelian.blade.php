@@ -24,7 +24,7 @@
 
             @else
             <div class="card-body p-4">
-                <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="p-2 card shadow-0 border mb-1">
+                <div class="p-2 card shadow-0 border mb-1">
                     <div class="row d-flex align-items-center">
                         <div class="col-md-12 mb-1" align="center">
                             @foreach($profiles as $profile)
@@ -36,7 +36,7 @@
                     </div>
                     @foreach($product_purchases as $product_purchase)
                         @if($product_purchase->purchase_id == $purchase->purchase_id)
-                        <div class="card border mb-1">
+                        <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="card border mb-1">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-2">
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         @endif
                     @endforeach
                     <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
@@ -162,7 +162,18 @@
                         
                         @endif
                     </div>
-                </a>
+
+                    <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-primary btn-round" href="./detail_pembelian/{{$purchase->purchase_id}}">
+                                <span>LANJUTKAN</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             @endif

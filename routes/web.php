@@ -123,6 +123,7 @@ Route::get('/ambil_voucher_ongkos_kirim', 'App\Http\Controllers\PembelianControl
 Route::post('/PostBeliProduk', 'App\Http\Controllers\PembelianController@PostBeliProduk');
 Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar_pembelian');
 Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
+Route::get('/batalkan_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@batalkan_pembelian');
 
 Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
 Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
