@@ -24,6 +24,7 @@ class CreatePurchasesTable extends Migration
             $table->string('courier_code')->nullable();
             $table->string('service')->nullable();
             $table->unsignedBigInteger('ongkir');
+            $table->boolean('is_cancelled');
             $table->timestampsTz($precision = 0);
 
             $table->foreign('user_id')->references('id')->on('users');

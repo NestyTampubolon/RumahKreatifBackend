@@ -335,6 +335,10 @@
                                 $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
                                 $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
                             }
+                            if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                                $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
+                            }
+
                             $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                             // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
                     ?>

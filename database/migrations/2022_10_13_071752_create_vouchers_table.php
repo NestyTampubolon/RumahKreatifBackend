@@ -23,6 +23,7 @@ class CreateVouchersTable extends Migration
             $table->integer('maksimal_pemotongan');
             $table->date('tanggal_berlaku');
             $table->date('tanggal_batas_berlaku');
+            $table->boolean('is_deleted');
             $table->timestampsTz($precision = 0);
         });
     }
