@@ -250,6 +250,7 @@ class PembelianController extends Controller
                 'alamat_purchase' => "",
                 'status_pembelian' => "status1_ambil",
                 'ongkir' => 0,
+                'is_cancelled' => 0,
             ]);
         }
         
@@ -263,6 +264,7 @@ class PembelianController extends Controller
                 'courier_code' => $courier_code,
                 'service' => $service,
                 'ongkir' => $ongkir,
+                'is_cancelled' => 0,
             ]);
         }
         
