@@ -19,9 +19,13 @@
                     <span class="sr-only">Toggle mobile menu</span>
                     <i class="icon-bars"></i>
                 </button>
-
+                
                 <a href="{{ url('/') }}" class="logo" style="margin:0">
                     <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="65">
+                </a>
+                
+                <a class="logo" style="margin:0px 0px 0px 20px">
+                    <img src="{{ URL::asset('asset/Image/Bangga_Buatan_Indonesia_Logo.png') }}" alt="BBI Logo" width="65">
                 </a>
 
                 <nav class="main-nav">
