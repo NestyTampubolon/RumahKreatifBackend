@@ -25,15 +25,21 @@
             @else
             <div class="card-body p-4">
                 <div class="p-2 card shadow-0 border mb-1">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-12 mb-1" align="center">
+                    <div class="col-md-12 d-flex justify-content-around" style="margin: 10px 0px -30px 0px">
+                        <h5>
+                            @if($purchase->kode_pembelian == "")
+
+                            @else
+                                {{$purchase->kode_pembelian}} - 
+                            @endif
                             @foreach($profiles as $profile)
                                 @if($profile->id == $purchase->user_id)
-                                    <p class="text-muted mb-0"><b>{{$profile->name}}</b></p>
+                                    {{$profile->name}}
                                 @endif
                             @endforeach
-                        </div>
+                        </h5>
                     </div>
+                    <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
                     @foreach($product_purchases as $product_purchase)
                         @if($product_purchase->purchase_id == $purchase->purchase_id)
                         <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="card border mb-1">
@@ -71,7 +77,7 @@
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                         <p class="text-muted mb-0 small">
                                             <?php
-                                                $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,2,',','.');     
+                                                $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,0,',','.');     
                                                 echo $harga_produk
                                             ?>
                                         </p>

@@ -21,6 +21,10 @@
         @if($purchase->checkout_id == $checkout->checkout_id)
         <div class="card-body p-4">
             <div class="p-2 card shadow-0 border mb-1">
+                <div class="col-md-12 d-flex justify-content-around" style="margin: 10px 0px -30px 0px">
+                    <h5>{{$purchase->kode_pembelian}}</h5>
+                </div>
+                <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
                 @foreach($product_purchases as $product_purchase)
                     @if($product_purchase->purchase_id == $purchase->purchase_id)
                     <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="card border mb-1">
@@ -80,7 +84,7 @@
                                 @if($jumlah_claim_voucher == 0)
                                     <?php
                                         $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
-                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
                                     ?>
                                 @else
                                     @foreach($claim_vouchers as $claim_voucher)
@@ -126,7 +130,7 @@
                                                     
                                                     if($claim_voucher->tipe_voucher == "pembelian"){
                                                         $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
-                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
                                                     }
                                             ?>
                                             
@@ -151,7 +155,7 @@
                                 @if($product_purchase->category_id != $cek_target_kategori)
                                     <?php
                                         $total_harga_pembelian_produk_no_potongan = $total_harga_pembelian_perproduk;
-                                        $total_harga_pembelian_produk_no_potongan_fix = "Rp." . number_format(floor($total_harga_pembelian_produk_no_potongan),2,',','.');
+                                        $total_harga_pembelian_produk_no_potongan_fix = "Rp." . number_format(floor($total_harga_pembelian_produk_no_potongan),0,',','.');
                                     ?>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                         {{$total_harga_pembelian_produk_no_potongan_fix}}

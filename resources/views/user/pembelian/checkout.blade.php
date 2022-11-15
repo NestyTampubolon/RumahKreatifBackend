@@ -32,9 +32,9 @@
                             <tbody>
                                 @foreach($carts as $cart)
                                 <?php
-                                    $harga_produk = "Rp." . number_format($cart->price,2,',','.');
+                                    $harga_produk = "Rp." . number_format($cart->price,0,',','.');
                                     $subtotal = $cart->price * $cart->jumlah_masuk_keranjang;
-                                    $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
+                                    $subtotal_harga_produk = "Rp." . number_format($subtotal,0,',','.');  
                                 ?>
                                 <tr align="center">
                                     <td class="product-col">
@@ -95,7 +95,7 @@
                                     @foreach($carts as $carts1)
                                     <?php
                                         $subtotal = $carts1->price * $carts1->jumlah_masuk_keranjang;
-                                        $subtotal_harga_produk = "Rp." . number_format($subtotal,2,',','.');  
+                                        $subtotal_harga_produk = "Rp." . number_format($subtotal,0,',','.');  
                                     ?>
                                     <tr>
                                         <td><a href="../lihat_produk/{{$carts1->product_id}}">{{$carts1->product_name}}</a></td>
@@ -295,7 +295,7 @@
                                                     <option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>
                                                     @foreach($get_ongkos_kirim_vouchers as $ongkos_kirim_voucher)
                                                         <?php
-                                                            $rp_potongan_ongkir = "Rp " . number_format($ongkos_kirim_voucher->potongan,2,',','.');
+                                                            $rp_potongan_ongkir = "Rp " . number_format($ongkos_kirim_voucher->potongan,0,',','.');
                                                         ?>
                                                         <option value="{{$ongkos_kirim_voucher->voucher_id}}">{{$ongkos_kirim_voucher->nama_voucher}} ({{$rp_potongan_ongkir}})</option>
                                                     @endforeach

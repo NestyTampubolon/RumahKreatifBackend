@@ -51,9 +51,12 @@ class ProdukController extends Controller
 
         $kategori_produk_id = 0;
         
+        // $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+        // ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")
+        // ->orwhere('nama_merchant', 'like',"%".$cari."%")->inRandomOrder()->get();
+
         $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")
-        ->orwhere('nama_merchant', 'like',"%".$cari."%")->inRandomOrder()->get();
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")->inRandomOrder()->get();
         
         $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();

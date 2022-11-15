@@ -60,7 +60,7 @@
 
                                 <div class="product-price">
                                     <?php
-                                        $harga_produk = "Rp " . number_format($products->price,2,',','.');     
+                                        $harga_produk = "Rp " . number_format($products->price,0,',','.');     
                                         echo $harga_produk
                                     ?>
                                 </div><!-- End .product-price -->

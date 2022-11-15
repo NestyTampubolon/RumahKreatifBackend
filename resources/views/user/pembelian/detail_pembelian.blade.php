@@ -287,7 +287,7 @@
         @if($jumlah_claim_pembelian_voucher == 0)
             <?php
                 $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
-                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
             ?>
         @elseif($jumlah_claim_pembelian_voucher > 0)
             @foreach($claim_pembelian_vouchers as $claim_pembelian_voucher)
@@ -333,14 +333,14 @@
                             
                             if($claim_pembelian_voucher->tipe_voucher == "pembelian"){
                                 $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
-                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),2,',','.');
+                                $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
                             }
                             if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
                                 $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
                             }
 
                             $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
-                            // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),2,',','.');
+                            // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),0,',','.');
                     ?>
                     
                     @if($target_kategori == $product_purchases->category_id)
@@ -407,7 +407,7 @@
                                     <p>Jumlah: {{$product_purchases->jumlah_pembelian_produk}}</p>
                                     <p>
                                         <?php
-                                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,2,',','.');     
+                                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,0,',','.');     
                                             // echo $harga_produk
                                         ?>
                                         {{$total_harga_pembelian_produk_fix}}
@@ -449,7 +449,7 @@
                     <p>Jmlh: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>
                         <?php
-                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,2,',','.');     
+                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,0,',','.');     
                             // echo $harga_produk
                         ?>
                         {{$total_harga_pembelian_produk_fix}}

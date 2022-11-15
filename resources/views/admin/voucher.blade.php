@@ -62,9 +62,9 @@
                   <tbody>
                     @foreach($vouchers as $vouchers)
                     <?php
-                        $minimal_pengambilan = "Rp " . number_format($vouchers->minimal_pengambilan,2,',','.');
-                        $maksimal_pemotongan = "Rp " . number_format($vouchers->maksimal_pemotongan,2,',','.');
-                        $potongan_ongkir = "Rp " . number_format($vouchers->potongan,2,',','.');
+                        $minimal_pengambilan = "Rp " . number_format($vouchers->minimal_pengambilan,0,',','.');
+                        $maksimal_pemotongan = "Rp " . number_format($vouchers->maksimal_pemotongan,0,',','.');
+                        $potongan_ongkir = "Rp " . number_format($vouchers->potongan,0,',','.');
                     ?>
                     <tr>
                         <td>{{$vouchers->nama_voucher}}</td>

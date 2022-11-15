@@ -211,6 +211,8 @@ class PembelianController extends Controller
     public function PostBeliProduk(Request $request) {
         $user_id = Auth::user()->id;
         
+        $kode_pembelian = 'rkt_'.time();
+
         $merchant_id = $request -> merchant_id;
         
         $voucher_pembelian = $request -> voucher_pembelian;
@@ -245,6 +247,7 @@ class PembelianController extends Controller
 
         if($metode_pembelian == "ambil_ditempat"){
             DB::table('purchases')->insert([
+                'kode_pembelian' => $kode_pembelian,
                 'user_id' => $user_id,
                 'checkout_id' => $checkout_id->checkout_id,
                 'alamat_purchase' => "",
@@ -257,6 +260,7 @@ class PembelianController extends Controller
         if($metode_pembelian == "pesanan_dikirim"){
             $ongkir = $request -> ongkir;
             DB::table('purchases')->insert([
+                'kode_pembelian' => $kode_pembelian,
                 'user_id' => $user_id,
                 'checkout_id' => $checkout_id->checkout_id,
                 'alamat_purchase' => $alamat_purchase,

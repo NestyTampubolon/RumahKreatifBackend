@@ -3,7 +3,7 @@
 @section('title', 'Rumah Kreatif Toba - Dashboard')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">Toko</li>
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
 @endsection
 
 @section('container')
@@ -62,7 +62,7 @@
                                                         </td>
                                                         <td class="price-col" id="harga">
                                                             <?php
-                                                                $harga_produk = "Rp." . number_format($cart->price,2,',','.');     
+                                                                $harga_produk = "Rp." . number_format($cart->price,0,',','.');     
                                                                 echo $harga_produk
                                                             ?>
                                                         </td>
@@ -92,7 +92,7 @@
                                                         <td class="total-col" id="total_harga_table[{{$cart->cart_id}}]">
                                                             <?php
                                                                 $total = $cart->price * $cart->jumlah_masuk_keranjang;
-                                                                $total_harga_produk = "Rp." . number_format($total,2,',','.');  
+                                                                $total_harga_produk = "Rp." . number_format($total,0,',','.');  
                                                                 echo $total_harga_produk;
                                                             ?>
                                                         </td>

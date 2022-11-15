@@ -3,7 +3,7 @@
 @section('title', 'Rumah Kreatif Toba - Dashboard')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">Toko</li>
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
 @endsection
 
 @section('container')

@@ -22,7 +22,7 @@
 
                     @if($purchases->status_pembelian == "status4")
                         <?php
-                            $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir),2,',','.');
+                            $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir),0,',','.');
                         ?>
                         <p class="">
                             Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN. 
@@ -37,7 +37,7 @@
                         
                     @if($purchases->status_pembelian == "status4_ambil_b")
                         <?php
-                            $total_harga_status4_ambil_b = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
+                            $total_harga_status4_ambil_b = "Rp." . number_format(floor((int)$total_harga->total_harga),0,',','.');
                         ?>
                         <p class="">
                             Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
@@ -74,8 +74,8 @@
                         <h6 class="">Detail Bayaran :</h6>
                         <p>
                             <?php
-                                $total_harga_detail_bayaran_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga),2,',','.');
-                                $ongkir = "Rp." . number_format(floor((int)$ongkir),2,',','.');
+                                $total_harga_detail_bayaran_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga),0,',','.');
+                                $ongkir = "Rp." . number_format(floor((int)$ongkir),0,',','.');
                             ?>
                             Total Pembelian Produk =  <a id="total_harga_produk_kirim_no_ongkir">{{$total_harga_detail_bayaran_status4}}</a><br>
                             Ongkos Kirim =  <a id="ongkir">{{$ongkir}}</a> <a>[{{$courier_name}}] [{{$service_name}}]</a><br>
@@ -136,9 +136,16 @@
         <div class="col-lg-12">
             <div class="card card-dashboard">
                 <div class="card-body" align="center">
-                    @if($profile->id == $purchases->user_id)
-                        <p class=""><b>{{$profile->name}}</b></p>
-                    @endif
+                    <p class=""><b>
+                        @if($purchases->kode_pembelian == "")
+
+                        @else
+                            {{$purchases->kode_pembelian}} - 
+                        @endif
+                        @if($profile->id == $purchases->user_id)
+                            {{$profile->name}}
+                        @endif
+                    </b></p>
                 </div><!-- End .card-body -->
             </div><!-- End .card-dashboard -->
         </div><!-- End .col-lg-6 -->
@@ -211,7 +218,7 @@
                     <p>Jumlah: {{$product_purchases->jumlah_pembelian_produk}}</p>
                     <p>
                         <?php
-                            $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,2,',','.');     
+                            $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,0,',','.');     
                             echo $harga_produk
                         ?>
                     </p>
