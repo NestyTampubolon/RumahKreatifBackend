@@ -460,11 +460,11 @@ class PembelianController extends Controller
             
             // $claim_vouchers = DB::table('claim_vouchers')->get();
 
-            // $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
+            $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
 
-            $profile = DB::table('profiles')->where('user_id', $purchase->user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
+            $profile = DB::table('profiles')->where('user_id', $purchases->user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
 
-            $purchases_address = DB::table('user_address')->where('user_id', $purchase->user_id)->first();
+            $purchases_address = DB::table('user_address')->where('user_id', $purchases->user_id)->first();
 
             $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
@@ -504,10 +504,10 @@ class PembelianController extends Controller
             curl_close($curl);
             
 
-            $cek_user_address = DB::table('purchases')->where('purchases.user_id', $purchase->user_id)->where('purchase_id', $purchase_id)
+            $cek_user_address = DB::table('purchases')->where('purchases.user_id', $purchases->user_id)->where('purchase_id', $purchase_id)
             ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->count();
 
-            $user_address = DB::table('purchases')->where('purchases.user_id', $purchase->user_id)->where('purchase_id', $purchase_id)
+            $user_address = DB::table('purchases')->where('purchases.user_id', $purchases->user_id)->where('purchase_id', $purchase_id)
             ->join('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')->first();
 
             $curl_2 = curl_init();
@@ -540,7 +540,7 @@ class PembelianController extends Controller
                 $err = curl_error($curl_2);
                 curl_close($curl_2);                
 
-                $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $purchase->user_id)->where('product_purchases.purchase_id', $purchase_id)
+                $total_berat = DB::table('product_purchases')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $purchases->user_id)->where('product_purchases.purchase_id', $purchase_id)
                 ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
 
@@ -550,8 +550,8 @@ class PembelianController extends Controller
                 $param = $merchant_address->city_id;
                 $merchant_subdistrict_id = $merchant_address->subdistrict_id;
                 $purchases_subdistrict_id = $user_address->subdistrict_id;
-                $courier_code = $purchase->courier_code;
-                $service = $purchase->service;
+                $courier_code = $purchases->courier_code;
+                $service = $purchases->service;
 
                 curl_setopt_array($curl_3, array(
                     CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
@@ -561,7 +561,7 @@ class PembelianController extends Controller
                     CURLOPT_TIMEOUT => 30,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchase->courier_code",
+                    CURLOPT_POSTFIELDS => "origin=$purchases_subdistrict_id&originType=subdistrict&destination=$merchant_subdistrict_id&destinationType=subdistrict&weight=$total_berat->total_berat&courier=$purchases->courier_code",
                     CURLOPT_HTTPHEADER => array(
                         "content-type: application/x-www-form-urlencoded",
                         "key: 41df939eff72c9b050a81d89b4be72ba"
@@ -596,7 +596,7 @@ class PembelianController extends Controller
 
                     $service_name = $service;
                     
-                    $ongkir = $purchase->ongkir;
+                    $ongkir = $purchases->ongkir;
 
                     // $courier_name = $courier_array["name"];
                     // $service_name = $service_array["description"];
@@ -624,7 +624,7 @@ class PembelianController extends Controller
 
 
             return view('user.toko.detail_pembelian')->with('product_purchases', $product_purchases)->with('product_specifications', $product_specifications)
-            ->with('purchase', $purchase)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile)->with('total_harga', $total_harga)
+            ->with('purchases', $purchases)->with('cek_proof_of_payment', $cek_proof_of_payment)->with('profile', $profile)->with('total_harga', $total_harga)
             ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
             ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)
             ->with('ongkir', $ongkir)->with('courier_name', $courier_name)->with('service_name', $service_name);
