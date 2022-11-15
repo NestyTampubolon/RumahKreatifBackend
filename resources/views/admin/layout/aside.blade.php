@@ -3,7 +3,7 @@
 <!-- Brand Logo -->
 <a href="#" class="brand-link" style="background-color: #f8f9fa">
     <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="Logo" class="brand-image">
-    <span class="brand-text font-weight-light" style="color:black">RKT</span>
+    <span class="brand-text font-weight-light" style="color:black">Rumah Kreatif Toba</span>
 </a>
 
 <!-- Sidebar -->
