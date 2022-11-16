@@ -109,7 +109,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="product-cat">
-                                    <a href="#"><b>{{$product->nama_merchant}}</b></a>
+                                    <a href="../produk/toko[{{$product->merchant_id}}]"><b>{{$product->nama_merchant}}</b></a>
                                 </div><!-- End .product-cat -->
                                 
                                 <div class="mb-2"></div>

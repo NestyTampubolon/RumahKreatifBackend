@@ -50,13 +50,19 @@ class ProdukController extends Controller
 		$cari = $request->cari_produk;
 
         $kategori_produk_id = 0;
-        
-        // $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
-        // ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")
-        // ->orwhere('nama_merchant', 'like',"%".$cari."%")->inRandomOrder()->get();
 
-        $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")->inRandomOrder()->get();
+        $toko = DB::table('merchants')->where('nama_merchant', 'like', $cari)->count();
+        // dd($toko);
+        if($toko != 0){
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)
+            ->where('nama_merchant', 'like', $cari)->inRandomOrder()->get();
+        }
+        
+        else{
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->where('is_deleted', 0)->where('product_name', 'like',"%".$cari."%")->inRandomOrder()->get();
+        }
         
         $product_info = DB::table('products')->orderBy('product_id', 'desc')->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
