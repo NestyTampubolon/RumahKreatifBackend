@@ -81,7 +81,7 @@
     <div class="footer-middle">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-lg-6">
+                <div class="col-sm-4 col-lg-2">
                     <div class="widget widget-about">
                         <img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" class="footer-logo" alt="Footer Logo" width="75">
                         <p>
@@ -103,6 +103,21 @@
                             </div>
                         </div> -->
 
+                    </div>
+                </div>
+                
+
+                
+
+                <div class="col-sm-12 col-lg-3">
+                    <div class="widget">
+                        <a href="http://tobajourney.com/"  target="_blank">
+                            <h4 class="widget-title">WISATA DANAU TOBA</h4>
+                        </a>
+
+                        <ul class="widget-list">
+                            <li><a href="http://tobajourney.com/"  target="_blank">Partner Terbaik Berwisata di Danau Toba</a></li>
+                        </ul>
                     </div>
                 </div>
 
