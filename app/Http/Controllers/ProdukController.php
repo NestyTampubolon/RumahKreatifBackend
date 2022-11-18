@@ -415,8 +415,6 @@ class ProdukController extends Controller
             $lokasi_toko = "";
         }
         
-
-        
         if(Auth::check()){
             $user_id = Auth::user()->id;
             $cek_alamat = DB::table('user_address')->where('user_id', $user_id)->first();

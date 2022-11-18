@@ -483,8 +483,8 @@
             </div>
         </div>
         
-        <!-- <div class="container">
-            <h2 class="title text-center mb-4">You May Also Like</h2>
+        <div class="container">
+            <h2 class="title text-center mb-4">Produk Lain yang Serupa</h2>
             <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                 data-owl-options='{
                     "nav": false, 
@@ -511,192 +511,92 @@
                         }
                     }
                 }'>
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-new">New</span>
-                        <a href="product.html">
-                            <img src="{{ URL::asset('asset/Molla/assets/images/products/product-4.jpg') }}" alt="Product image" class="product-image">
-                        </a>
+                
+                <?php
+                    $nama_produk = explode(" ", $product->product_name);
+                    $cek_produk_serupa = 0; 
+                ?>
 
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div>
+                @foreach($nama_produk as $get_nama_produk)
+                <?php
+                    // $cek_jumlah_produk_serupa = DB::table('products')->where('is_deleted', 0)->where('product_name', 'like', "%".$get_nama_produk."%")
+                    // ->where('product_id', '!=', $product->product_id)->first();
 
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
+                    $produk_serupa = DB::table('products')->where('is_deleted', 0)->where('product_name', 'like', "%".$get_nama_produk."%")
+                    ->where('product_id', '!=', $product->product_id)->join('categories', 'products.category_id', '=', 'categories.category_id')
+                    ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->limit(5)->get();
 
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Women</a>
-                        </div>
-                        <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3>
-                        <div class="product-price">
-                            $60.00
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div>
+                ?>
+                    @foreach($produk_serupa as $produk_serupa)
+                        @if($cek_produk_serupa == $produk_serupa->product_id)
+
+                        @elseif($cek_produk_serupa != $produk_serupa->product_id)
+                        <?php $cek_produk_serupa = $produk_serupa->product_id; ?>
+                        <div class="product product-7 text-center">
+                            <figure class="product-media">
+                                <!-- <span class="product-label label-new">New</span> -->
+                            
+                                <a href="../lihat_produk/{{$produk_serupa->product_id}}">
+                                    <?php
+                                        $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $produk_serupa->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
+                                        $product_images_hover = DB::table('product_images')->select('product_image_name')->where('product_id', $produk_serupa->product_id)->orderBy('product_image_id', 'desc')->limit(1)->get();
+                                    ?>
+                                    @foreach($product_images as $product_image)
+                                        <img src="../asset/u_file/product_image/{{$product_image->product_image_name}}" alt="{{$produk_serupa->product_name}}" class="product-image">
+                                    @endforeach
+                                    
+                                    @foreach($product_images_hover as $product_image_hover)
+                                        <img src="../asset/u_file/product_image/{{$product_image_hover->product_image_name}}" alt="{{$produk_serupa->product_name}}" class="product-image-hover">
+                                    @endforeach
+                                </a>
+                                <!-- <div class="product-action-vertical">
+                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                </div>
+
+                                <div class="product-action">
+                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                </div> -->
+                            </figure>
+
+                            <div class="product-body">
+                                <div class="product-cat">
+                                    <a href="../produk/kategori[{{$produk_serupa->category_id}}]">{{$produk_serupa->nama_kategori}}</a>
+                                </div>
+
+                                <div class="mb-1"></div>
+
+                                <div class="product-cat">
+                                    <a href="../produk/toko[{{$produk_serupa->merchant_id}}]"><b>{{$produk_serupa->nama_merchant}}</b></a>
+                                </div><!-- End .product-cat -->
+                                
+                                <div class="mb-1"></div>
+
+                                <h3 class="product-title"><a href="../lihat_produk/{{$produk_serupa->product_id}}">{{$produk_serupa->product_name}}</a></h3>
+
+                                <div class="mb-1"></div>
+
+                                <div class="product-price">
+                                    <?php
+                                        $harga_produk = "Rp " . number_format($produk_serupa->price,0,',','.');     
+                                        echo $harga_produk
+                                    ?>
+                                </div>
+                                <!-- <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val" style="width: 20%;"></div>
+                                    </div>
+                                    <span class="ratings-text">( 2 Reviews )</span>
+                                </div> -->
+
                             </div>
-                            <span class="ratings-text">( 2 Reviews )</span>
                         </div>
-
-                        <div class="product-nav product-nav-dots">
-                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-out">Out of Stock</span>
-                        <a href="product.html">
-                            <img src="{{ URL::asset('asset/Molla/assets/images/products/product-6.jpg') }}" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div>
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jackets</a>
-                        </div>
-                        <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3>
-                        <div class="product-price">
-                            <span class="out-price">$120.00</span>
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div>
-                            </div>
-                            <span class="ratings-text">( 6 Reviews )</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-top">Top</span>
-                        <a href="product.html">
-                            <img src="{{ URL::asset('asset/Molla/assets/images/products/product-11.jpg') }}" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div>
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Shoes</a>
-                        </div>
-                        <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a></h3>
-                        <div class="product-price">
-                            $110.00
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div>
-                            </div>
-                            <span class="ratings-text">( 1 Reviews )</span>
-                        </div>
-
-                        <div class="product-nav product-nav-dots">
-                            <a href="#" class="active" style="background: #8b513d;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #d2b99a;"><span class="sr-only">Color name</span></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="product.html">
-                            <img src="{{ URL::asset('asset/Molla/assets/images/products/product-10.jpg') }}" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div>
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jumpers</a>
-                        </div>
-                        <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3>
-                        <div class="product-price">
-                            $56.00
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 0%;"></div>
-                            </div>
-                            <span class="ratings-text">( 0 Reviews )</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="product.html">
-                            <img src="{{ URL::asset('asset/Molla/assets/images/products/product-7.jpg" alt="') }}Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div>
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div>
-                    </figure>
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jeans</a>
-                        </div>
-                        <h3 class="product-title"><a href="product.html">Blue utility pinafore denim dress</a></h3>
-                        <div class="product-price">
-                            $76.00
-                        </div>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div>
-                            </div>
-                            <span class="ratings-text">( 2 Reviews )</span>
-                        </div>
-                    </div>
-                </div>
+                        @endif
+                    @endforeach
+                @endforeach
             </div>
-        </div> -->
+        </div>
     </div>
 </main>
 

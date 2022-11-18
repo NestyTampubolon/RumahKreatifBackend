@@ -24,6 +24,14 @@ class HomeController extends Controller
         }
 
         else{
+            
+            $total_penjualan_produk = DB::table('product_purchases')->select(DB::raw('SUM(jumlah_pembelian_produk) as count_products'),
+            'product_purchases.product_id')->where('is_deleted', 0)
+            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+            ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->groupBy('product_purchases.product_id')->orderBy('count_products', 'desc')->limit(10)->get();
+
             $carousels = DB::table('carousels')->orderBy('id', 'desc')->get();
             
             $count_products = DB::table('products')->select(DB::raw('COUNT(*) as count_products'))->first();
@@ -34,7 +42,7 @@ class HomeController extends Controller
             $cek_http = DB::table('carousels')->where('link_carousel', 'like', 'https://'."%")->orwhere('link_carousel', 'like', 'http://'."%")->first();
             $cek_www = DB::table('carousels')->where('link_carousel', 'like', 'www.'."%")->first();
 
-            return view('user.index')->with('products', $products)->with('carousels', $carousels)->with('cek_http', $cek_http)
+            return view('user.index')->with('products', $products)->with('total_penjualan_produk', $total_penjualan_produk)->with('carousels', $carousels)->with('cek_http', $cek_http)
             ->with('cek_www', $cek_www)->with('count_products', $count_products);
         }
     }
