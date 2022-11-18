@@ -27,9 +27,26 @@
 </style>
 
 @section('container')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body" align="center">
+                    <p class=""><b>
+                        @if($purchases->kode_pembelian == "")
+
+                        @else
+                            {{$purchases->kode_pembelian}} - 
+                        @endif
+                        @if($profile->id == $purchases->user_id)
+                            {{$profile->name}}
+                        @endif
+                    </b></p>
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+        </div><!-- End .col-lg-6 -->
+    </div><!-- End .row -->
 
     @foreach($product_purchases as $invoice_product_purchases)
-    
     <a href="../lihat_produk/{{$invoice_product_purchases->product_id}}" class="col-lg-12 border mb-1 row" style="padding: 15px 0px 15px 0px; margin: 0px">
         <?php
             $invoice_product_image = DB::table('product_images')->select('product_image_name')->where('product_id', $invoice_product_purchases->product_id)->orderBy('product_image_id', 'asc')->first();
@@ -231,6 +248,11 @@
                         </tr><!-- End .summary-total -->
                     </tbody>
                 </table><!-- End .table table-summary -->
+                
+                <button onclick="window.open('../invoice_pembelian/{{$purchases->purchase_id}}', '_blank')" class="btn btn-outline-primary btn-rounded" style="border-color: red; color: red; background-color: white;">
+                    <span>Download PDF</span>
+                </button>
+                
             </div><!-- End .summary -->
         </aside><!-- End .col-lg-3 -->
     </div><!-- End .row -->

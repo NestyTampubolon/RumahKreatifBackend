@@ -125,6 +125,11 @@ Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar
 Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
 Route::get('/batalkan_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@batalkan_pembelian');
 
+
+Route::get('/invoice_pembelian/{purchase_id}', 'App\Http\Controllers\InvoiceController@invoice_pembelian');
+Route::get('/invoice_penjualan/{purchase_id}', 'App\Http\Controllers\InvoiceController@invoice_penjualan');
+
+
 Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
 Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
 Route::post('/update_status2_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status2_pembelian');
