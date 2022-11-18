@@ -25,17 +25,17 @@
                     <h5>{{$purchase->kode_pembelian}}</h5>
                 </div>
                 <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
-                @foreach($product_purchases as $product_purchase)
-                    @if($product_purchase->purchase_id == $purchase->purchase_id)
-                    <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="card border mb-1">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-2">
+                <a href="./detail_pembelian/{{$purchase->purchase_id}}">
+                    @foreach($product_purchases as $product_purchase)
+                        @if($product_purchase->purchase_id == $purchase->purchase_id)
+                        <div class="card border mb-1">
+                            <div class="row" style="padding: 15px 0px 15px 0px; margin: 0px">
+                                <div class="col-md-2" align="center">
                                     <?php
                                         $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $product_purchase->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
                                     ?>
                                     @foreach($product_images as $product_image)
-                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}">
+                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}" width ="50px">
                                     @endforeach
                                 </div>
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
@@ -50,123 +50,28 @@
                                     @foreach($product_specifications as $product_specification)
                                         @if($product_specification->product_id == $product_purchase->product_id)
                                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0 small">{{$product_specification->nama_spesifikasi}}</p>
+                                            <p class="text-muted mb-0">{{$product_specification->nama_spesifikasi}}</p>
                                         </div>
                                         @endif
                                     @endforeach
                                 @endif
 
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                    <p class="text-muted mb-0 small">Jmlh: {{$product_purchase->jumlah_pembelian_produk}}</p>
+                                    <p class="text-muted mb-0">Jumlah: {{$product_purchase->jumlah_pembelian_produk}}</p>
                                 </div>
-                                
+
                                 <?php
-                                    $jumlah_claim_voucher = DB::table('claim_vouchers')->where('checkout_id', $purchase->checkout_id)->count();
-                                        
-                                    $total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                                    ->where('purchases.checkout_id', $purchase->checkout_id)
-                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-
-                                    // $total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                                    // ->where('purchases.checkout_id', $purchase->checkout_id)
-                                    // ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                    // ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                    // ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-                                    
-                                    $total_harga_pembelian_perproduk = $product_purchase->price * $product_purchase->jumlah_pembelian_produk;
-                                    
-                                    $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchase->purchase_id)->count();
-
-                                    $cek_target_kategori = 0;
+                                    $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->price),0,',','.');
                                 ?>
-                                @if($jumlah_claim_voucher == 0)
-                                    <?php
-                                        $total_harga_pembelian_produk = $total_harga_pembelian_perproduk;
-                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
-                                    ?>
-                                @else
-                                    @foreach($claim_vouchers as $claim_voucher)
-                                        @if($claim_voucher->checkout_id == $checkout->checkout_id)
-                                            <?php
-                                                $target_kategori = explode(",", $claim_voucher->target_kategori);
-
-                                                foreach($target_kategori as $target_kategori){
-                                                    
-                                                    $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                                                    ->where('purchases.checkout_id', $purchase->checkout_id)->where('category_id', $target_kategori)
-                                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-                                
-                                                    $potongan_subtotal = [];
-                                                    $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_voucher->potongan / 100;
-                                                    
-
-                                                    $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_voucher->potongan / 100;
-                                
-                                                    $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
-
-                                                    if($jumlah_potongan_subtotal <= $claim_voucher->maksimal_pemotongan){
-                                                        if($product_purchase->category_id == $target_kategori){
-                                                            $potongan_harga_barang = $potongan_subtotal_perproduk;
-                                                        }
-    
-                                                        else{
-                                                            $potongan_harga_barang = 0;
-                                                        }
-                                                    }
-    
-                                                    else if($jumlah_potongan_subtotal > $claim_voucher->maksimal_pemotongan){
-                                                        if($product_purchase->category_id == $target_kategori){
-                                                            $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk->total_harga_pembelian * $claim_voucher->maksimal_pemotongan;
-                                                        }
-    
-                                                        else{
-                                                            $potongan_harga_barang = 0;
-                                                        }
-                                                    }
-                                                    
-                                                    if($claim_voucher->tipe_voucher == "pembelian"){
-                                                        $total_harga_pembelian_produk = (int)$total_harga_pembelian_perproduk - $potongan_harga_barang;
-                                                        $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
-                                                    }
-                                            ?>
-                                            
-                                            @if($target_kategori == $product_purchase->category_id)
-                                            <?php $cek_target_kategori = $product_purchase->category_id; ?>
-                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                {{$total_harga_pembelian_produk_fix}}
-                                            </div>
-                                            
-                                            @elseif($target_kategori != $product_purchase->category_id)
-
-                                            @endif
-
-                                            <?php
-                                                        
-                                                }
-                                            ?>
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                                @if($product_purchase->category_id != $cek_target_kategori)
-                                    <?php
-                                        $total_harga_pembelian_produk_no_potongan = $total_harga_pembelian_perproduk;
-                                        $total_harga_pembelian_produk_no_potongan_fix = "Rp." . number_format(floor($total_harga_pembelian_produk_no_potongan),0,',','.');
-                                    ?>
-                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                        {{$total_harga_pembelian_produk_no_potongan_fix}}
-                                    </div>
-                                @endif
+                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0">{{$total_harga_produk_fix}}</p>
+                                </div>
 
                             </div>
                         </div>
-                    </a>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
+                </a>
                 <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
                 <div class="row d-flex align-items-center">
                     @if($purchase->status_pembelian == "status4" || $purchase->status_pembelian == "status4_ambil_b"

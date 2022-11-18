@@ -95,7 +95,7 @@
                                         @if($verify_user->is_verified==1)
 
                                         @else
-                                          <a href="./verify_user/{{$verify_user->verify_id}}" class="btn btn-primary">Verify</a>
+                                          <a href="./user/{{$verify_user->verify_id}}" class="btn btn-primary">Verify</a>
                                         @endif
                                       @endif
                                 </div>

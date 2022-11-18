@@ -40,17 +40,17 @@
                         </h5>
                     </div>
                     <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
-                    @foreach($product_purchases as $product_purchase)
-                        @if($product_purchase->purchase_id == $purchase->purchase_id)
-                        <a href="./detail_pembelian/{{$purchase->purchase_id}}" class="card border mb-1">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-2">
+                    <a href="./detail_pembelian/{{$purchase->purchase_id}}">
+                        @foreach($product_purchases as $product_purchase)
+                            @if($product_purchase->purchase_id == $purchase->purchase_id)
+                            <div class="card border mb-1">
+                                <div class="row" style="padding: 15px 0px 15px 0px; margin: 0px">
+                                    <div class="col-md-2" align="center">
                                         <?php
                                             $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $product_purchase->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
                                         ?>
                                         @foreach($product_images as $product_image)
-                                            <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}">
+                                            <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}" width="50px">
                                         @endforeach
                                     </div>
                                     
@@ -66,27 +66,25 @@
                                         @foreach($product_specifications as $product_specification)
                                             @if($product_specification->product_id == $product_purchase->product_id)
                                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <p class="text-muted mb-0 small">{{$product_specification->nama_spesifikasi}}</p>
+                                                <p class="text-muted mb-0">{{$product_specification->nama_spesifikasi}}</p>
                                             </div>
                                             @endif
                                         @endforeach
                                     @endif
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                        <p class="text-muted mb-0 small">Jmlh: {{$product_purchase->jumlah_pembelian_produk}}</p>
+                                        <p class="text-muted mb-0">Jumlah: {{$product_purchase->jumlah_pembelian_produk}}</p>
                                     </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                        <p class="text-muted mb-0 small">
                                             <?php
-                                                $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,0,',','.');     
-                                                echo $harga_produk
+                                                $harga_produk = "Rp " . number_format($product_purchase->price*$product_purchase->jumlah_pembelian_produk,0,',','.');
                                             ?>
-                                        </p>
+                                        <p class="text-muted mb-0">{{$harga_produk}}</p>
                                     </div>
                                 </div>
                             </div>
-                        </a>
-                        @endif
-                    @endforeach
+                            @endif
+                        @endforeach
+                    </a>
                     <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
                     <div class="row d-flex align-items-center">
                         @if($purchase->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")

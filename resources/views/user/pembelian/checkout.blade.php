@@ -80,7 +80,7 @@
 
                     @if($cek_cart > 0)
                     <aside class="col-lg-3">
-                        <div class="summary summary-cart">
+                        <div class="summary">
                             <h3 class="summary-title">Cart Total</h3>
 
                             <table class="table table-summary">

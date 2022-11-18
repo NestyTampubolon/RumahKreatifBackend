@@ -28,8 +28,212 @@
 
 @section('container')
 
-<div class="tab-pane fade show active" id="tab-toko" role="tabpanel" aria-labelledby="tab-toko-link">
+    @foreach($product_purchases as $invoice_product_purchases)
     
+    <a href="../lihat_produk/{{$invoice_product_purchases->product_id}}" class="col-lg-12 border mb-1 row" style="padding: 15px 0px 15px 0px; margin: 0px">
+        <?php
+            $invoice_product_image = DB::table('product_images')->select('product_image_name')->where('product_id', $invoice_product_purchases->product_id)->orderBy('product_image_id', 'asc')->first();
+        ?>
+
+        <div class="col-md-2"  align="center">
+            <img src="../asset/u_file/product_image/{{$invoice_product_image->product_image_name}}" class="img-fluid" alt="{{$invoice_product_image->product_image_name}}" width="50px" style="padding: 0px">
+        </div>
+        
+        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0">{{$invoice_product_purchases->product_name}}</p>
+        </div>
+        
+        <?php
+            $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $invoice_product_purchases->product_id)->count();
+        ?>
+        @if($jumlah_product_specifications == 0)
+
+        @else
+            @foreach($product_specifications as $product_specification)
+                @if($product_specification->product_id == $invoice_product_purchases->product_id)
+                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0">{{$product_specification->nama_spesifikasi}}</p>
+                </div>
+                @endif
+            @endforeach
+        @endif
+
+        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0">Jumlah: {{$invoice_product_purchases->jumlah_pembelian_produk}}</p>
+        </div>
+
+        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            
+            <?php
+                $invoice_product_purchases_price = "Rp." . number_format($invoice_product_purchases->price,2,',','.');  
+            ?>
+            <p class="text-muted mb-0">{{$invoice_product_purchases_price}}</p>
+        </div>
+        </a>
+    @endforeach
+
+    @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status2" 
+    || $purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
+        @if($cek_user_address > 0)
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                    <h3 class="card-title">Lokasi Pengiriman </h3>
+                        <table>
+                            <tr>
+                                <td>Provinsi</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$lokasi_pembeli["province"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Kota</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$lokasi_pembeli["city"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Kecamatan</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td>{{$lokasi_pembeli["subdistrict_name"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Alamat</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$user_address->user_street_address}} </td>
+                            </tr>
+                        </table>
+                        <!-- <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6> -->
+                        <p></p>
+                    </div><!-- End .card-body -->
+                </div><!-- End .card-dashboard -->
+            </div><!-- End .col-lg-6 -->
+        </div><!-- End .row -->
+        @elseif($cek_user_address == 0)
+
+        @endif
+    
+    @elseif($purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2_ambil")
+        @if($cek_merchant_address > 0)
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <h3 class="card-title">Lokasi Toko </h3>
+                        <table>
+                            <tr>
+                                <td>Provinsi</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$lokasi_toko["province"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Kota</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$lokasi_toko["city"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Kecamatan</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td>{{$lokasi_toko["subdistrict_name"]}} </td>
+                            </tr>
+                            <tr>
+                                <td>Alamat</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$merchant_address->merchant_street_address}} </td>
+                            </tr>
+                        </table>
+                    </div><!-- End .card-body -->
+                </div><!-- End .card-dashboard -->
+            </div><!-- End .col-lg-6 -->
+        </div><!-- End .row -->
+        @elseif($cek_merchant_address == 0)
+
+        @endif
+
+    @else
+
+    @endif
+
+    <div class="row">
+        <aside class="col-lg-12">
+            <div class="summary">
+                <h3 class="summary-title">Detail Pembayaran</h3><!-- End .summary-title -->
+
+                <table class="table table-summary">
+                    <!-- <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead> -->
+
+                    <tbody>
+                        <tr class="summary-subtotal">
+                            <td>Subtotal:</td>
+                            <td>
+                                <?php
+                                    $invoice_total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                    ->where('purchases.checkout_id', $purchases->checkout_id)
+                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+
+                                    $invoice_total_harga_pembelian_fix = "Rp." . number_format($invoice_total_harga_pembelian->total_harga_pembelian,2,',','.');  
+                                ?>
+                                <a>{{$invoice_total_harga_pembelian_fix}}</a>
+                            </td>
+                        </tr><!-- End .summary-subtotal -->
+                        @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status3"
+                        || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5")
+                        <tr>
+                            <td>Ongkos Kirim [{{$courier_name}}] [{{$service_name}}]:</td>
+                            <td>
+                                <?php
+                                    $invoice_ongkir = "Rp." . number_format($ongkir,2,',','.');
+                                ?>
+                                <a>{{$invoice_ongkir}}</a>
+                            </td>
+                        </tr>
+                        @endif
+                        
+                        <?php
+                            $invoice_jumlah_claim_pembelian_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->where('checkout_id', $purchases->checkout_id)
+                            ->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->count();
+
+                            $invoice_jumlah_claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->where('checkout_id', $purchases->checkout_id)
+                            ->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->count();
+                        ?>
+
+                        @if($invoice_jumlah_claim_pembelian_voucher > 0)
+                        <tr>
+                            <td>Voucher Pembelian:</td>
+                            <td><a id="jumlah_potongan_subtotal"></a></td>
+                        </tr>
+                        @endif
+
+                        @if($invoice_jumlah_claim_ongkos_kirim_voucher > 0)
+                        <tr>
+                            <td>Voucher Ongkos Kirim:</td>
+                            <td><a id="total_potongan_ongkir"></a></td>
+                        </tr>
+                        @endif
+                        
+                        <tr class="summary-total">
+                            <td>Total:</td>
+                            <td>
+                            @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status2" || $purchases->status_pembelian == "status3"
+                                || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5")
+                                <a id="invoice_total_harga_produk_kirim"></a>
+                            @else
+                                <a id="invoice_total_harga_produk"></a>
+                            @endif
+                                
+                            </td>
+                        </tr><!-- End .summary-total -->
+                    </tbody>
+                </table><!-- End .table table-summary -->
+            </div><!-- End .summary -->
+        </aside><!-- End .col-lg-3 -->
+    </div><!-- End .row -->
     
     @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status1_ambil")
         @if(!$cek_proof_of_payment)
@@ -53,27 +257,6 @@
                             <center><b>1070018822454 (Mandiri)</b> A/N <b>Riyanthi A Sianturi</b><center>
                                 
                             <!-- <center><b>7780086305 (BCA)</b> A/N <b>Timothy J F Henan</b><center> -->
-                        </p>
-                    </div><!-- End .card-body -->
-                </div><!-- End .card-dashboard -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
-        @elseif($cek_proof_of_payment)
-
-        @endif
-    @endif
-
-    @if($purchases->status_pembelian == "status1")
-        @if(!$cek_proof_of_payment)
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-dashboard">
-                    <div class="card-body">
-                        <h6 class="">Detail Bayaran :</h6>
-                        <p>
-                            Total Pembelian Produk =  <a id="total_harga_produk_kirim_no_ongkir"></a><br>
-                            <!-- Total Pembelian Produk =  <a id="">-</a><br> -->
-                            Ongkos Kirim =  <a id="ongkir"></a> <a>[{{$courier_name}}] [{{$service_name}}]</a><br>
                         </p>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
@@ -180,88 +363,6 @@
         @endif
     @endif
 
-
-    @if($purchases->status_pembelian == "status1" || $purchases->status_pembelian == "status2" 
-    || $purchases->status_pembelian == "status3" || $purchases->status_pembelian == "status4" || $purchases->status_pembelian == "status5" )
-    @if($cek_user_address > 0)
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-dashboard">
-                <div class="card-body">
-                <h3 class="card-title">Lokasi Pengiriman </h3>
-                    <table>
-                        <tr>
-                            <td>Provinsi</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$lokasi_pembeli["province"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Kota</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$lokasi_pembeli["city"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Kecamatan</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td>{{$lokasi_pembeli["subdistrict_name"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Alamat</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$user_address->user_street_address}} </td>
-                        </tr>
-                    </table>
-                    <!-- <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6> -->
-                    <p></p>
-                </div><!-- End .card-body -->
-            </div><!-- End .card-dashboard -->
-        </div><!-- End .col-lg-6 -->
-    </div><!-- End .row -->
-    @elseif($cek_user_address == 0)
-
-    @endif
-    
-    @elseif($purchases->status_pembelian == "status1_ambil" || $purchases->status_pembelian == "status2_ambil")
-    @if($cek_merchant_address > 0)
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-dashboard">
-                <div class="card-body">
-                    <h3 class="card-title">Lokasi Toko </h3>
-                    <table>
-                        <tr>
-                            <td>Provinsi</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$lokasi_toko["province"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Kota</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$lokasi_toko["city"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Kecamatan</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td>{{$lokasi_toko["subdistrict_name"]}} </td>
-                        </tr>
-                        <tr>
-                            <td>Alamat</td>
-                            <td>&emsp; : &emsp;</td>
-                            <td> {{$merchant_address->merchant_street_address}} </td>
-                        </tr>
-                    </table>
-                </div><!-- End .card-body -->
-            </div><!-- End .card-dashboard -->
-        </div><!-- End .col-lg-6 -->
-    </div><!-- End .row -->
-    @elseif($cek_merchant_address == 0)
-
-    @endif
-
-    @else
-
-    @endif
-
     <div class="row">
     @foreach($product_purchases as $product_purchases)
         <?php
@@ -342,7 +443,7 @@
                             $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                             // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan),0,',','.');
                     ?>
-                    
+
                     @if($target_kategori == $product_purchases->category_id)
                         @if($jumlah_claim_pembelian_voucher > 0)
                             <script>
@@ -352,69 +453,54 @@
                                     currency: "IDR"
                                     }).format(number);
                                 }
+                                
+                                let jumlah_potongan_subtotal = document.getElementById("jumlah_potongan_subtotal");
+                                jumlah_potongan_subtotal.innerHTML = "- " + rupiah(<?php echo $jumlah_potongan_subtotal?>);
 
                                 <?php if($ongkir != 0){ ?>
+                                    let invoice_total_harga_produk_kirim = document.getElementById("invoice_total_harga_produk_kirim");
                                     let total_harga_produk_kirim = document.getElementById("total_harga_produk_kirim");
-                                    let total_harga_produk_kirim_no_ongkir = document.getElementById("total_harga_produk_kirim_no_ongkir");
-                                    let ongkir = document.getElementById("ongkir");
+                                    let total_potongan_ongkir = document.getElementById("total_potongan_ongkir");
                                     
                                     <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
+                                        invoice_total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $ongkir?>);
                                         total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $ongkir?>);
-                                        ongkir.innerHTML = rupiah(<?php echo $ongkir?>);
+                                        
+                                        jumlah_potongan_subtotal.innerHTML = "- " + rupiah(<?php echo $jumlah_potongan_subtotal?>);
                                     <?php } ?>
+                                    
                                     <?php
                                         if($jumlah_claim_ongkos_kirim_voucher > 0){
                                             
-                                            $total_potongan_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
+                                            $total_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
 
-                                            if($total_potongan_ongkir <= 0){
-                                                $total_potongan_ongkir = 0;
+                                            $total_potongan_ongkir = $ongkir;
+
+                                            if($ongkir > $claim_ongkos_kirim_voucher->potongan){
+                                                $total_potongan_ongkir = $claim_ongkos_kirim_voucher->potongan;
+                                            }
+
+                                            if($total_ongkir <= 0){
+                                                $total_ongkir = 0;
                                             }
                                     ?>
-                                            total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_potongan_ongkir?>);
-                                            ongkir.innerHTML = rupiah(<?php echo $total_potongan_ongkir?>);
+                                            total_potongan_ongkir.innerHTML = "- " + rupiah(<?php echo $total_potongan_ongkir?>);
+                                            
+                                            invoice_total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_ongkir?>);
+                                            total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan + $total_ongkir?>);
+
+                                            jumlah_potongan_subtotal.innerHTML = "- " + rupiah(<?php echo $jumlah_potongan_subtotal?>);
                                     <?php } ?>
 
-                                    total_harga_produk_kirim_no_ongkir.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
-
                                 <?php } ?>
+
+                                let invoice_total_harga_produk = document.getElementById("invoice_total_harga_produk");
+                                invoice_total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
 
                                 let total_harga_produk = document.getElementById("total_harga_produk");
                                 total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian_keseluruhan?>);
                             </script>
                         @endif
-
-                        <?php $cek_target_kategori = $product_purchases->category_id; ?>
-
-                        <div class="col-lg-6">
-                            <div class="card card-dashboard">
-                                <div class="card-body">
-                                    <a href="../lihat_produk/{{$product_purchases->product_id}}"><h3 class="card-title">{{$product_purchases->product_name}}</h3></a>
-                                    <p>
-                                    <?php
-                                        $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchases->product_id)->count();
-                                    ?>
-                                    @if($jumlah_product_specifications == 0)
-
-                                    @else
-                                        @foreach($product_specifications as $product_specification)
-                                            @if($product_specification->product_id == $product_purchases->product_id)
-                                                <a>{{$product_specification->nama_spesifikasi}},</a>&nbsp;
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                    </p>
-                                    <p>Jumlah: {{$product_purchases->jumlah_pembelian_produk}}</p>
-                                    <p>
-                                        <?php
-                                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,0,',','.');     
-                                            // echo $harga_produk
-                                        ?>
-                                        {{$total_harga_pembelian_produk_fix}}
-                                    </p>
-                                </div><!-- End .card-body -->
-                            </div><!-- End .card-dashboard -->
-                        </div><!-- End .col-lg-6 -->
                     
                     @elseif($target_kategori != $product_purchases->category_id)
 
@@ -427,39 +513,6 @@
             @endforeach
         @endif
         
-        @if($product_purchases->category_id != $cek_target_kategori)
-        <div class="col-lg-6">
-            <div class="card card-dashboard">
-                <div class="card-body">
-                    <a href="../lihat_produk/{{$product_purchases->product_id}}"><h3 class="card-title">{{$product_purchases->product_name}}</h3></a>
-                    <p>
-                    <?php
-                        $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchases->product_id)->count();
-                    ?>
-                    @if($jumlah_product_specifications == 0)
-
-                    @else
-                        @foreach($product_specifications as $product_specification)
-                            @if($product_specification->product_id == $product_purchases->product_id)
-                                <a>{{$product_specification->nama_spesifikasi}},</a>&nbsp;
-                            @endif
-                        @endforeach
-                    @endif
-                    </p>
-                    <p>Jmlh: {{$product_purchases->jumlah_pembelian_produk}}</p>
-                    <p>
-                        <?php
-                            // $harga_produk = "Rp " . number_format($potongan_checkout->jumlah_pembelian_produk,0,',','.');     
-                            // echo $harga_produk
-                        ?>
-                        {{$total_harga_pembelian_produk_fix}}
-                    </p>
-                </div><!-- End .card-body -->
-            </div><!-- End .card-dashboard -->
-        </div><!-- End .col-lg-6 -->
-        
-        @endif
-        
         @if($jumlah_claim_pembelian_voucher == 0)
             <script>
                 const rupiah = (number)=>{
@@ -470,36 +523,44 @@
                 }
                 
                 <?php if($ongkir != 0){ ?>
+                    let invoice_total_harga_produk_kirim = document.getElementById("invoice_total_harga_produk_kirim");
                     let total_harga_produk_kirim = document.getElementById("total_harga_produk_kirim");
-                    let total_harga_produk_kirim_no_ongkir = document.getElementById("total_harga_produk_kirim_no_ongkir");
-                    let ongkir = document.getElementById("ongkir");
+                    let total_potongan_ongkir = document.getElementById("total_potongan_ongkir");
 
                     <?php if($jumlah_claim_ongkos_kirim_voucher == 0){ ?>
+                        invoice_total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian + $ongkir?>);
                         total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian + $ongkir?>);
-                        ongkir.innerHTML = rupiah(<?php echo $ongkir?>);
                     <?php } ?>
                     <?php
                         if($jumlah_claim_ongkos_kirim_voucher > 0){
                             
-                            $total_potongan_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
+                            $total_ongkir = $ongkir - $claim_ongkos_kirim_voucher->potongan;
+                            
+                            $total_potongan_ongkir = $ongkir;
+                            
+                            if($ongkir > $claim_ongkos_kirim_voucher->potongan){
+                                $total_potongan_ongkir = $claim_ongkos_kirim_voucher->potongan;
+                            }
 
-                            if($total_potongan_ongkir <= 0){
-                                $total_potongan_ongkir = 0;
+                            if($total_ongkir <= 0){
+                                $total_ongkir = 0;
                             }
                     ?>
-                            total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian + $total_potongan_ongkir?>);
-                            ongkir.innerHTML = rupiah(<?php echo $total_potongan_ongkir?>);
-                    <?php } ?>
+                            total_potongan_ongkir.innerHTML = "- " + rupiah(<?php echo $total_potongan_ongkir?>);
 
-                    total_harga_produk_kirim_no_ongkir.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian?>);
+                            invoice_total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian + $total_ongkir?>);
+                            total_harga_produk_kirim.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian + $total_ongkir?>);
+                    <?php } ?>
                     
                 <?php } ?>
+
+                let invoice_total_harga_produk = document.getElementById("invoice_total_harga_produk");
+                invoice_total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian ?>);
 
                 let total_harga_produk = document.getElementById("total_harga_produk");
                 total_harga_produk.innerHTML = rupiah(<?php echo $total_harga_pembelian->total_harga_pembelian ?>);
             </script>
         @endif
-        
     @endforeach
     </div><!-- End .row -->
 </div><!-- .End .tab-pane -->

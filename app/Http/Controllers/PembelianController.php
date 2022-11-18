@@ -78,7 +78,7 @@ class PembelianController extends Controller
         $ongkos_kirim_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
         ->where('tanggal_batas_berlaku', '>=', date('Y-m-d'))->where('tipe_voucher', "ongkos_kirim")->orderBy('nama_voucher', 'asc')->get();
         
-        $total_berat = DB::table('carts')->select(DB::raw('SUM(heavy) as total_berat'))->where('user_id', $user_id)->where('merchant_id', $merchant_id)
+        $total_berat = DB::table('carts')->select(DB::raw('SUM(heavy * jumlah_masuk_keranjang) as total_berat'))->where('user_id', $user_id)->where('merchant_id', $merchant_id)
         ->join('products', 'carts.product_id', '=', 'products.product_id')->first();
         
         $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_id)->first();

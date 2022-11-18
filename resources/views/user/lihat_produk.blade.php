@@ -150,6 +150,11 @@
                                         @endforeach
                                     @endif
                                     <div class="product-cat">
+                                        <span>Berat:</span>
+                                        <a>{{$product->heavy}} gr</a>
+                                        <span class="meta-separator">|</span>
+                                    </div><!-- End .product-cat -->
+                                    <div class="product-cat">
                                         <span>Sisa:</span>
                                         <a>{{$stocks->stok}}</a>
                                     </div><!-- End .product-cat -->
