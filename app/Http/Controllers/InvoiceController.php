@@ -18,7 +18,7 @@ class InvoiceController extends Controller
                 
         $purchases = DB::table('purchases')->where('user_id', $user_id)->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
         
-        $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->where('checkout_id', $purchases->checkout_id)->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
+        $claim_pembelian_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->where('checkout_id', $purchases->checkout_id)->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->first();
         
         $claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->where('checkout_id', $purchases->checkout_id)->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->first();
 
@@ -176,9 +176,9 @@ class InvoiceController extends Controller
 
         $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
 
-        return view('user.pembelian.invoice_pembelian', compact(['claim_pembelian_vouchers', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        return view('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
 
-        $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_vouchers', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
 
     	return $pdf->download("invoice_pembelian_$purchases->kode_pembelian.pdf");
     }

@@ -112,8 +112,7 @@
                             <table class="table table-summary">
                                 <tbody>
                                     <tr class="summary-shipping-estimate">
-                                        <td>Gunakan Voucher Pembelian:</td>
-                                        <td></td>
+                                        <td colspan="2">Gunakan Voucher Pembelian:</td>
                                     </tr>
                                     <?php
                                         $jumlah_vouchers = DB::table('vouchers')->where('is_deleted', 0)->where('tanggal_berlaku', '<=', date('Y-m-d'))
@@ -146,7 +145,7 @@
                                         ?>
                                         @if($jumlah_pembelian_vouchers > 0 && $cek_pembelian_vouchers != 0)
                                         <tr id="voucher_pembelian_tr">
-                                            <td id="voucher_pembelian_td">
+                                            <td colspan="2" id="voucher_pembelian_td">
                                                 <select name="voucher_pembelian" id="voucher_pembelian" class="custom-select form-control" required>
                                                     <option value="" disabled selected>Pilih Voucher Pembelian</option>
                                                     @foreach($get_pembelian_vouchers as $pembelian_voucher)
@@ -165,22 +164,19 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         @else
                                         <tr>
-                                            <td>
+                                            <td colspan="2">
                                                 <input class="form-control" value="Tidak ada voucher pembelian." disabled>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         @endif
                                     @else
                                     <tr>
-                                        <td>
+                                        <td colspan="2">
                                             <input class="form-control" value="Tidak ada voucher yang bisa diambil." disabled>
                                         </td>
-                                        <td></td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -284,13 +280,12 @@
                             <table class="table table-summary" id="voucher_ongkir_table">
                                 <tbody>
                                     <tr class="summary-shipping-estimate">
-                                        <td>Gunakan Voucher Ongkos Kirim:</td>
-                                        <td></td>
+                                        <td colspan="2">Gunakan Voucher Ongkos Kirim:</td>
                                     </tr>
                                     @if($jumlah_vouchers > 0)
                                         @if($cek_ongkos_kirim_vouchers > 0)
                                         <tr id="voucher_ongkos_kirim_tr">
-                                            <td id="voucher_ongkos_kirim_td">
+                                            <td colspan="2" id="voucher_ongkos_kirim_td">
                                                 <select name="voucher_ongkos_kirim" id="voucher_ongkos_kirim" class="custom-select form-control">
                                                     <option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>
                                                     @foreach($get_ongkos_kirim_vouchers as $ongkos_kirim_voucher)
@@ -301,35 +296,52 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         @else
                                         <tr>
-                                            <td>
+                                            <td colspan="2">
                                                 <input class="form-control" value="Tidak ada voucher ongkos kirim." disabled>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         @endif
                                     @else
                                     <tr>
-                                        <td>
+                                        <td colspan="2">
                                             <input class="form-control" value="Tidak ada voucher yang bisa diambil." disabled>
                                         </td>
-                                        <td></td>
                                     </tr>
                                     @endif
                                 </tbody>
                             </table>
 
+                            <input name="harga_pembelian" value="{{$total_harga->total_harga}}" hidden>
+                            
                             <table class="table table-summary">
+                                <?php
+                                    $rp_total_harga_checkout = "Rp." . number_format($total_harga->total_harga,0,',','.');
+                                ?>
                                 <tbody>
+                                    <tr class="summary-subtotal" id="invoice_subtotal">
+                                        <td>Subtotal:</td>
+                                        <td>
+                                            {{$rp_total_harga_checkout}}
+                                        </td>
+                                    </tr>
+
+                                    <tr class="summary-subtotal" id="invoice_ongkir">
+                                    </tr>
+                                    
+                                    <tr class="summary-subtotal" id="jumlah_potongan_subtotal">
+                                        <input name="potongan_pembelian" value="0" hidden>
+                                    </tr>
+
+                                    <tr class="summary-subtotal" id="total_potongan_ongkir">
+                                    </tr>
+
                                     <tr class="summary-total">
                                         <td>Total:</td>
                                         <td id="total_harga_checkout">
-                                            <?php
-                                                $rp_total_harga_checkout = "Rp." . number_format($total_harga->total_harga,0,',','.');
-                                            ?>
+                                            <input name="potongan_pembelian" value="0" hidden>
                                             {{$rp_total_harga_checkout}}
                                         </td>
                                     </tr>
@@ -369,8 +381,9 @@
     $subdistrict_id = <?php echo $merchant_address->subdistrict_id ?>;
     $total_harga_checkout = <?php echo $total_harga->total_harga ?>;
     $total_harga_checkout_mentah = 0;
-    $potongan_ongkir = 0;
     $ongkir = 0;
+    $potongan_pembelian = 0;
+    $potongan_ongkir = 0;
     
     $("#voucher_ongkir_table").hide();
 

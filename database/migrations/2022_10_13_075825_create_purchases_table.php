@@ -19,6 +19,8 @@ class CreatePurchasesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('checkout_id');
             $table->string('alamat_purchase')->nullable();
+            $table->unsignedBigInteger('harga_pembelian')->nullable();
+            $table->unsignedBigInteger('potongan_pembelian')->nullable();
             $table->string('status_pembelian');
             $table->string('no_resi')->nullable();
             $table->string('courier_code')->nullable();

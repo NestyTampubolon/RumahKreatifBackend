@@ -185,6 +185,22 @@
                                                                     <?php                                                
                                                                         $target_kategori = explode(",", $claim_pembelian_voucher->target_kategori);
 
+                                                                        foreach($target_kategori as $target_kategori_subtotal){
+                                                                            $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                                                            ->where('purchases.checkout_id', $purchase->checkout_id)->where('category_id', $target_kategori_subtotal)
+                                                                            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                                                            ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                                                            ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+                                                        
+                                                                            // $potongan_subtotal = [];
+                                                                            $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
+                                                                        }
+                                                                        
+                                                                        
+                                                                        $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+
+                                                                        
+
                                                                         foreach($target_kategori as $target_kategori){
                                                                             
                                                                             $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
@@ -194,11 +210,11 @@
                                                                             ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
                                                         
                                                                             $potongan_subtotal = [];
-                                                                            $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
+                                                                            // $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
 
                                                                             $potongan_subtotal_perproduk = (int)$total_harga_pembelian_perproduk * $claim_pembelian_voucher->potongan / 100;
                                                         
-                                                                            $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                                                                            // $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
 
                                                                             if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
                                                                                 if($product_purchase->category_id == $target_kategori){
@@ -268,6 +284,11 @@
 
                                                     @endif
                                                 @endforeach<br>
+
+
+
+
+
                                                 <?php
                                                   if($purchase->courier_code = "pos"){ $courier_name = "POS Indonesia (POS)"; }
                                                   elseif($purchase->courier_code = "jne"){ $courier_name = "Jalur Nugraha Eka (JNE)"; }
