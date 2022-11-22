@@ -412,7 +412,7 @@
             ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
             
             if($product_purchases->harga_pembelian_produk == null){
-                $total_harga_pembelian_perproduk = $product_purchasess->price * $product_purchasess->jumlah_pembelian_produk;
+                $total_harga_pembelian_perproduk = $product_purchases->price * $product_purchases->jumlah_pembelian_produk;
             }
 
             if($product_purchases->harga_pembelian_produk == null){
