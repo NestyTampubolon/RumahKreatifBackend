@@ -209,6 +209,8 @@ class PembelianController extends Controller
     }
 
     public function PostBeliProduk(Request $request) {
+        date_default_timezone_set('Asia/Jakarta');
+
         $user_id = Auth::user()->id;
         
         $kode_pembelian = 'rkt_'.time();
@@ -357,9 +359,9 @@ class PembelianController extends Controller
                 
                 $claim_ongkos_kirim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
-                $purchases = DB::table('purchases')->join('users', 'purchases.user_id', '=', 'users.id')->where('is_cancelled', 0)->orderBy('purchase_id', 'desc')->get();
-                
-                $profiles = DB::table('profiles')->get();
+                $purchases = DB::table('purchases')->where('is_cancelled', 0)->orderBy('purchase_id', 'desc')->get();
+
+                $profiles = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
 
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
@@ -887,6 +889,8 @@ class PembelianController extends Controller
     }
 
     public function update_status_pembelian(Request $request, $purchase_id) {
+        date_default_timezone_set('Asia/Jakarta');
+        
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
 
         if($purchases->status_pembelian == "status1"){

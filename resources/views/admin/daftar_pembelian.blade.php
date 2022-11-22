@@ -36,10 +36,10 @@
                     <tr>
                         <th>ID Pesanan</th>
                         <th>Kode Pembelian</th>
-                        <th>Nama</th>
-                        <th>User ID</th>
                         <th>Username</th>
                         <th>Status Pesanan</th>
+                        <th>Tanggal Terpesanan</th>
+                        <th>Tanggal Pesanan Terupdate</th>
                         <th>Update Status </th>
                         <th>Info</th>
                     </tr>
@@ -53,11 +53,9 @@
                             <td>{{$purchase->kode_pembelian}}</td>
                             @foreach($profiles as $profile)
                               @if($profile->user_id == $purchase->user_id)
-                                <td>{{$profile->name}}</td>
+                              <td>{{$profile->username}}</td>
                               @endif
                             @endforeach
-                            <td>{{$purchase->user_id}}</td>
-                            <td>{{$purchase->username}}</td>
                             <td>
                               @if($purchase->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
                                 PENJUALAN DAN PEMBELIAN BERHASIL.
@@ -94,6 +92,8 @@
                                   @endif
                               @endif
                             </td>
+                            <td>{{$purchase->created_at}}</td>
+                            <td>{{$purchase->updated_at}}</td>
                             <td align="center" width="150px">
                                 @if($purchase->status_pembelian == "status2" || $purchase->status_pembelian == "status2_ambil")
                                 
