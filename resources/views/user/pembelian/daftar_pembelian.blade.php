@@ -59,10 +59,16 @@
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                     <p class="text-muted mb-0">Jumlah: {{$product_purchase->jumlah_pembelian_produk}}</p>
                                 </div>
-
                                 <?php
-                                    $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->price),0,',','.');
+                                    if($product_purchase->harga_pembelian_produk == null){
+                                        $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->price * $product_purchase->jumlah_pembelian_produk),0,',','.');
+                                    }
+                                    
+                                    else if($product_purchase->harga_pembelian_produk != null){
+                                        $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->harga_pembelian_produk),0,',','.');
+                                    }
                                 ?>
+                                
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                     <p class="text-muted mb-0">{{$total_harga_produk_fix}}</p>
                                 </div>

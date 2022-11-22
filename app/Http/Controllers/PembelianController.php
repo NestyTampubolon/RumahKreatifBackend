@@ -224,7 +224,6 @@ class PembelianController extends Controller
         $potongan_pembelian = $request -> potongan_pembelian;
 
         $alamat_purchase = $request -> alamat_purchase;
-        $jumlah_pembelian_produk = $request -> jumlah_pembelian_produk;
         
         $courier_code = $request -> courier;
         $service = $request -> service;
@@ -283,14 +282,16 @@ class PembelianController extends Controller
         
         $purchase_id = DB::table('purchases')->select('purchase_id')->orderBy('purchase_id', 'desc')->first();
 
-        $product_purchase = DB::table('carts')->select('carts.product_id', 'jumlah_masuk_keranjang')->where('user_id', $user_id)
+        $product_purchase = DB::table('carts')->select('carts.product_id', 'heavy', 'jumlah_masuk_keranjang', 'price')->where('user_id', $user_id)
         ->where('merchant_id', $merchant_id)->join('products', 'carts.product_id', '=', 'products.product_id')->get();
 
         foreach($product_purchase as $product_purchase){
             DB::table('product_purchases')->insert([
                 'purchase_id' => $purchase_id->purchase_id,
                 'product_id' => $product_purchase->product_id,
+                'berat_pembelian_produk' => $product_purchase->jumlah_masuk_keranjang * $product_purchase->heavy,
                 'jumlah_pembelian_produk' => $product_purchase->jumlah_masuk_keranjang,
+                'harga_pembelian_produk' => $product_purchase->jumlah_masuk_keranjang * $product_purchase->price,
             ]);
             
             $stok = DB::table('stocks')->select('stok')->where('product_id', $product_purchase->product_id)->first();

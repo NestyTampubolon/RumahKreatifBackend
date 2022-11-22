@@ -80,9 +80,14 @@
         </div>
 
         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-            
             <?php
-                $invoice_product_purchases_price = "Rp." . number_format($invoice_product_purchases->price * $invoice_product_purchases->jumlah_pembelian_produk,2,',','.');  
+                if($invoice_product_purchases->harga_pembelian_produk == null){
+                    $invoice_product_purchases_price = "Rp." . number_format(floor($invoice_product_purchases->price * $invoice_product_purchases->jumlah_pembelian_produk),0,',','.');
+                }
+                
+                else if($invoice_product_purchases->harga_pembelian_produk != null){
+                    $invoice_product_purchases_price = "Rp." . number_format(floor($invoice_product_purchases->harga_pembelian_produk),0,',','.');
+                }
             ?>
             <p class="text-muted mb-0">{{$invoice_product_purchases_price}}</p>
         </div>
@@ -188,13 +193,19 @@
                             <td>Subtotal:</td>
                             <td>
                                 <?php
-                                    $invoice_total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                                    ->where('purchases.checkout_id', $purchases->checkout_id)
-                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-
-                                    $invoice_total_harga_pembelian_fix = "Rp." . number_format($invoice_total_harga_pembelian->total_harga_pembelian,2,',','.');  
+                                    if($purchases->harga_pembelian == null){
+                                        $invoice_total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                        ->where('purchases.checkout_id', $purchases->checkout_id)
+                                        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                        ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+    
+                                        $invoice_total_harga_pembelian_fix = "Rp." . number_format($invoice_total_harga_pembelian->total_harga_pembelian,2,',','.');
+                                    }
+                                    
+                                    else if($purchases->harga_pembelian != null){
+                                        $invoice_total_harga_pembelian_fix = "Rp." . number_format(floor($purchases->harga_pembelian),2,',','.');
+                                    }
                                 ?>
                                 <a>{{$invoice_total_harga_pembelian_fix}}</a>
                             </td>
@@ -400,7 +411,13 @@
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
             
-            $total_harga_pembelian_perproduk = $product_purchases->price * $product_purchases->jumlah_pembelian_produk;
+            if($product_purchases->harga_pembelian_produk == null){
+                $total_harga_pembelian_perproduk = $product_purchasess->price * $product_purchasess->jumlah_pembelian_produk;
+            }
+
+            if($product_purchases->harga_pembelian_produk == null){
+                $total_harga_pembelian_perproduk = $product_purchases->harga_pembelian;
+            }
             
             $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchases->purchase_id)->count();
             
@@ -416,29 +433,37 @@
             <?php                                                
                 $target_kategori = explode(",", $claim_pembelian_voucher->target_kategori);
 
-                foreach($target_kategori as $target_kategori){
-                    
-                    $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                    ->where('purchases.checkout_id', $purchases->checkout_id)->where('category_id', $target_kategori)
-                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+                if($purchases->potongan_pembelian == null){
+                    foreach($target_kategori as $target_kategori){
+                        
+                        $subtotal_harga_produk = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                        ->where('purchases.checkout_id', $purchases->checkout_id)->where('category_id', $target_kategori)
+                        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                        ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
 
-                    // $potongan_subtotal = [];
-                    $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
-                }
+                        // $potongan_subtotal = [];
+                        $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
+                    }
 
-                $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
-
-                if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
                     $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
-                }
-        
-                else if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
-                    $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
+
+                    if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
+                        $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                    }
+            
+                    else if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                        $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
+                    }
+
+                    $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
                 }
 
-                $total_harga_pembelian_keseluruhan = (int)$total_harga_pembelian->total_harga_pembelian - $jumlah_potongan_subtotal;
+                else if($purchases->potongan_pembelian != null){
+                    $jumlah_potongan_subtotal = $purchases->potongan_pembelian;
+                    
+                    $total_harga_pembelian_keseluruhan = (int)$purchases->harga_pembelian - $jumlah_potongan_subtotal;
+                }
 
             ?>
         @endif

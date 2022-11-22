@@ -66,7 +66,14 @@
 
             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                 <?php
-                    $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,0,',','.');
+                    if($product_purchases->harga_pembelian_produk == null){
+                        $harga_produk = "Rp." . number_format(floor($product_purchases->price * $product_purchases->jumlah_pembelian_produk),0,',','.');
+                    }
+                    
+                    else if($product_purchases->harga_pembelian_produk != null){
+                        $harga_produk = "Rp." . number_format(floor($product_purchases->harga_pembelian_produk),0,',','.');
+                    }
+                    // $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk * $product_purchases->jumlah_pembelian_produk,0,',','.');
                 ?>
                 <p class="text-muted mb-0">{{$harga_produk}}</p>
             </div>
@@ -135,13 +142,19 @@
                             <td>Subtotal:</td>
                             <td>
                                 <?php
-                                    $invoice_total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
-                                    ->where('purchases.checkout_id', $purchases->checkout_id)
-                                    ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                                    ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
-
-                                    $invoice_total_harga_pembelian_fix = "Rp." . number_format($invoice_total_harga_pembelian->total_harga_pembelian,2,',','.');  
+                                    if($purchases->harga_pembelian == null){
+                                        $invoice_total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                                        ->where('purchases.checkout_id', $purchases->checkout_id)
+                                        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                        ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+    
+                                        $invoice_total_harga_pembelian_fix = "Rp." . number_format($invoice_total_harga_pembelian->total_harga_pembelian,2,',','.');
+                                    }
+                                    
+                                    else if($purchases->harga_pembelian != null){
+                                        $invoice_total_harga_pembelian_fix = "Rp." . number_format(floor($purchases->harga_pembelian),2,',','.');
+                                    }
                                 ?>
                                 <a>{{$invoice_total_harga_pembelian_fix}}</a>
                             </td>
@@ -164,7 +177,14 @@
                             <td>Total:</td>
                             <td>
                                 <?php
-                                    $invoice_total_pembelian = $total_harga->total_harga + $ongkir;
+                                    if($purchases->harga_pembelian == null){
+                                        $invoice_total_pembelian = $total_harga->total_harga + $ongkir;
+                                    }
+
+                                    else if($purchases->harga_pembelian != null){
+                                        $invoice_total_pembelian = $purchases->harga_pembelian + $ongkir;
+                                    }
+
                                     $invoice_total_pembelian_fix = "Rp." . number_format($invoice_total_pembelian,2,',','.');
                                 ?>
                                 <a>{{$invoice_total_pembelian_fix}}</a>
