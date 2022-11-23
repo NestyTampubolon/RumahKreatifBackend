@@ -190,7 +190,13 @@
                             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                             ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
                             
-                            $total_harga_pembelian_perproduk = $product_purchases->price * $product_purchases->jumlah_pembelian_produk;
+                            if($product_purchases->harga_pembelian_produk == null){
+                                $total_harga_pembelian_perproduk = $product_purchases->price * $product_purchases->jumlah_pembelian_produk;
+                            }
+                
+                            else if($product_purchases->harga_pembelian_produk != null){
+                                $total_harga_pembelian_perproduk = $product_purchases->harga_pembelian;
+                            }
                             
                             $jumlah_product_purchase = DB::table('product_purchases')->where('purchase_id', $purchases->purchase_id)->count();
                             

@@ -73,7 +73,14 @@
 
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <?php
-                            $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk,0,',','.');
+                            if($product_purchases->harga_pembelian_produk == null){
+                                $harga_produk = "Rp." . number_format(floor($product_purchases->price * $product_purchases->jumlah_pembelian_produk),0,',','.');
+                            }
+                            
+                            else if($product_purchases->harga_pembelian_produk != null){
+                                $harga_produk = "Rp." . number_format(floor($product_purchases->harga_pembelian_produk),0,',','.');
+                            }
+                            // $harga_produk = "Rp " . number_format($product_purchases->price*$product_purchases->jumlah_pembelian_produk * $product_purchases->jumlah_pembelian_produk,0,',','.');
                         ?>
                         <p class="text-muted mb-0">{{$harga_produk}}</p>
                     </div>
