@@ -415,7 +415,7 @@
                 $total_harga_pembelian_perproduk = $product_purchases->price * $product_purchases->jumlah_pembelian_produk;
             }
 
-            if($product_purchases->harga_pembelian_produk == null){
+            else if($product_purchases->harga_pembelian_produk != null){
                 $total_harga_pembelian_perproduk = $product_purchases->harga_pembelian;
             }
             
