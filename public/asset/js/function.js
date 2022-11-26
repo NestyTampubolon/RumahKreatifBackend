@@ -143,8 +143,6 @@ $("#voucher_pembelian").change(function (data) {
                 $("#tr_pesanan_dikirim").show();
                 $("#tr_ambil_ditempat").hide();
 
-                $("#alamat_table").show();
-
                 $("#disabled_alamat").remove();
                 $("#street_address").append('<option value="" id="disabled_alamat" disabled selected>Pilih Alamat Pengiriman</option>');
 
