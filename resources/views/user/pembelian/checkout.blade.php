@@ -188,15 +188,15 @@
                                         <td>Metode Pembelian:</td>
                                         <td></td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr id="tr_ambil_ditempat">
+                                        <td id="td_ambil_ditempat">
                                             <input type="radio" id="ambil_ditempat" name="metode_pembelian" value="ambil_ditempat" required>
                                             <label for="ambil_ditempat">Ambil Ditempat</label>
                                         </td>
                                         <td></td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr id="tr_pesanan_dikirim">
+                                        <td id="td_pesanan_dikirim">
                                             <input type="radio" id="pesanan_dikirim" name="metode_pembelian" value="pesanan_dikirim" required>
                                             <label for="pesanan_dikirim">Pesanan Dikirim</label>
                                         </td>

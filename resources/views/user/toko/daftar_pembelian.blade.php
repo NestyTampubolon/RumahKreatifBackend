@@ -34,7 +34,7 @@
                             @endif
                             @foreach($profiles as $profile)
                                 @if($profile->id == $purchase->user_id)
-                                    {{$profile->name}}
+                                    {{$profile->name}} ({{$profile->username}})
                                 @endif
                             @endforeach
                         </h5>

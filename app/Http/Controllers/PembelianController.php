@@ -99,8 +99,11 @@ class PembelianController extends Controller
         $total_harga_checkout = $_GET['total_harga_checkout'];
         
         $voucher_dipilih = DB::table('vouchers')->where('voucher_id', $voucher)->first();
+        
+        $target_metode_pembelian = $voucher_dipilih->target_metode_pembelian;
 
         $target_kategori = explode(",", $voucher_dipilih->target_kategori);
+        
 
         foreach($target_kategori as $target_kategori){
             $subtotal_harga_produk = DB::table('carts')->select(DB::raw('SUM(price * jumlah_masuk_keranjang) as subtotal_harga_produk'))->where('category_id', $target_kategori)
@@ -119,15 +122,15 @@ class PembelianController extends Controller
             $potongan = $voucher_dipilih->maksimal_pemotongan;
         }
 
-        if($potongan > $voucher_dipilih->maksimal_pemotongan){
-            $potongan = $voucher_dipilih->maksimal_pemotongan;
-        }
+        // if($potongan > $voucher_dipilih->maksimal_pemotongan){
+        //     $potongan = $voucher_dipilih->maksimal_pemotongan;
+        // }
 
         $total_harga_fix = (int)$total_harga_checkout - $potongan;
 
         $total_harga_checkout = "Rp." . number_format($total_harga_fix,0,',','.');
         
-        return response()->json($potongan);
+        return response()->json(compact(['potongan', 'target_metode_pembelian']));
     }
 
     public function ambil_voucher_ongkos_kirim() {
@@ -179,8 +182,13 @@ class PembelianController extends Controller
         
         $err = curl_error($curl);
         curl_close($curl);
+        
+        $shipping_local = DB::table('shipping_locals')->where('merchant_id', $_GET['merchant_id'])
+        ->where('shipping_local_subdistrict_id', $subdistrict_id)->first();
 
-        return response()->json($filtered);
+        return response()->json(compact(['filtered', 'shipping_local']));
+
+        // return response()->json($filtered);
     }
 
     public function cek_ongkir(Request $request)
@@ -960,5 +968,17 @@ class PembelianController extends Controller
 
         return redirect()->back();
     }
+
+    public function update_no_resi(Request $request, $purchase_id) {
+        $no_resi = $request->no_resi;
+        
+        DB::table('purchases')->where('purchase_id', $purchase_id)->update([
+            'no_resi' => $no_resi,
+        ]);
+
+        return redirect()->back();
+    }
+
+
     
 }

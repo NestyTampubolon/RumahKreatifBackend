@@ -319,7 +319,7 @@
 
                     @if($purchases->status_pembelian == "status3")
                         <p class="">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN SAMPAI.</p>
-                        <p class="">SILAHKAN <a href="https://parcelsapp.com/id" target="_blank">CEK</a> RESI MENGUNAKAN NOMOR RESI : <b>{{$purchases->no_resi}}</b> <a>[{{$courier_name}}]</a></p>
+                        <p class="">SILAHKAN <a href="https://cekresi.com/?noresi={{$purchases->no_resi}}" target="_blank"><b>CEK</b></a> RESI MENGUNAKAN NOMOR RESI : <b>{{$purchases->no_resi}}</b> <a>[{{$courier_name}}]</a></p>
                     @endif
                     
                     @if($purchases->status_pembelian == "status3_ambil")

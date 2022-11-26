@@ -445,11 +445,6 @@
                                     <td>&emsp; : &emsp;</td>
                                     <td colspan="3">{{$product->deskripsi_toko}}</td>
                                 </tr>
-                                <tr>
-                                    <td>Kontak Toko</td>
-                                    <td>&emsp; : &emsp;</td>
-                                    <td colspan="3">{{$product->kontak_toko}}</td>
-                                </tr>
                                 @if($cek_merchant_address > 0 )
                                 <tr>
                                     <td rowspan="4">Lokasi Toko</td>

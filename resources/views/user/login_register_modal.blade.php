@@ -48,7 +48,12 @@
                                     
                                     <div class="form-group">
                                         <label for="password">Password *</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
+                                        <input type="password" class="form-control" id="inputPasswordLogin" name="password" required>
+                                        
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="showPassLogin" onClick="showPasswordLogin()">
+                                            <label class="custom-control-label" for="showPassLogin">Tampilkan Password</label>
+                                        </div><!-- End .custom-checkbox -->
                                     </div><!-- End .form-group -->
 
                                     <div class="form-footer">
@@ -103,8 +108,13 @@
 
                                     <div class="form-group">
                                         <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
+                                        <input type="password" class="form-control" id="inputPasswordRegistrasi" name="password" required>
                                         <!-- <label><small class="form-text">Minimal password 8 karakter</small></label> -->
+                                        
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="showPassRegistrasi" onClick="showPasswordRegist()">
+                                            <label class="custom-control-label" for="showPassRegistrasi">Tampilkan Password</label>
+                                        </div><!-- End .custom-checkbox -->
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
@@ -134,6 +144,18 @@
                                             return true;
                                         }
                                     </script>
+
+
+                                    <div class="form-group mt-3" align="center">
+                                        @error('g-recaptcha-response')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                        
+                                        <div class="mb-1"></div>
+
+                                        {!! NoCaptcha::renderJs() !!}
+                                        {!! NoCaptcha::display() !!}
+                                    </div>
 
                                     <div class="form-footer">
                                         <button id="daftar" type="submit" class="btn btn-outline-primary-2" disabled>
@@ -170,6 +192,25 @@
                                 </div> -->
 
                             </div><!-- .End .tab-pane -->
+                            
+                            <script>
+                                function showPasswordLogin()
+                                {
+                                    var x = document.getElementById('inputPasswordLogin');
+
+                                    if (x.type === 'password') { x.type = "text"; }
+                                    else { x.type = 'password'; }
+                                }
+                                
+                                function showPasswordRegist()
+                                {
+                                    var y = document.getElementById('inputPasswordRegistrasi');
+
+                                    if (y.type === 'password') { y.type = "text"; }
+                                    else { y.type = 'password'; }
+                                }
+                            </script>
+
                         </div><!-- End .tab-content -->
                     </div><!-- End .form-tab -->
                 </div><!-- End .form-box -->

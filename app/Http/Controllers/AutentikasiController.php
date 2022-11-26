@@ -22,7 +22,8 @@ class AutentikasiController extends Controller
             'name' => 'required',    
             'no_hp' => 'required',    
             'birthday' => 'required',    
-            'gender' => 'required',    
+            'gender' => 'required',
+            'g-recaptcha-response' => 'required|captcha',    
         ]);
 
         $data_users = $request->only(['username', 'password', 'email']);
@@ -63,7 +64,7 @@ class AutentikasiController extends Controller
 
         if(Auth::attempt(['username' => $username_email, 'password' => $password]) || Auth::attempt(['email' => $username_email, 'password' => $password])){
             $user = Auth::user();
-            return redirect('./');
+            return redirect()->back();
         }
         
         else{

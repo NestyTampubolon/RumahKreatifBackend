@@ -23,7 +23,7 @@
                             {{$purchases->kode_pembelian}} - 
                         @endif
                         @if($profile->id == $purchases->user_id)
-                            {{$profile->name}}
+                            {{$profile->name}} ({{$profile->username}})
                         @endif
                     </b></p>
                 </div><!-- End .card-body -->
@@ -108,6 +108,15 @@
                                     <td>Alamat</td>
                                     <td>&emsp; : &emsp;</td>
                                     <td> {{$user_address->user_street_address}} </td>
+                                </tr>
+                                <tr>
+                                    <td>Nomor Telepon</td>
+                                    <td>&emsp; : &emsp;</td>
+                                    <td> 
+                                        @if($profile->id == $purchases->user_id)
+                                            {{$profile->no_hp}}
+                                        @endif
+                                    </td>
                                 </tr>
                             </table>
                             <!-- <h6 class="">Alamat Pengiriman : <br><br> {{$purchases->alamat_purchase}}</h6> -->
@@ -200,6 +209,25 @@
         </aside><!-- End .col-lg-3 -->
     </div><!-- End .row -->
 
+    @if($purchases->status_pembelian == "status3")
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    <p class="">SILAHKAN <a href="https://cekresi.com/?noresi={{$purchases->no_resi}}" target="_blank"><b>CEK</b></a> RESI MENGUNAKAN NOMOR RESI : <b>{{$purchases->no_resi}}</b> <a>[{{$courier_name}}]</a></p>
+                    <p><b>ATAU</b></p>
+                    <p class="">UPDATE NOMOR RESI.</p>
+                    <form action="../update_no_resi/{{$purchases->purchase_id}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                        <input type="text" name="no_resi" class="form-control form-control-rounded" placeholder="Nomor Resi" required>
+                        <button type="submit" class="btn btn-primary btn-round"><span>EDIT</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-dashboard">
@@ -270,9 +298,7 @@
                     @csrf
                         <input type="text" name="no_resi" class="form-control" placeholder="Nomor Resi" required>
                         
-                        <button type="submit" class="btn btn-primary btn-round">
-                            <span>KIRIM</span>
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-round"><span>KIRIM</span></button>
                     </form>
                     @endif
                     

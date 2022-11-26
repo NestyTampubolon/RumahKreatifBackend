@@ -41,6 +41,7 @@ class VoucherController extends Controller
 
         if($tipe_voucher == "pembelian"){
             $target_kategori = $request -> target_kategori;
+            $target_metode_pembelian = $request -> target_metode_pembelian;
             
             $request -> validate([
                 'nama_voucher' => 'required',
@@ -57,6 +58,7 @@ class VoucherController extends Controller
                 'nama_voucher' => $nama_voucher,
                 'tipe_voucher' => $tipe_voucher,
                 'target_kategori' => implode(", ", $target_kategori),
+                'target_metode_pembelian' => $target_metode_pembelian,
                 'potongan' => $potongan,
                 'minimal_pengambilan' => $minimal_pengambilan,
                 'maksimal_pemotongan' => $maksimal_pemotongan,
@@ -67,6 +69,8 @@ class VoucherController extends Controller
         }
         
         else if($tipe_voucher == "ongkos_kirim"){
+            $target_metode_pembelian = $request -> target_metode_pembelian;
+
             $request -> validate([
                 'nama_voucher' => 'required',
                 'tipe_voucher' => 'required',
@@ -75,9 +79,11 @@ class VoucherController extends Controller
                 'tanggal_berlaku' => 'required',
                 'tanggal_batas_berlaku' => 'required',    
             ]);
+
             DB::table('vouchers')->insert([
                 'nama_voucher' => $nama_voucher,
                 'tipe_voucher' => $tipe_voucher,
+                'target_metode_pembelian' => $target_metode_pembelian,
                 'potongan' => $potongan,
                 'minimal_pengambilan' => $minimal_pengambilan,
                 'maksimal_pemotongan' => $potongan,

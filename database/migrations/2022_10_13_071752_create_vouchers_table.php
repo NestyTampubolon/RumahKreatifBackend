@@ -17,7 +17,8 @@ class CreateVouchersTable extends Migration
             $table->id('voucher_id');
             $table->string('nama_voucher');
             $table->string('tipe_voucher');
-            $table->string('target_kategori');
+            $table->string('target_kategori')->nullable();
+            $table->string('target_metode_pembelian')->nullable();
             $table->integer('potongan');
             $table->integer('minimal_pengambilan');
             $table->integer('maksimal_pemotongan');

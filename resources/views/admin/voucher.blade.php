@@ -166,6 +166,16 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="div_target_metode_pembelian">
+                            <label for="target_metode_pembelian">Target Metode Pembelian</label>
+                            <select name="target_metode_pembelian" id="target_metode_pembelian" class="custom-select form-control">
+                                <option value="" selected>Semua</option>
+                                <option value="ambil_ditempat">Ambil Ditempat</option>
+                                <option value="pesanan_dikirim">Pesanan Dikirim</option>
+                            </select>
+                            <!-- <input type="number" class="form-control" name="potongan" id="potongan" placeholder="Masukkan potongan yang diberikan voucher. (%)" required> -->
+                        </div>
+
                         <script>
                             function select_all(source) {
                                 var checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -232,6 +242,7 @@
     $("#maksimal_pemotongan_div").hide();
     $("#tanggal_voucher").hide();
     $("#div_checkbox_categories").hide();
+    $("#div_target_metode_pembelian").hide();
 </script>
 <script src="{{ URL::asset('asset/js/function_2.js') }}"></script>
 

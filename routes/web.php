@@ -29,10 +29,17 @@ Route::get('/edit_profil', 'App\Http\Controllers\ProfilController@edit_profil');
 Route::post('/PostEditProfil', 'App\Http\Controllers\ProfilController@PostEditProfil');
 
 Route::get('/alamat', 'App\Http\Controllers\AlamatController@alamat');
-Route::get('/ambil_lokasi', 'App\Http\Controllers\AlamatController@ambil_lokasi');
 Route::post('/PostAlamat', 'App\Http\Controllers\AlamatController@PostAlamat');
 Route::get('/daftar_alamat', 'App\Http\Controllers\AlamatController@daftar_alamat');
 Route::get('/hapus_alamat/{address_id}', 'App\Http\Controllers\AlamatController@HapusAlamat');
+
+Route::get('/pengiriman_lokal', 'App\Http\Controllers\PengirimanLokalController@pengiriman_lokal');
+Route::post('/PostPengirimanLokal', 'App\Http\Controllers\PengirimanLokalController@PostPengirimanLokal');
+Route::get('/daftar_pengiriman_lokal', 'App\Http\Controllers\PengirimanLokalController@daftar_pengiriman_lokal');
+Route::get('/hapus_pengiriman_lokal/{shipping_local_id}', 'App\Http\Controllers\PengirimanLokalController@HapusPengirimanLokal');
+
+Route::get('/ambil_lokasi', 'App\Http\Controllers\AlamatController@ambil_lokasi');
+
 
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 
@@ -125,14 +132,13 @@ Route::get('/daftar_pembelian', 'App\Http\Controllers\PembelianController@daftar
 Route::get('/detail_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@detail_pembelian');
 Route::get('/batalkan_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@batalkan_pembelian');
 
-
 Route::get('/invoice_pembelian/{purchase_id}', 'App\Http\Controllers\InvoiceController@invoice_pembelian');
 Route::get('/invoice_penjualan/{purchase_id}', 'App\Http\Controllers\InvoiceController@invoice_penjualan');
-
 
 Route::post('/PostBuktiPembayaran/{purchase_id}', 'App\Http\Controllers\PembelianController@PostBuktiPembayaran');
 Route::get('/update_status_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status_pembelian');
 Route::post('/update_status2_pembelian/{purchase_id}', 'App\Http\Controllers\PembelianController@update_status2_pembelian');
+Route::post('/update_no_resi/{purchase_id}', 'App\Http\Controllers\PembelianController@update_no_resi');
 
 Route::get('/keranjang', 'App\Http\Controllers\KeranjangController@keranjang');
 // Route::get('/masuk_keranjang/{product_id}', 'App\Http\Controllers\KeranjangController@masuk_keranjang');
