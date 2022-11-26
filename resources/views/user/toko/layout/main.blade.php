@@ -50,9 +50,9 @@
 								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pembelian</a>
 								    </li>
-								    <li class="nav-item">
+								    <!-- <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/daftar_pengiriman_lokal') }}">Pengiriman Lokal</a>
-								    </li>
+								    </li> -->
 								    <li class="nav-item">
 								        <a class="nav-link" href="{{ url('/daftar_alamat') }}">Alamat</a>
 								    </li>
