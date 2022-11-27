@@ -37,11 +37,12 @@
                         <th>ID Pesanan</th>
                         <th>Kode Pembelian</th>
                         <th>Username</th>
+                        <th>Toko</th>
                         <th>Status Pesanan</th>
                         <th>Tanggal Terpesanan</th>
                         <th>Tanggal Pesanan Terupdate</th>
-                        <th>Update Status </th>
                         <th>Info</th>
+                        <th>Update Status </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -53,9 +54,23 @@
                             <td>{{$purchase->kode_pembelian}}</td>
                             @foreach($profiles as $profile)
                               @if($profile->user_id == $purchase->user_id)
-                              <td>{{$profile->username}}</td>
+                                <td>{{$profile->username}}</td>
                               @endif
                             @endforeach
+                            <?php
+                                $nama_toko = DB::table('product_purchases')->where('product_purchases.purchase_id', $purchase->purchase_id)->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                                ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->first();
+                            ?>
+                           
+                           <td>
+                              @if($nama_toko)
+                                {{$nama_toko->nama_merchant}}
+                              @else
+
+                              @endif
+                            </td>
+                           
                             <td>
                               @if($purchase->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
                                 PENJUALAN DAN PEMBELIAN BERHASIL.
@@ -94,6 +109,9 @@
                             </td>
                             <td>{{$purchase->created_at}}</td>
                             <td>{{$purchase->updated_at}}</td>
+                            <td align="center" width="100px">
+                                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-detail-{{$purchase->purchase_id}}">Cek</button>
+                            </td>
                             <td align="center" width="150px">
                                 @if($purchase->status_pembelian == "status2" || $purchase->status_pembelian == "status2_ambil")
                                 
@@ -106,9 +124,6 @@
 
                                     @endif
                                 @endif
-                            </td>
-                            <td align="center" width="100px">
-                                <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-detail-{{$purchase->purchase_id}}">Cek</button>
                             </td>
                         </tr>
                         
