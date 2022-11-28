@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use Session;
 
+use Carbon\Carbon;
+
 class PembelianController extends Controller
 {
     public function checkout($merchant_id) {
@@ -269,6 +271,8 @@ class PembelianController extends Controller
                 'status_pembelian' => "status1_ambil",
                 'ongkir' => 0,
                 'is_cancelled' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
         }
         
@@ -286,6 +290,8 @@ class PembelianController extends Controller
                 'service' => $service,
                 'ongkir' => $ongkir,
                 'is_cancelled' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
         }
         
@@ -895,63 +901,73 @@ class PembelianController extends Controller
     }
 
     public function update_status_pembelian(Request $request, $purchase_id) {
+        date_default_timezone_set('Asia/Jakarta');
+
         
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
 
         if($purchases->status_pembelian == "status1"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status2',
+                'updated_at' => Carbon::now(),
             ]);
         }
 
         else if($purchases->status_pembelian == "status3"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status4',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         else if($purchases->status_pembelian == "status4"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status5',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         if($purchases->status_pembelian == "status1_ambil"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status2_ambil',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         else if($purchases->status_pembelian == "status2_ambil"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status3_ambil',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         else if($purchases->status_pembelian == "status3_ambil"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status4_ambil_a',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         else if($purchases->status_pembelian == "status4_ambil_a"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status4_ambil_b',
+                'updated_at' => Carbon::now(),
             ]);
         }
         
         else if($purchases->status_pembelian == "status4_ambil_b"){
             DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                 'status_pembelian' => 'status5_ambil',
+                'updated_at' => Carbon::now(),
             ]);
         }
-
-        date_default_timezone_set('Asia/Jakarta');
 
         return redirect()->back();
     }
 
     public function update_status2_pembelian(Request $request, $purchase_id) {
+        date_default_timezone_set('Asia/Jakarta');
+
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
         
         if($purchases->status_pembelian == "status2"){
@@ -961,6 +977,7 @@ class PembelianController extends Controller
                 DB::table('purchases')->where('purchase_id', $purchase_id)->update([
                     'no_resi' => $no_resi,
                     'status_pembelian' => 'status3',
+                    'updated_at' => Carbon::now(),
                 ]);
             }
         }
@@ -969,10 +986,13 @@ class PembelianController extends Controller
     }
 
     public function update_no_resi(Request $request, $purchase_id) {
+        date_default_timezone_set('Asia/Jakarta');
+
         $no_resi = $request->no_resi;
         
         DB::table('purchases')->where('purchase_id', $purchase_id)->update([
             'no_resi' => $no_resi,
+            'updated_at' => Carbon::now(),
         ]);
 
         return redirect()->back();
