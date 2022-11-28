@@ -162,6 +162,11 @@
                                 <td>&emsp; : &emsp;</td>
                                 <td> {{$merchant_address->merchant_street_address}} </td>
                             </tr>
+                            <tr>
+                                <td>Nama Toko</td>
+                                <td>&emsp; : &emsp;</td>
+                                <td> {{$merchant_info->nama_merchant}} </td>
+                            </tr>
                         </table>
                     </div><!-- End .card-body -->
                 </div><!-- End .card-dashboard -->
@@ -314,7 +319,7 @@
                     @endif
                     
                     @if($purchases->status_pembelian == "status4_ambil_a")
-                        <p class="">Pesanan telah diberikan.</p>
+                        <p class="">Pesanan telah diberikan.  SILAHKAN KONFIRMASI PESANAN.</p>
                     @endif
 
                     @if($purchases->status_pembelian == "status3")

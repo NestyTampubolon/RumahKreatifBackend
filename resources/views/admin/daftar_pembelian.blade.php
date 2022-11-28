@@ -230,7 +230,13 @@
                                                                         
                                                                         $subtotal_harga_produk_terkait_seluruh = array_sum($subtotal_harga_produk_terkait);
 
-                                                                        $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                                                                        if($purchase->potongan_pembelian != null){
+                                                                          $jumlah_potongan_subtotal = $purchase->potongan_pembelian;
+                                                                        }
+                                                                        
+                                                                        else if($purchase->potongan_pembelian == null){
+                                                                          $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+                                                                        }
 
                                                                         foreach($target_kategori as $target_kategori){
                                                                             

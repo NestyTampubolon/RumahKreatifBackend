@@ -390,14 +390,20 @@ class PembelianController extends Controller
                 ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
                 
                 $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
-                
+
+                $cek_purchases = DB::table('purchases')->where('user_id', $user_id)->first();
+
                 $purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
                 ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
+                $cancelled_purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 1)
+                ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
 
+                $cek_purchases = DB::table('purchases')->where('user_id', $user_id)->first();
+
+                $purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
+                ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
-
-
                 // foreach($claim_vouchers as $claim_vouchers_get){
                 //     $target_kategori = explode(",", $claim_vouchers_get->target_kategori);
                     
@@ -417,13 +423,6 @@ class PembelianController extends Controller
                 //         dd($jumlah_potongan_subtotal);
                 //     }
                 // }
-
-
-
-
-
-
-                $cek_purchases = DB::table('purchases')->where('user_id', $user_id)->first();
                 
                 $profile = DB::table('profiles')->where('user_id', $user_id)
                 ->join('users', 'profiles.user_id', '=', 'users.id')->first();
@@ -440,7 +439,7 @@ class PembelianController extends Controller
                 $count_proof_of_payment = DB::table('proof_of_payments')->select(DB::raw('COUNT(*) as count_proof_of_payment'))->first();
         
                 return view('user.pembelian.daftar_pembelian')->with('checkouts', $checkouts)->with('claim_vouchers', $claim_vouchers)
-                ->with('purchases', $purchases)->with('cek_purchases', $cek_purchases)->with('product_purchases', $product_purchases)->with('profile', $profile)
+                ->with('purchases', $purchases)->with('cancelled_purchases', $cancelled_purchases)->with('cek_purchases', $cek_purchases)->with('product_purchases', $product_purchases)->with('profile', $profile)
                 ->with('product_specifications', $product_specifications)->with('count_proof_of_payment', $count_proof_of_payment);
             }
         }
@@ -475,8 +474,6 @@ class PembelianController extends Controller
             ->where('product_purchases.purchase_id', $purchase_id)->join('products', 'product_purchases.product_id', '=', 'products.product_id')->first();
             
             $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
-
-
 
             // $checkouts = DB::table('checkouts')->where('user_id', $user_id)
             // ->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
@@ -681,6 +678,8 @@ class PembelianController extends Controller
                 $merchant_purchase = DB::table('product_purchases')->select('merchant_id')->where('purchase_id', $purchase_id)
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('merchant_id')->first();
     
+                $merchant_info = DB::table('merchants')->where('merchant_id', $merchant_purchase->merchant_id)->first();
+
                 $cek_merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->count();
 
                 $merchant_address = DB::table('merchant_address')->where('merchant_id', $merchant_purchase->merchant_id)->first();
@@ -860,13 +859,12 @@ class PembelianController extends Controller
                 $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
         
                 return view('user.pembelian.detail_pembelian')->with('claim_pembelian_voucher', $claim_pembelian_voucher)
-                ->with('claim_ongkos_kirim_voucher', $claim_ongkos_kirim_voucher)->with('cek_merchant_address', $cek_merchant_address)
-                ->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
+                ->with('claim_ongkos_kirim_voucher', $claim_ongkos_kirim_voucher)->with('merchant_info', $merchant_info)
+                ->with('cek_merchant_address', $cek_merchant_address)->with('merchant_address', $merchant_address)->with('lokasi_toko', $lokasi_toko)
                 ->with('cek_user_address', $cek_user_address)->with('user_address', $user_address)->with('lokasi_pembeli', $lokasi_pembeli)
                 ->with('product_purchases', $product_purchases)->with('profile', $profile)->with('product_specifications', $product_specifications)
                 ->with('purchases', $purchases)->with('total_harga', $total_harga)->with('total_harga_semula', $total_harga_semula)
                 ->with('cek_proof_of_payment', $cek_proof_of_payment)->with('ongkir', $ongkir)->with('courier_name', $courier_name)->with('service_name', $service_name);
-                
             }
         }
     }
@@ -897,7 +895,6 @@ class PembelianController extends Controller
     }
 
     public function update_status_pembelian(Request $request, $purchase_id) {
-        date_default_timezone_set('Asia/Jakarta');
         
         $purchases = DB::table('purchases')->where('purchase_id', $purchase_id)->first();
 
@@ -948,6 +945,8 @@ class PembelianController extends Controller
                 'status_pembelian' => 'status5_ambil',
             ]);
         }
+
+        date_default_timezone_set('Asia/Jakarta');
 
         return redirect()->back();
     }

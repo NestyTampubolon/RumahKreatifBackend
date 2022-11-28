@@ -14,225 +14,72 @@
     <h5 class="text-muted mb-0">Pesanan Anda, <span style="color: #800000;">{{$profile->name}}</span>!</h5>
 </div>
 
-@if($cek_purchases)
+<div class="card-body p-4">
 
-@foreach($checkouts as $checkout)
-    @foreach($purchases as $purchase)
-        @if($purchase->checkout_id == $checkout->checkout_id)
-        <div class="card-body p-4">
-            <div class="p-2 card shadow-0 border mb-1">
-                <div class="col-md-12 d-flex justify-content-around" style="margin: 10px 0px -30px 0px">
-                    <h5>{{$purchase->kode_pembelian}}</h5>
-                </div>
-                <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
-                <a href="./detail_pembelian/{{$purchase->purchase_id}}">
-                    @foreach($product_purchases as $product_purchase)
-                        @if($product_purchase->purchase_id == $purchase->purchase_id)
-                        <div class="card border mb-1">
-                            <div class="row" style="padding: 15px 0px 15px 0px; margin: 0px">
-                                <div class="col-md-2" align="center">
-                                    <?php
-                                        $product_images = DB::table('product_images')->select('product_image_name')->where('product_id', $product_purchase->product_id)->orderBy('product_image_id', 'asc')->limit(1)->get();
-                                    ?>
-                                    @foreach($product_images as $product_image)
-                                        <img src="./asset/u_file/product_image/{{$product_image->product_image_name}}" class="img-fluid" alt="{{$product_purchase->product_name}}" width ="50px">
-                                    @endforeach
-                                </div>
-                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                    <p class="text-muted mb-0">{{$product_purchase->product_name}}</p>
-                                </div>
-                                <?php
-                                    $jumlah_product_specifications = DB::table('product_specifications')->where('product_id', $product_purchase->product_id)->count();
-                                ?>
-                                @if($jumlah_product_specifications == 0)
-
-                                @else
-                                    @foreach($product_specifications as $product_specification)
-                                        @if($product_specification->product_id == $product_purchase->product_id)
-                                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0">{{$product_specification->nama_spesifikasi}}</p>
-                                        </div>
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                    <p class="text-muted mb-0">Jumlah: {{$product_purchase->jumlah_pembelian_produk}}</p>
-                                </div>
-                                <?php
-                                    if($product_purchase->harga_pembelian_produk == null){
-                                        $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->price * $product_purchase->jumlah_pembelian_produk),0,',','.');
-                                    }
-                                    
-                                    else if($product_purchase->harga_pembelian_produk != null){
-                                        $total_harga_produk_fix = "Rp." . number_format(floor($product_purchase->harga_pembelian_produk),0,',','.');
-                                    }
-                                ?>
-                                
-                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                    <p class="text-muted mb-0">{{$total_harga_produk_fix}}</p>
-                                </div>
-
-                            </div>
-                        </div>
-                        @endif
-                    @endforeach
-                </a>
-                <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
-                <div class="row d-flex align-items-center">
-                    @if($purchase->status_pembelian == "status4" || $purchase->status_pembelian == "status4_ambil_b"
-                    || $purchase->status_pembelian == "status5" || $purchase->status_pembelian == "status5_ambil")
-                        <div class="col-md-12 mb-1">
-                            <p class="text-muted ">Jejak Pembelian</p>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="progress" style="height: 6px; border-radius: 16px;">
-                            <div class="progress-bar" role="progressbar"
-                                style="width: 100%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div class="d-flex justify-content-around mb-1">
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Diterima. PEMBELIAN BERHASIL.</p>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if($purchase->status_pembelian == "status3" || $purchase->status_pembelian == "status3_ambil"
-                    || $purchase->status_pembelian == "status4_ambil_a")
-                        <div class="col-md-12 mb-1">
-                            <p class="text-muted ">Jejak Pembelian</p>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="progress" style="height: 6px; border-radius: 16px;">
-                            <div class="progress-bar" role="progressbar"
-                                style="width: 66.6%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div class="d-flex justify-content-around mb-1">
-                                @if($purchase->status_pembelian == "status3")
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN SAMPAI.</p>
-                                @endif
-
-                                @if($purchase->status_pembelian == "status3_ambil")
-                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">SILAHKAN AMBIL PESANAN ANDA DI TOKO.</p>
-                                @endif
-                                
-                                @if($purchase->status_pembelian == "status4_ambil_a")
-                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan telah diberikan.</p>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-
-                    @if($purchase->status_pembelian == "status2" || $purchase->status_pembelian == "status2_ambil")
-                        <div class="col-md-12 mb-1">
-                            <p class="text-muted ">Jejak Pembelian</p>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="progress" style="height: 6px; border-radius: 16px;">
-                            <div class="progress-bar" role="progressbar"
-                                style="width: 33.3%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div class="d-flex justify-content-around mb-1">
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.</p>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
-                    <div class="col-md-12 mb-1">
-                        <p class="text-muted ">Jejak Pembelian</p>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="progress" style="height: 6px; border-radius: 16px;">
-                        <div class="progress-bar" role="progressbar"
-                            style="width: 0%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
-                            aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex justify-content-around mb-1">
-                            @if($count_proof_of_payment->count_proof_of_payment == 0)
-                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN.</p>
-                            @endif
-                            
-                            <?php
-                                $proof_of_payments = DB::table('proof_of_payments')->where('purchase_id', $purchase->purchase_id)->first();
-                            ?>
-                            @if($count_proof_of_payment->count_proof_of_payment != 0)
-                                @if($proof_of_payments)
-                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Bukti pembayaran telah dikirim. MENUNGGU KONFIRMASI.</p>
-                                @else
-                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Belum dapat dikonfirmasi. KIRIM BUKTI PEMBAYARAN.</p>
-                                @endif
-                            @endif
-                        </div>
-                    </div>
-                    @endif
-                </div>
+    <div class="col-md-16">
+        <ul class="nav nav-tabs nav-tabs-bg" id="tabs-1" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="tab_semua_pesanan_tab" data-toggle="tab" href="#tab_semua_pesanan" role="tab" aria-controls="tab_semua_pesanan" aria-selected="true">Semua</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_belum_bayar_tab" data-toggle="tab" href="#tab_pesanan_belum_bayar" role="tab" aria-controls="tab_pesanan_belum_bayar" aria-selected="false">Pesanan Belum Bayar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pembayaran_belum_dikonfirmasi_tab" data-toggle="tab" href="#tab_pembayaran_belum_dikonfirmasi" role="tab" aria-controls="tab_pembayaran_belum_dikonfirmasi" aria-selected="false">Pembayaran Belum Dikonfirmasi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_sedang_dikemas_tab" data-toggle="tab" href="#tab_sedang_dikemas" role="tab" aria-controls="tab_sedang_dikemas" aria-selected="false">Sedang Dikemas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_dalam_perjalanan_tab" data-toggle="tab" href="#tab_pesanan_dalam_perjalanan" role="tab" aria-controls="tab_pesanan_dalam_perjalanan" aria-selected="false">Pesanan Dalam Perjalanan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_belum_diambil_tab" data-toggle="tab" href="#tab_pesanan_belum_diambil" role="tab" aria-controls="tab_pesanan_belum_diambil" aria-selected="false">Pesanan Belum Diambil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_belum_dikonfirmasi_pembeli_tab" data-toggle="tab" href="#tab_pesanan_belum_dikonfirmasi_pembeli" role="tab" aria-controls="tab_pesanan_belum_dikonfirmasi_pembeli" aria-selected="false">Pesanan Belum Dikonfirmasi Pembeli</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_berhasil_tab" data-toggle="tab" href="#tab_pesanan_berhasil" role="tab" aria-controls="tab_pesanan_berhasil" aria-selected="false">Pesanan Berhasil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab_pesanan_dibatalkan_tab" data-toggle="tab" href="#tab_pesanan_dibatalkan" role="tab" aria-controls="tab_pesanan_dibatalkan" aria-selected="false">Pesanan Dibatalkan</a>
+            </li>
+        </ul>
+        <div class="tab-content tab-content-border" id="tab-content-1">
             
-                <hr class="mb-2" style="background-color: #e0e0e0; opacity: 1;">
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-12 mb-2">
-                        <a class="btn btn-primary btn-round" href="./detail_pembelian/{{$purchase->purchase_id}}">
-                            <span>LANJUTKAN</span>
-                            <i class="icon-long-arrow-right"></i>
-                        </a>
-                        @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
-                            @if($count_proof_of_payment->count_proof_of_payment != 0)
-                                @if($proof_of_payments)
-                                
-                                @else
-                                <a href="#batalkan_pembelian_{{$purchase->purchase_id}}" class="btn btn-outline-dark btn-rounded" data-toggle="modal" href="" style="float:right">
-                                    <span>BATALKAN</span>
-                                </a>
-                                @endif
-                            @endif
-                        @endif
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        @endif
+            <div class="tab-pane fade show active" id="tab_semua_pesanan" role="tabpanel" aria-labelledby="tab_semua_pesanan_tab">
+                @include('user.pembelian.tab_semua_pesanan')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_belum_bayar" role="tabpanel" aria-labelledby="tab_pembelian_belum_bayar_tab">
+                @include('user.pembelian.tab_pesanan_belum_bayar')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pembayaran_belum_dikonfirmasi" role="tabpanel" aria-labelledby="tab_pembayaran_belum_dikonfirmasi_tab">
+                @include('user.pembelian.tab_pembayaran_belum_dikonfirmasi')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_sedang_dikemas" role="tabpanel" aria-labelledby="tab_sedang_dikemas_tab">
+                @include('user.pembelian.tab_sedang_dikemas')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_dalam_perjalanan" role="tabpanel" aria-labelledby="tab_pesanan_dalam_perjalanan_tab">
+                @include('user.pembelian.tab_pesanan_dalam_perjalanan')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_belum_diambil" role="tabpanel" aria-labelledby="tab_pesanan_belum_diambil_tab">
+                @include('user.pembelian.tab_pesanan_belum_diambil')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_belum_dikonfirmasi_pembeli" role="tabpanel" aria-labelledby="tab_pesanan_belum_dikonfirmasi_pembeli_tab">
+                @include('user.pembelian.tab_pesanan_belum_dikonfirmasi_pembeli')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_berhasil" role="tabpanel" aria-labelledby="tab_pesanan_berhasil_tab">
+                @include('user.pembelian.tab_pesanan_berhasil')
+            </div><!-- .End .tab-pane -->
+            <div class="tab-pane fade" id="tab_pesanan_dibatalkan" role="tabpanel" aria-labelledby="tab_pesanan_dibatalkan_tab">
+                @include('user.pembelian.tab_pesanan_dibatalkan')
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+    </div><!-- End .col-md-6 -->
 
+</div><!-- End .col-md-6 -->
 
-        <div class="modal fade" id="batalkan_pembelian_{{$purchase->purchase_id}}" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><i class="icon-close"></i></span>
-                        </button>
-
-                        <div class="form-box">
-                            <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active">
-                                    
-                                    <label for="isi_review">Apakah anda ingin membatalkan pesanan anda? *</label><br>
-                                    <button type="submit" class="btn btn-outline-primary-2 btn-round" data-dismiss="modal" aria-label="Close">
-                                        <span>TIDAK</span>
-                                    </button>
-                                    <button onclick="window.location.href='./batalkan_pembelian/{{$purchase->purchase_id}}'" class="btn btn-primary btn-round" style="float:right">
-                                        <span>KONFIRMASI</span>
-                                    </button>
-                                </div><!-- .End .tab-pane -->
-                            </div><!-- End .tab-content -->
-                        </div><!-- End .form-box -->
-                    </div><!-- End .modal-body -->
-                </div><!-- End .modal-content -->
-            </div><!-- End .modal-dialog -->
-        </div><!-- End .modal -->
-
-    @endforeach
-@endforeach
-    
-@else
-
-<div class="col-md-12" align="center">
-    <h6 style="color:darkred"><b>Anda Tidak Memiliki Pesanan. <a href="./produk">Ayo Belanja.</a></b></h6>
-</div>
-
-@endif
 
 @endsection
 
