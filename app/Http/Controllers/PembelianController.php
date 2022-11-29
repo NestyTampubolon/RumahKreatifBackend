@@ -404,11 +404,6 @@ class PembelianController extends Controller
                 
                 $cancelled_purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 1)
                 ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
-
-                $cek_purchases = DB::table('purchases')->where('user_id', $user_id)->first();
-
-                $purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
-                ->join('users', 'purchases.user_id', '=', 'users.id')->orderBy('purchase_id', 'desc')->get();
                 
                 // foreach($claim_vouchers as $claim_vouchers_get){
                 //     $target_kategori = explode(",", $claim_vouchers_get->target_kategori);

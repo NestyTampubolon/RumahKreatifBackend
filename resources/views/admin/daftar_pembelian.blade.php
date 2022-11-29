@@ -254,7 +254,7 @@
                                                         
                                                                             // $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
 
-                                                                            if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
+                                                                            if($jumlah_potongan_subtotal < $claim_pembelian_voucher->maksimal_pemotongan){
                                                                                 if($product_purchase->category_id == $target_kategori){
                                                                                     $potongan_harga_barang = $potongan_subtotal_perproduk;
                                                                                 }
@@ -264,7 +264,7 @@
                                                                                 }
                                                                             }
                             
-                                                                            else if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                                                                            else if($jumlah_potongan_subtotal >= $claim_pembelian_voucher->maksimal_pemotongan){
                                                                                 if($product_purchase->category_id == $target_kategori){
                                                                                     $potongan_harga_barang = $total_harga_pembelian_perproduk / $subtotal_harga_produk_terkait_seluruh * $claim_pembelian_voucher->maksimal_pemotongan;
                                                                                 }
@@ -287,7 +287,7 @@
                                                                     ?>
                                                                     @if($target_kategori == $product_purchase->category_id)
                                                                         <?php
-                                                                          if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                                                                          if($jumlah_potongan_subtotal >= $claim_pembelian_voucher->maksimal_pemotongan){
                                                                             $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
                                                                           }
                                                                           $cek_target_kategori = $product_purchase->category_id; 

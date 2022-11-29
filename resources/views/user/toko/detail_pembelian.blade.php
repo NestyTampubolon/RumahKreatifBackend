@@ -241,7 +241,7 @@
                             $total_harga_status4 = "Rp." . number_format(floor((int)$total_harga->total_harga + $ongkir),0,',','.');
                         ?>
                         <p class="">
-                            Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN. 
+                            Pembelian Berhasil. SILAHKAN TUNGGU BAYARAN. 
                             <b><a id="total_harga_produk"></a>{{$total_harga_status4}}</b>    
                             DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.
                         </p>
@@ -257,7 +257,7 @@
                             $total_pembelian_fix = "Rp." . number_format(floor((int)$total_pembelian),2,',','.');
                         ?>
                         <p class="">
-                            Pengiriman Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
+                            Pembelian Berhasil. SILAHKAN TUNGGU BAYARAN SENILAI 
                             <b><a id="total_harga_produk">{{$total_pembelian_fix}}</a></b>    
                             DIKIRIM KE REKENING YANG TELAH TOKO DAFTARKAN.
                         </p>

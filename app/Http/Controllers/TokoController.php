@@ -135,7 +135,7 @@ class TokoController extends Controller
 
         if(Auth::attempt(['id' => $user_id, 'password' => $password])){
             Session::put('toko', $toko->merchant_id);
-            return redirect('./toko');
+            return redirect('./dashboard');
         }
         
         else{

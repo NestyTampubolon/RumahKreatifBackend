@@ -1,9 +1,7 @@
 @foreach($cek_purchase as $cek_purchase)
     @foreach($purchases as $purchase)
         @if($purchase->purchase_id == $cek_purchase->purchase_id)
-            @if($purchase->status_pembelian == "status1" || $purchase->status_pembelian == "status1_ambil")
-
-            @else
+            @if($purchase->status_pembelian == "status3" || $purchase->status_pembelian == "status4_ambil_a")
             <div class="card-body p-4">
                 <div class="p-2 card shadow-0 border mb-1">
                     <div class="col-md-12 d-flex justify-content-around" style="margin: 10px 0px -30px 0px">
