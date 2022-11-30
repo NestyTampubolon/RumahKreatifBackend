@@ -66,9 +66,11 @@
                 @foreach($purchases as $purchase)
                     @if($purchase->purchase_id == $cek_purchase->purchase_id)
                         <?php
+                            $kurir = "";
+
                             if($purchase->courier_code == "pos"){ $kurir = "POS Indonesia (POS)"; }
                             
-                            if($purchase->courier_code == "jene"){ $kurir = "Jalur Nugraha Eka (JNE)"; }
+                            else if($purchase->courier_code == "jene"){ $kurir = "Jalur Nugraha Eka (JNE)"; }
                         ?>
                         @if($purchase->status_pembelian == "status2")
                             <div class="row">
