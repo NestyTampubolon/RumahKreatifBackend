@@ -64,21 +64,21 @@
             <div class="mb-2"></div>
             @foreach($cek_purchases as $cek_purchase)
                 @foreach($purchases as $purchase)
-                    @if($purchase->purchase_id == $cek_purchase->purchase_id)
                         <?php
-                            $kurir = "";
+                            // $kurir = "";
 
-                            if($purchase->courier_code == "pos"){ $kurir = "POS Indonesia (POS)"; }
+                            // if($purchase->courier_code == "pos"){ $kurir = "POS Indonesia (POS)"; }
                             
-                            else if($purchase->courier_code == "jene"){ $kurir = "Jalur Nugraha Eka (JNE)"; }
+                            // else if($purchase->courier_code == "jene"){ $kurir = "Jalur Nugraha Eka (JNE)"; }
                         ?>
+                    @if($purchase->purchase_id == $cek_purchase->purchase_id)
                         @if($purchase->status_pembelian == "status2")
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card card-dashboard">
                                         <div class="card-body">
                                             <h3 class="card-title">Pesanan masuk!</h3>
-                                            <p>Anda memiliki pesanan dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b>. Silahkan kirim pesanan melalui <b>{{$kurir}} | {{$purchase->service}}</b>. Kemudian masukkan kirim resi pengiriman.</p>
+                                            <p>Anda memiliki pesanan dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b>. Silahkan kirim pesanan melalui <b> | {{$purchase->service}}</b>. Kemudian masukkan kirim resi pengiriman.</p>
                                             <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                         </div><!-- End .card-body -->
                                     </div><!-- End .card-dashboard -->
