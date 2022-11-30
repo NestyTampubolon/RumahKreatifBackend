@@ -61,49 +61,57 @@ class HomeController extends Controller
             $count_status = DB::table('product_purchases')->select('purchases.purchase_id')->where('merchant_id', $toko)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->groupBy('purchases.purchase_id')->get();
-            $jumlah_status2 = 0;
-            $jumlah_status2_ambil = 0;
-            $jumlah_status3 = 0;
-            $jumlah_status3_ambil = 0;
-            $jumlah_status4_ambil_a = 0;
-            $jumlah_status4 = 0;
-            $jumlah_status4_ambil_b = 0;
-            $jumlah_status5 = 0;
-            $jumlah_status5_ambil = 0;
-            foreach($count_status as $count_status){
-                $count_purchases_status2[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status2')->count();
-                $jumlah_status2 = array_sum($count_purchases_status2);
-                
-                $count_purchases_status2_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status2_ambil')->count();
-                $jumlah_status2_ambil = array_sum($count_purchases_status2_ambil);
-                
-                $count_purchases_status3[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status3')->count();
-                $jumlah_status3 = array_sum($count_purchases_status3);
-                
-                $count_purchases_status3_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status3_ambil')->count();
-                $jumlah_status3_ambil = array_sum($count_purchases_status3_ambil);
-                
-                $count_purchases_status4_ambil_a[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4_ambil_a')->count();
-                $jumlah_status4_ambil_a = array_sum($count_purchases_status4_ambil_a);
-                
-                $count_purchases_status4[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4')->count();
-                $jumlah_status4 = array_sum($count_purchases_status4);
-                
-                $count_purchases_status4_ambil_b[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4_ambil_b')->count();
-                $jumlah_status4_ambil_b = array_sum($count_purchases_status4_ambil_b);
-                
-                $count_purchases_status5[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status5')->count();
-                $jumlah_status5 = array_sum($count_purchases_status5);
-                
-                $count_purchases_status5_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status5_ambil')->count();
-                $jumlah_status5_ambil = array_sum($count_purchases_status5_ambil);
-            }
-            $jumlah_pesanan_sedang_berlangsung = $jumlah_status2 + $jumlah_status2_ambil + $jumlah_status3
-            + $jumlah_status3_ambil + $jumlah_status4_ambil_a;
 
-            $jumlah_pesanan_berhasil_belum_dibayar = $jumlah_status4 + $jumlah_status4_ambil_b;
+            // $jumlah_status2 = 0;
+            // $jumlah_status2_ambil = 0;
+            // $jumlah_status3 = 0;
+            // $jumlah_status3_ambil = 0;
+            // $jumlah_status4_ambil_a = 0;
+            // $jumlah_status4 = 0;
+            // $jumlah_status4_ambil_b = 0;
+            // $jumlah_status5 = 0;
+            // $jumlah_status5_ambil = 0;
+            // foreach($count_status as $count_status){
+            //     $count_purchases_status2[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status2')->count();
+            //     $jumlah_status2 = array_sum($count_purchases_status2);
+                
+            //     $count_purchases_status2_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status2_ambil')->count();
+            //     $jumlah_status2_ambil = array_sum($count_purchases_status2_ambil);
+                
+            //     $count_purchases_status3[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status3')->count();
+            //     $jumlah_status3 = array_sum($count_purchases_status3);
+                
+            //     $count_purchases_status3_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status3_ambil')->count();
+            //     $jumlah_status3_ambil = array_sum($count_purchases_status3_ambil);
+                
+            //     $count_purchases_status4_ambil_a[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4_ambil_a')->count();
+            //     $jumlah_status4_ambil_a = array_sum($count_purchases_status4_ambil_a);
+                
+            //     $count_purchases_status4[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4')->count();
+            //     $jumlah_status4 = array_sum($count_purchases_status4);
+                
+            //     $count_purchases_status4_ambil_b[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status4_ambil_b')->count();
+            //     $jumlah_status4_ambil_b = array_sum($count_purchases_status4_ambil_b);
+                
+            //     $count_purchases_status5[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status5')->count();
+            //     $jumlah_status5 = array_sum($count_purchases_status5);
+                
+            //     $count_purchases_status5_ambil[] = DB::table('purchases')->where('purchase_id', $count_status->purchase_id)->where('status_pembelian', 'status5_ambil')->count();
+            //     $jumlah_status5_ambil = array_sum($count_purchases_status5_ambil);
+            // }
+            // $jumlah_pesanan_sedang_berlangsung = $jumlah_status2 + $jumlah_status2_ambil + $jumlah_status3
+            // + $jumlah_status3_ambil + $jumlah_status4_ambil_a;
+
+            // $jumlah_pesanan_berhasil_belum_dibayar = $jumlah_status4 + $jumlah_status4_ambil_b;
             
-            $jumlah_pesanan_berhasil_telah_dibayar = $jumlah_status5 + $jumlah_status5_ambil;
+            // $jumlah_pesanan_berhasil_telah_dibayar = $jumlah_status5 + $jumlah_status5_ambil;
+
+            
+            $jumlah_pesanan_sedang_berlangsung = "";
+
+            $jumlah_pesanan_berhasil_belum_dibayar = "";
+            
+            $jumlah_pesanan_berhasil_telah_dibayar = "";
             
             return view('user.toko.dashboard')->with('toko', $toko)->with('cek_purchases', $cek_purchases)->with('purchases', $purchases)
             ->with('jumlah_pesanan_sedang_berlangsung', $jumlah_pesanan_sedang_berlangsung)->with('jumlah_pesanan_berhasil_belum_dibayar', $jumlah_pesanan_berhasil_belum_dibayar)
