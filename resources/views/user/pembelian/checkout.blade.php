@@ -266,6 +266,11 @@
                                             </select>
                                         </td>
                                     </tr>
+
+                                    <!-- <tr id="pengiriman_lokal_tr">
+                                        <td id="pengiriman_lokal_td"></td>
+                                    </tr> -->
+
                                     <tr class="summary-shipping-estimate" id="service_row">
                                         <td colspan="2">
                                             <label>Servis *</label>

@@ -453,11 +453,11 @@
 
                     $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
 
-                    if($jumlah_potongan_subtotal <= $claim_pembelian_voucher->maksimal_pemotongan){
+                    if($jumlah_potongan_subtotal < $claim_pembelian_voucher->maksimal_pemotongan){
                         $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
                     }
             
-                    else if($jumlah_potongan_subtotal > $claim_pembelian_voucher->maksimal_pemotongan){
+                    else if($jumlah_potongan_subtotal >= $claim_pembelian_voucher->maksimal_pemotongan){
                         $jumlah_potongan_subtotal = $claim_pembelian_voucher->maksimal_pemotongan;
                     }
 

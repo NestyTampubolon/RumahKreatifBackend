@@ -78,7 +78,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Anda telah memesan!</h3>
+                                                <h3 class="card-title">Anda telah memesan</h3>
                                                 <p>Pesanan anda telah terkirim dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b>. Silahkan kirim bukti pembayaran agar pesanan anda diproses.</p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->
@@ -95,7 +95,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Anda telah mengirim bukti bayar!</h3>
+                                                <h3 class="card-title">Anda telah mengirim bukti bayar</h3>
                                                 <p>Bukti bayar anda dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b> telah terkirim. Silahkan tunggu bukti bayar anda dikonfirmasi.</p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->
@@ -112,7 +112,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Pesanan sedang dikemas!</h3>
+                                                <h3 class="card-title">Pesanan sedang dikemas</h3>
                                                 <p>Bukti bayar anda dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b> telah dikonfirmasi. Silahkan tunggu pesanan anda dikemas.</p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->
@@ -129,7 +129,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Pesanan sedang dalam perjalanan!</h3>
+                                                <h3 class="card-title">Pesanan sedang dalam perjalanan</h3>
                                                 <p>Pesanan anda dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b> sedang dalam perjalanan. Silahkan tunggu pesanan anda sampai. Silahkan konfirmasi jika pesanan anda telah sampai dan telah diterima.</p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->
@@ -146,7 +146,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Pesanan belum diambil!</h3>
+                                                <h3 class="card-title">Pesanan belum diambil</h3>
                                                 <p>Silahkan ambil pesanan anda dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b> di toko.</p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->
@@ -163,7 +163,7 @@
                                     <div class="col-lg-12">
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Pesanan telah diambil!</h3>
+                                                <h3 class="card-title">Pesanan telah diambil</h3>
                                                 <p>Silahkan konfirmasi pesanan telah anda ambil dari toko dengan kode pembelian <b>{{$purchase->kode_pembelian}}</b></p>
                                                 <h4 style="float:right; margin-top: -5px; margin-bottom: -5px"><a href="./detail_pembelian/{{$purchase->purchase_id}}"><i class="icon-long-arrow-right"></i></a></h4>
                                             </div><!-- End .card-body -->

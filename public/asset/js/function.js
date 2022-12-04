@@ -203,20 +203,8 @@ $("#voucher_ongkos_kirim").change(function (data) {
                 $potongan_ongkir = $ongkir;
             }
 
-            // if($ongkir_hasil_potong < 0){
-            //     $ongkir_hasil_potong = 0;
-            // }
-
             $("#total_harga_checkout").empty();
             
-            // if($total_harga_checkout_mentah == 0){
-            //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt($ongkir_hasil_potong)), }))
-            // }
-
-            // else{
-            //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout_mentah) + parseInt($ongkir_hasil_potong)), }))
-            // }
-
             $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt($ongkir) - parseInt($potongan_pembelian) - parseInt($potongan_ongkir)), }))
 
             $("#total_potongan_ongkir").empty();
@@ -273,13 +261,6 @@ $("#ambil_ditempat").click(function (data) {
             
             $("#total_harga_checkout").empty();
 
-            // if($total_harga_checkout_mentah == 0){
-            //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah($total_harga_checkout), }))
-            // }
-            // else{
-            //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah($total_harga_checkout_mentah), }))
-            // }
-            
             $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt($ongkir) - parseInt($potongan_pembelian) - parseInt($potongan_ongkir)), }))
 
             $("#checkout").empty();
@@ -292,7 +273,7 @@ $("#ambil_ditempat").click(function (data) {
     });
 });
 
-$("#pesanan_dikirim").change(function (data) {
+$("#pesanan_dikirim").click(function (data) {
     console.log($(this).val());
     $.ajax({
         type: "GET",
@@ -366,7 +347,8 @@ $("#street_address").change(function (data) {
             $("#courier").append($('<option>', { value: "pos", text: "POS Indonesia", }))
             $("#courier").append($('<option>', { value: "jne", text: "JNE", }))
             // if($shipping_local){
-            //     $("#courier").append($('<option>', { id: "pengiriman_lokal", value: $location["shipping_local_id "], text: "Pengiriman Loka Oleh Toko", }))
+            //     $("#pengiriman_lokal_td").append($('<input>', { type: "radio", id: "pengiriman_lokal", value: $shipping_local["shipping_local_id"] }))
+            //     $("#pengiriman_lokal_td").append($('<label>', { for: "pengiriman_lokal", text: "Pengiriman Oleh Toko" }))
             // }
             
             $("#servis_row").hide();
@@ -413,9 +395,10 @@ $("#courier").change(function (data) {
 
                             $('#service').change(function() {
 
+                                $("#voucher_ongkir_table").show();
+
                                 $("#disabled_voucher_ongkir").remove();
                                 $("#voucher_ongkos_kirim").append('<option value="" id="disabled_voucher_ongkir" disabled selected>Pilih Voucher Ongkos Kirim</option>');
-                                $("#voucher_ongkir_table").show();
 
                                 $("#total_potongan_ongkir").empty();
                                 $potongan_ongkir = 0;
@@ -430,15 +413,6 @@ $("#courier").change(function (data) {
 
                                 $("#total_harga_checkout").empty();
 
-                                // if($total_harga_checkout_mentah == 0){
-                                //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt(ongkir)), }))
-                                // }
-
-                                // else{
-                                //     $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout_mentah) + parseInt(ongkir)), }))
-                                // }
-
-                                
                                 $("#total_harga_checkout").append($('<a>', { text: "Rp."+ format_rupiah(parseInt($total_harga_checkout) + parseInt($ongkir) - parseInt($potongan_pembelian) - parseInt($potongan_ongkir)), }))
                                 
                                 $ongkir = parseInt(ongkir);

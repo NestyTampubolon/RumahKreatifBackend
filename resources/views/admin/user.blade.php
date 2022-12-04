@@ -40,6 +40,7 @@
                         <th align="center">ID User</th>
                         <th align="center">Username</th>
                         <th align="center">Email</th>
+                        <th align="center">Nama</th>
                         <th align="center">Status</th>
                         <th align="center">Action</th>
                     </tr>
@@ -50,6 +51,7 @@
                           <td>{{$profile_user->user_id}}</td>
                           <td>{{$profile_user->username}}</td>
                           <td>{{$profile_user->email}}</td>
+                          <td>{{$profile_user->name}}</td>
                           
                           <?php $verify_user = DB::table('verify_users')->where('user_id', $profile_user->user_id)->first(); ?>
                           @if($verify_user)
@@ -80,7 +82,6 @@
                                       <center><a href="./asset/u_file/foto_ktp/{{$verify_user->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
                                       <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_user->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
                                     @endif
-                                    <center><a>{{$profile_user->name}}</a></center>
                                     <center><a>{{$profile_user->no_hp}}</a></center>
                                     <center><a>{{$profile_user->birthday}}</a></center>
                                     @if($profile_user->gender == "L")

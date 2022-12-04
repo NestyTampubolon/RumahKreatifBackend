@@ -40,25 +40,6 @@
             	<div class="dashboard">
 	                <div class="container">
 	                	<div class="row">
-	                		<!-- <aside class="col-md-4 col-lg-3">
-	                			<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
-								    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
-								    </li>
-								    <li class="nav-item">
-								        <a class="nav-link" href="{{ url('/toko') }}">Toko</a>
-								    </li>
-								    <li class="nav-item">
-								        <a class="nav-link" href="{{ url('/daftar_pembelian') }}">Pesananku</a>
-								    </li>
-								    <li class="nav-item">
-								        <a class="nav-link" href="{{ url('/keranjang') }}">Keranjangku</a>
-								    </li>
-								    <li class="nav-item">
-								        <a class="nav-link" href="{{ url('/logout') }}">Keluar</a>
-								    </li>
-								</ul>
-	                		</aside> -->
 
 	                		<div class="col-md-12 col-lg-12">
 	                			<div class="tab-content">

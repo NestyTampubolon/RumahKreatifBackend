@@ -365,17 +365,11 @@ class PembelianController extends Controller
             $cek_admin_id = DB::table('users')->where('id', $user_id)->where('is_admin', 1)->first();
 
             if($cek_admin_id){
-                $checkouts = DB::table('checkouts')->join('users', 'checkouts.user_id', '=', 'users.id')->orderBy('checkout_id', 'desc')->get();
-                
-                // $claim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
-
                 $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
                 $claim_ongkos_kirim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
                 
-                $purchases = DB::table('purchases')->where('is_cancelled', 0)->orderBy('purchase_id', 'desc')->get();
-
-                $profiles = DB::table('profiles')->join('users', 'profiles.user_id', '=', 'users.id')->get();
+                $purchases = DB::table('purchases')->where('is_cancelled', 0)->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')->orderBy('purchase_id', 'desc')->get();
 
                 $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
                 ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
@@ -385,10 +379,16 @@ class PembelianController extends Controller
                 ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
                 ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
                 ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
+                
+                // foreach($purchases as $purchases_in_controller){
+                //     $nama_toko = DB::table('product_purchases')->where('product_purchases.purchase_id', $purchases_in_controller->purchase_id)
+                //     ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                //     ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->first();
+                // }
         
-                return view('admin.daftar_pembelian')->with('checkouts', $checkouts)->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
+                return view('admin.daftar_pembelian')->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
                 ->with('claim_ongkos_kirim_vouchers', $claim_ongkos_kirim_vouchers)->with('product_purchases', $product_purchases)
-                ->with('profiles', $profiles)->with('product_specifications', $product_specifications)->with('purchases', $purchases);
+                ->with('product_specifications', $product_specifications)->with('purchases', $purchases);
             }
 
             else{
