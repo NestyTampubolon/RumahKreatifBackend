@@ -156,13 +156,13 @@
               ribuan = reverse.match(/\d{1,3}/g);
           return ribuan	= ribuan.join('.').split('').reverse().join('');
     }
+    
     let data = $(this).data("purchaseid");
 
     $.ajax({url:`/purchase/detail/${data}`, success: function(result){
       $("#list-products").empty();
       console.log(result)
       result.products.forEach(product => {
-        
         if(product.harga_pembelian_produk == null){
           harga_pembelian_produk = product.price * product.jumlah_pembelian_produk;
         }
@@ -200,8 +200,6 @@
             if(harga_pembelian_produk_terpotong < 0){
               harga_pembelian_produk_terpotong = 0;
             }
-
-            // $total_harga_pembelian_produk_fix = "Rp." . number_format(floor($total_harga_pembelian_produk),0,',','.');
           
             if(result.claim_pembelian_voucher){
               get_harga_pembelian_produk_terpotong = "Rp." + format_rupiah(harga_pembelian_produk_terpotong) + " dari ";
@@ -215,7 +213,6 @@
               cek_target_kategori = product.category_id;
               
               total_harga_pembelian_keseluruhan_beli = result.semua_total_harga_pembelian - result.jumlah_potongan_subtotal;
-              // $total_harga_pembelian_keseluruhan_fix = "Rp." . number_format(floor($total_harga_pembelian_keseluruhan_beli),0,',','.');
 
               $("#list-products").append(`<li>Product ID: ${product.product_id} | Nama Produk: ${product.product_name} |  Jumlah Pembelian: ${product.jumlah_pembelian_produk}  | Harga: ${get_harga_pembelian_produk_terpotong} Rp.${format_rupiah(harga_pembelian_produk)}</li>`)
             }
@@ -225,8 +222,6 @@
         else if(!result.claim_pembelian_voucher){
           $("#list-products").append(`<li>Product ID: ${product.product_id} | Nama Produk: ${product.product_name} |  Jumlah Pembelian: ${product.jumlah_pembelian_produk}  | Harga: Rp.${format_rupiah(harga_pembelian_produk)}</li>`)
         }
-        
-        
       });
 
       if(!result.claim_pembelian_voucher){
@@ -270,7 +265,6 @@
         }
       }
 
-
       if(result.proof_of_payment){
         $("#list-products").append(`<center><a href="./asset/u_file/proof_of_payment_image/${result.proof_of_payment.proof_of_payment_image}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>`)
       }
@@ -278,7 +272,6 @@
       else if(!result.proof_of_payment){
         $("#list-products").append(`<center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>`)
       }
-
 
       $('#myModal').modal('show');
     }});

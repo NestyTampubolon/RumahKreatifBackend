@@ -15,7 +15,6 @@
 </div>
 
 <div class="card-body p-4">
-
     <div class="col-md-16">
         <ul class="nav nav-tabs nav-tabs-bg" id="tabs-1" role="tablist">
             <li class="nav-item">
@@ -41,33 +40,30 @@
             </li>
         </ul>
         <div class="tab-content tab-content-border" id="tab-content-1">
-
             <div class="tab-pane fade show active" id="tab_semua_pembelian" role="tabpanel" aria-labelledby="tab_semua_pembelian_tab">
                 @include('user.toko.tab_semua_pembelian')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade show" id="tab_pembelian_belum_dikemas" role="tabpanel" aria-labelledby="tab_pembelian_belum_dikemas_tab">
                 @include('user.toko.tab_pembelian_belum_dikemas')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade" id="tab_pembelian_dalam_perjalanan" role="tabpanel" aria-labelledby="tab_pembelian_dalam_perjalanan_tab">
                 @include('user.toko.tab_pembelian_dalam_perjalanan')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade" id="tab_pembelian_belum_diambil" role="tabpanel" aria-labelledby="tab_pembelian_belum_diambil_tab">
                 @include('user.toko.tab_pembelian_belum_diambil')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade" id="tab_pembelian_belum_dikonfirmasi_pembeli" role="tabpanel" aria-labelledby="tab_pembelian_belum_dikonfirmasi_pembeli_tab">
                 @include('user.toko.tab_pembelian_belum_dikonfirmasi_pembeli')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade" id="tab_pembelian_berhasil" role="tabpanel" aria-labelledby="tab_pembelian_berhasil_tab">
                 @include('user.toko.tab_pembelian_berhasil')
-            </div><!-- .End .tab-pane -->
+            </div>
             <div class="tab-pane fade" id="tab_pembelian_telah_dibayar" role="tabpanel" aria-labelledby="tab_pembelian_telah_dibayar_tab">
                 @include('user.toko.tab_pembelian_telah_dibayar')
-            </div><!-- .End .tab-pane -->
-            
-        </div><!-- End .tab-content -->
-    </div><!-- End .col-md-6 -->
-
-</div><!-- End .col-md-6 -->
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
