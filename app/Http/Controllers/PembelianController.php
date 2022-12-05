@@ -365,30 +365,22 @@ class PembelianController extends Controller
             $cek_admin_id = DB::table('users')->where('id', $user_id)->where('is_admin', 1)->first();
 
             if($cek_admin_id){
-                $claim_pembelian_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'pembelian')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
-                
-                $claim_ongkos_kirim_vouchers = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')->get();
-                
-                $purchases = DB::table('purchases')->where('is_cancelled', 0)->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')->orderBy('purchase_id', 'desc')->get();
+                $data = DB::table("purchases as p")
+                    ->join("profiles", "profiles.user_id", "=", "p.user_id")
+                    ->joinSub(DB::table("product_purchases as pp")
+                        ->join("products as p", "pp.product_id", "p.product_id")
+                        ->join("merchants as m", "m.merchant_id", "p.merchant_id")
+                        ->select("pp.purchase_id", "m.nama_merchant"), "mp", function($join){
+                            $join->on("p.purchase_id", "=", "mp.purchase_id");
+                        })
+                    ->leftJoin("proof_of_payments as ppp", "ppp.purchase_id", "=", "p.purchase_id")
+                    ->select("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian","ppp.proof_of_payment_image")
+                    ->groupBy("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian", "ppp.proof_of_payment_image")
+                    ->get();
 
-                $product_purchases = DB::table('product_purchases')->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
-
-                $product_specifications = DB::table('product_specifications')
-                ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
-                ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
-                ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')->get();
-                
-                // foreach($purchases as $purchases_in_controller){
-                //     $nama_toko = DB::table('product_purchases')->where('product_purchases.purchase_id', $purchases_in_controller->purchase_id)
-                //     ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                //     ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_purchases.product_purchase_id', 'desc')->first();
-                // }
-        
-                return view('admin.daftar_pembelian')->with('claim_pembelian_vouchers', $claim_pembelian_vouchers)
-                ->with('claim_ongkos_kirim_vouchers', $claim_ongkos_kirim_vouchers)->with('product_purchases', $product_purchases)
-                ->with('product_specifications', $product_specifications)->with('purchases', $purchases);
+                return view('admin.daftar_pembelian', [
+                    "purchases"=> $data,
+                ]);
             }
 
             else{
@@ -444,6 +436,119 @@ class PembelianController extends Controller
                 ->with('product_specifications', $product_specifications)->with('count_proof_of_payment', $count_proof_of_payment);
             }
         }
+    }
+
+    public function detail_purchase(Request $request, $id){
+        $purchase = null;
+        $purchase = DB::table("purchases")->where("purchase_id", $id)
+            ->first();
+        
+        $products = null;
+        $products = DB::table("product_purchases as pp")
+            ->join("products as p", "pp.product_id", "=", "p.product_id")
+            ->where("purchase_id", $id)
+            ->get();
+        
+        $claim_pembelian_voucher = null;
+        $claim_pembelian_voucher = DB::table('claim_vouchers')
+            ->where('tipe_voucher', 'pembelian')->where('purchase_id', $id)
+            ->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')
+            ->join('purchases', 'claim_vouchers.checkout_id', '=', 'purchases.checkout_id')
+            ->first();
+            
+        $target_kategori = null;
+
+        $subtotal_harga_produk = null;
+        $potongan_subtotal = null;
+        $subtotal_harga_produk_terkait = null;
+        $subtotal_harga_produk_terkait_seluruh = null;
+        $jumlah_potongan_subtotal = null;
+
+        if($claim_pembelian_voucher){
+            $target_kategori = explode(",", $claim_pembelian_voucher->target_kategori);
+
+            foreach($target_kategori as $target_kategori_subtotal){
+                $subtotal_harga_produk = DB::table('product_purchases')
+                ->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+                ->where('purchases.purchase_id', $id)->where('category_id', $target_kategori_subtotal)
+                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+                ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')->first();
+
+                $potongan_subtotal[] = (int)$subtotal_harga_produk->total_harga_pembelian * $claim_pembelian_voucher->potongan / 100;
+
+                $subtotal_harga_produk_terkait[] = (int)$subtotal_harga_produk->total_harga_pembelian;
+            }
+
+            $subtotal_harga_produk_terkait_seluruh = array_sum($subtotal_harga_produk_terkait);
+            
+
+            if($purchase->potongan_pembelian != null){
+                $jumlah_potongan_subtotal = $purchase->potongan_pembelian;
+            }
+            
+            else if($purchase->potongan_pembelian == null){
+                $jumlah_potongan_subtotal = array_sum($potongan_subtotal);
+            }
+        }
+        
+        $claim_ongkos_kirim_voucher = null;
+        $claim_ongkos_kirim_voucher = DB::table('claim_vouchers')->where('tipe_voucher', 'ongkos_kirim')->where('purchase_id', $id)
+            ->join('vouchers', 'claim_vouchers.voucher_id', '=', 'vouchers.voucher_id')
+            ->join('purchases', 'claim_vouchers.checkout_id', '=', 'purchases.checkout_id')
+            ->first();
+
+        $total_harga_pembelian = null;
+        $total_harga_pembelian = DB::table('product_purchases')->select(DB::raw('SUM(price * jumlah_pembelian_produk) as total_harga_pembelian'))
+            ->where('purchases.purchase_id', $id)
+            ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+            ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+            ->join('checkouts', 'purchases.checkout_id', '=', 'checkouts.checkout_id')
+            ->first();
+        
+        $semua_total_harga_pembelian = null;
+        if($purchase->harga_pembelian == null){
+            $semua_total_harga_pembelian = $total_harga_pembelian->total_harga_pembelian;
+        }
+  
+        else if($purchase->harga_pembelian != null){
+            $semua_total_harga_pembelian = $purchase->harga_pembelian;
+        }
+        
+        $courier_name = null;
+        if($purchase->courier_code = "pos"){ $courier_name = "POS Indonesia (POS)"; }
+        else if($purchase->courier_code = "jne"){ $courier_name = "Jalur Nugraha Eka (JNE)"; }
+
+        $proof_of_payment = null;
+        $proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $id)
+        ->first();
+
+        $ongkir = null;
+        $ongkir = $purchase->ongkir;
+        $ongkir_get_voucher = null;
+
+        if($claim_ongkos_kirim_voucher){
+            $ongkir_get_voucher = $purchase->ongkir - $claim_ongkos_kirim_voucher->potongan;
+
+            if($ongkir_get_voucher < 0 ){
+                $ongkir_get_voucher = 0;
+            }
+        }
+
+        return response()->json([
+            "purchase" => $purchase,
+            "products"=> $products,
+            "claim_pembelian_voucher" => $claim_pembelian_voucher,
+            "target_kategori" => $target_kategori,
+            "subtotal_harga_produk_terkait_seluruh" => $subtotal_harga_produk_terkait_seluruh,
+            "jumlah_potongan_subtotal" => $jumlah_potongan_subtotal,
+            "claim_ongkos_kirim_voucher" => $claim_ongkos_kirim_voucher,
+            "semua_total_harga_pembelian" => $semua_total_harga_pembelian,
+            "proof_of_payment" => $proof_of_payment,
+            "courier_name" => $courier_name,
+            "ongkir" => $ongkir,
+            "ongkir_get_voucher" => $ongkir_get_voucher,
+        ], 200);
     }
 
     public function detail_pembelian($purchase_id) {

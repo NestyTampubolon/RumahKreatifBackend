@@ -302,5 +302,7 @@
   // DropzoneJS Demo Code End
 </script>
 
+@yield("custom_script")
+
 </body>
 </html>
