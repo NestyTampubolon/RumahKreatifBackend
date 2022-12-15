@@ -11,12 +11,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>Tabel Daftar Pembelian</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <li class="breadcrumb-item active">Tabel Daftar Pembelian</li>
             </ol>
           </div>
         </div>
@@ -55,39 +55,39 @@
                           <td><?php 
                             $status_pembelian = "";
                             if($item->status_pembelian == "status1" || $item->status_pembelian == "status1_ambil"){
-                                if($item->proof_of_payment_image){
-                                  $status_pembelian = "Bukti Pembayaran Telah Dikirim. SILAHKAN KONFIRMASI.";
-                                }
-
-                                else{
-                                  $status_pembelian = "Belum Dapat Dikonfirmasi. TUNGGU BUKTI PEMBAYARAN.";
-                                }
-                              }
-                              
-                              else if($item->status_pembelian == "status2" || $item->status_pembelian == "status2_ambil"){
-                                $status_pembelian = "Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.";
-                              }
-                              
-                              else if($item->status_pembelian == "status3_ambil"){
-                                $status_pembelian = "MENUNGGU PELANGGAN MENGAMBIL PESANAN.";
-                              }
-                              
-                              else if($item->status_pembelian == "status3"){
-                                $status_pembelian = "Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.";
-                              }
-                              
-                              else if($item->status_pembelian == "status4_ambil_a"){
-                                $status_pembelian = "Pesanan telah diberikan. TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.";
+                              if($item->proof_of_payment_image){
+                                $status_pembelian = "Bukti Pembayaran Telah Dikirim. SILAHKAN KONFIRMASI.";
                               }
 
-                              else if($item->status_pembelian == "status4" || $item->status_pembelian == "status4_ambil_b"){
-                                $status_pembelian = "Transaksi Sukses. SILAHKAN KIRIM BAYARAN.";
+                              else{
+                                $status_pembelian = "Belum Dapat Dikonfirmasi. TUNGGU BUKTI PEMBAYARAN.";
                               }
+                            }
+                            
+                            else if($item->status_pembelian == "status2" || $item->status_pembelian == "status2_ambil"){
+                              $status_pembelian = "Pesanan Sedang Diproses. TUNGGU PESANAN DIPROSES.";
+                            }
+                            
+                            else if($item->status_pembelian == "status3_ambil"){
+                              $status_pembelian = "MENUNGGU PELANGGAN MENGAMBIL PESANAN.";
+                            }
+                            
+                            else if($item->status_pembelian == "status3"){
+                              $status_pembelian = "Pesanan Sedang Dalam Perjalanan. TUNGGU PESANAN DITERIMA.";
+                            }
+                            
+                            else if($item->status_pembelian == "status4_ambil_a"){
+                              $status_pembelian = "Pesanan telah diberikan. TUNGGU PELANGGAN MENGKONFIRMASI PESANAN YANG TELAH DIAMBIL.";
+                            }
 
-                              else if($item->status_pembelian == "status5" || $item->status_pembelian == "status5_ambil"){
-                                $status_pembelian = "PENJUALAN DAN PEMBELIAN BERHASIL.";
-                              }
-                              echo($status_pembelian);
+                            else if($item->status_pembelian == "status4" || $item->status_pembelian == "status4_ambil_b"){
+                              $status_pembelian = "Transaksi Sukses. SILAHKAN KIRIM BAYARAN.";
+                            }
+
+                            else if($item->status_pembelian == "status5" || $item->status_pembelian == "status5_ambil"){
+                              $status_pembelian = "PENJUALAN DAN PEMBELIAN BERHASIL.";
+                            }
+                            echo($status_pembelian);
                           ?></td>
                           <td>{{ $item->created_at }}</td>
                           <td>{{ $item->updated_at }}</td>
@@ -255,7 +255,7 @@
             $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir_get_voucher)} dari Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
           }
           else if(!result.claim_ongkos_kirim_voucher){
-            total_bayar = parseInt(result.semua_total_harga_pembelian) + parseInt(result.ongkir);
+            total_bayar = parseInt(result.total_harga_pembelian_keseluruhan_beli) + parseInt(result.ongkir);
             
             $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
           }
@@ -263,6 +263,10 @@
           $("#list-products").append(`<center><a>TOTAL PEMBAYARAN PEMBELI: Rp.${format_rupiah(total_bayar)}</a></center><br>`)
           $("#list-products").append(`<center><a>TOTAL PEMBAYARAN KE PENJUAL: Rp.${format_rupiah(total_bayar_ke_penjual)}</a></center><br>`)
         }
+      }
+
+      if(result.purchase.no_resi != null){
+        $("#list-products").append(`<center><a>Slahkan <a href="https://cekresi.com/?noresi=${result.purchase.no_resi}" target="_blank"><b>CEK</b></a> nomor resi: ${result.purchase.no_resi} [${result.courier_name}]</a></center><br>`)
       }
 
       if(result.proof_of_payment){

@@ -154,6 +154,12 @@ class InvoiceController extends Controller
             $service_name = "";
         }
 
+        $merchant = DB::table('product_purchases')->select('nama_merchant', 'kontak_toko')->where('purchases.user_id', $user_id)
+        ->where('product_purchases.purchase_id', $purchase_id)
+        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
+
         $product_purchases = DB::table('product_purchases')->where('user_id', $user_id)->where('product_purchases.purchase_id', $purchase_id)
         ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')->orderBy('product_purchases.product_purchase_id', 'desc')->get();
@@ -176,9 +182,9 @@ class InvoiceController extends Controller
 
         $cek_proof_of_payment = DB::table('proof_of_payments')->where('purchase_id', $purchase_id)->first();
 
-        return view('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        return view('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'merchant', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-        $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'merchant', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
     	return $pdf->download("invoice_pembelian_$purchases->kode_pembelian.pdf");
     }
@@ -194,6 +200,12 @@ class InvoiceController extends Controller
         $purchase = DB::table('purchases')->where('purchase_id', $purchase_id)->join('users', 'purchases.user_id', '=', 'users.id')->first();
 
         $profile = DB::table('profiles')->where('user_id', $purchase->user_id)->join('users', 'profiles.user_id', '=', 'users.id')->first();
+
+        $merchant = DB::table('product_purchases')->select('nama_merchant', 'kontak_toko')->where('products.merchant_id', $toko)
+        ->where('product_purchases.purchase_id', $purchase_id)
+        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->first();
 
         $product_purchases = DB::table('product_purchases')->where('merchant_id', $toko)->where('product_purchases.purchase_id', $purchase_id)
         ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
@@ -347,9 +359,9 @@ class InvoiceController extends Controller
             $service_name = "";
         }
 
-        return view('user.toko.invoice_penjualan', compact(['product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        return view('user.toko.invoice_penjualan', compact(['merchant', 'product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-        $pdf = PDF::loadview('user.toko.invoice_penjualan', compact(['product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'ongkir', 'courier_name', 'service_name']));
+        $pdf = PDF::loadview('user.toko.invoice_penjualan', compact(['merchant', 'product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
     	return $pdf->download("invoice_penjualan_$purchases->kode_pembelian.pdf");
     }

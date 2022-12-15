@@ -16,7 +16,49 @@ class HomeController extends Controller
         }
         
         if(isset($cek_admin_id)){
-            return view('admin.index');
+            $data = DB::table("purchases as p")
+                ->join("profiles", "profiles.user_id", "=", "p.user_id")
+                ->joinSub(DB::table("product_purchases as pp")
+                    ->join("products as p", "pp.product_id", "p.product_id")
+                    ->join("merchants as m", "m.merchant_id", "p.merchant_id")
+                    ->select("pp.purchase_id", "m.nama_merchant"), "mp", function($join){
+                        $join->on("p.purchase_id", "=", "mp.purchase_id");
+                    })
+                ->leftJoin("proof_of_payments as ppp", "ppp.purchase_id", "=", "p.purchase_id")
+                ->select("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian","ppp.proof_of_payment_image")
+                ->where('p.is_cancelled', 0)->where("p.status_pembelian", "status1")->orwhere("p.status_pembelian", "status1_ambil")->where("ppp.proof_of_payment_image", "!=", null)
+                ->groupBy("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian", "ppp.proof_of_payment_image")
+                ->get();
+            
+            $jumlah_pesanan = DB::table('purchases')->where('is_cancelled', 0)->count();
+            $jumlah_pesanan_perlu_konfirmasi = DB::table('purchases')
+            ->leftJoin("proof_of_payments", "proof_of_payments.purchase_id", "=", "purchases.purchase_id")
+            ->where('is_cancelled', 0)->where("status_pembelian", "status1")
+            ->orwhere("status_pembelian", "status1_ambil")->where("proof_of_payment_image", "!=", null)->count();
+
+            $jumlah_pengguna = DB::table('profiles')->count();
+            $jumlah_pengguna_perlu_verifikasi = DB::table('profiles')
+            ->leftJoin("verify_users", "verify_users.user_id", "=", "profiles.user_id")
+            ->where('is_verified', "!=", 1)->groupBy("profiles.user_id",)
+            ->count();
+
+            $toko = DB::table('merchants')->count();
+            $toko_perlu_verifikasi = DB::table('merchants')
+            ->where('is_verified', "!=", 1)
+            ->count();
+
+            return view('admin.index', [
+                "purchases"=> $data,
+                "jumlah_pesanan"=> $jumlah_pesanan,
+                "jumlah_pesanan_perlu_konfirmasi"=> $jumlah_pesanan_perlu_konfirmasi,
+                "jumlah_pengguna"=> $jumlah_pengguna,
+                "jumlah_pengguna_perlu_verifikasi"=> $jumlah_pengguna_perlu_verifikasi,
+                "jumlah_toko"=> $toko,
+                "jumlah_toko_perlu_verifikasi"=> $toko_perlu_verifikasi,
+
+            ]);
+
+            // return view('admin.index');
         }
  
         if(Session::get('toko')){

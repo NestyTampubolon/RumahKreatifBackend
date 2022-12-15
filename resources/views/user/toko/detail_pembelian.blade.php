@@ -203,7 +203,7 @@
                 </table><!-- End .table table-summary -->
                 
                 <button onclick="window.open('../invoice_penjualan/{{$purchases->purchase_id}}', '_blank')" class="btn btn-outline-primary btn-rounded" style="border-color: red; color: red; background-color: white;">
-                    <span>Download PDF</span>
+                    <span>Lihat Invoice</span>
                 </button>
             </div><!-- End .summary -->
         </aside><!-- End .col-lg-3 -->

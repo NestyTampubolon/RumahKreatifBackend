@@ -21,23 +21,79 @@
             <div class="col-lg-8">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card card-dashboard">
-                            <div class="card-body" align="center">
+                        <div class="card">
                                 <p class=""><b>
-                                    @if($purchases->kode_pembelian == "")
-
-                                    @else
-                                        {{$purchases->kode_pembelian}} - 
-                                    @endif
-                                    @if($profile->id == $purchases->user_id)
-                                        {{$profile->name}}
-                                    @endif
+                                    Invoice
                                 </b></p>
-                            </div><!-- End .card-body -->
                         </div><!-- End .card-dashboard -->
-                    </div><!-- End .col-lg-6 -->
+                    </div>
                 </div><!-- End .row -->
                 
+                <div class="mb-1"></div>
+                
+                <div class="row" align="left">
+                    <table class="col-lg-5">
+                        <tr><td colspan="3"><img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="100"></td></tr>
+                        <tr><td colspan="3">DITERBITKAN ATAS NAMA</td></tr>
+                        <tr>
+                            <td><b>Toko</b></td>
+                            <td align="center" width="10px"><b>:</b></td>
+                            <td>{{$merchant->nama_merchant}}</td>
+                        </tr>
+                        @if($purchases->alamat_purchase != null || $purchases->alamat_purchase != "")
+                            @if($cek_merchant_address > 0)
+                                <tr>
+                                    <td><b>Alamat Pengiriman</b></td>
+                                    <td><b>:</b></td>
+                                    <td>
+                                        {{$merchant->nama_merchant}} 
+                                        @if($purchases->status_pembelian != "status1" || $purchases->status_pembelian != "status1_ambil")
+                                            ({{$merchant->kontak_toko}})
+                                        @endif
+                                        , {{$merchant_address->merchant_street_address}}, {{$lokasi_toko["subdistrict_name"]}}
+                                        , {{$lokasi_toko["city"]}}, {{$lokasi_toko["province"]}}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endif
+                    </table>
+                    <div class="col-lg-2"></div>
+                    <table class="col-lg-5">
+                        <tr align="center"><td colspan="3"><b>Untuk</b></td></tr>
+                        <tr>
+                            <td><b>Pembeli</b></td>
+                            <td><b>:</b></td>
+                            <td>
+                                @if($profile->id == $purchases->user_id)
+                                    {{$profile->name}}
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Tanggal Pembelian</b></td>
+                            <td align="center" width="10px"><b>:</b></td>
+                            <td>{{$purchases->created_at}}</td>
+                        </tr>
+                        @if($purchases->alamat_purchase != null || $purchases->alamat_purchase != "")
+                            @if($cek_user_address > 0)
+                                <tr>
+                                    <td><b>Alamat Pengiriman</b></td>
+                                    <td><b>:</b></td>
+                                    <td>
+                                        @if($profile->id == $purchases->user_id)
+                                            {{$profile->name}} ({{$profile->no_hp}})
+                                        @endif
+                                        , {{$user_address->user_street_address}}, {{$lokasi_pembeli["subdistrict_name"]}}
+                                        , {{$lokasi_pembeli["city"]}}, {{$lokasi_pembeli["province"]}}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endif
+                    </table>
+                </div><!-- End .row -->
+                
+                <div class="mb-3"></div>
+
                 @foreach($product_purchases as $invoice_product_purchases)
                 <a class="col-lg-12 border mb-1 row" style="padding: 15px 0px 15px 0px; margin: 0px">
                     <?php

@@ -4,7 +4,7 @@
 
 @section('container')
 
-<!-- <div class="content-wrapper">
+<div class="content-wrapper">
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -13,8 +13,8 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard v1</li>
+            <li class="breadcrumb-item"><a href="./">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
           </ol>
         </div>
       </div>
@@ -24,20 +24,86 @@
   <section class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-3 col-6">
+
+        <!-- <div class="col-lg-3 col-6">
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>150</h3>
+              <h3>{{$jumlah_pesanan}}</h3>
 
-              <p>New Orders</p>
+              <p>Total Pesanan</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="./daftar_pembelian" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div> -->
+        
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{$jumlah_pesanan_perlu_konfirmasi}}</h3>
+
+              <p>Perlu Konfirmasi</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <a href="./daftar_pembelian" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
+
+        <!-- <div class="col-lg-3 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{$jumlah_pengguna}}</h3>
+
+              <p>Total Pengguna</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <a href="./user" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div> -->
+
         <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{$jumlah_pengguna_perlu_verifikasi}}</h3>
+
+              <p>Pengguna Perlu Verifikasi</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="./user" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+
+        <!-- <div class="col-lg-3 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{$jumlah_toko}}</h3>
+
+              <p>Total Toko</p>
+            </div>
+            <a href="./toko_user" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div> -->
+
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{$jumlah_toko_perlu_verifikasi}}</h3>
+
+              <p>Toko Perlu Verifikasi</p>
+            </div>
+            <a href="./toko_user" class="small-box-footer">Info Lanjut <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- <div class="col-lg-3 col-6">
           <div class="small-box bg-success">
             <div class="inner">
               <h3>53<sup style="font-size: 20px">%</sup></h3>
@@ -49,21 +115,8 @@
             </div>
             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
-        </div>
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>44</h3>
-
-              <p>User Registrations</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <div class="col-lg-3 col-6">
+        </div> -->
+        <!-- <div class="col-lg-3 col-6">
           <div class="small-box bg-danger">
             <div class="inner">
               <h3>65</h3>
@@ -76,9 +129,77 @@
             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
-      </div>
-      
+      </div> -->
+
+
       <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead align="center">
+                    <tr>
+                        <th>ID Pesanan</th>
+                        <th>Kode Pembelian</th>
+                        <th>Nama</th>
+                        <th>Toko</th>
+                        <th>Status Pesanan</th>
+                        <th>Tanggal Pemesanan</th>
+                        <th>Detail</th>
+                        <th>Update Status </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($purchases as $item)
+                        <tr>
+                          <td>{{ $item->purchase_id }}</td>
+                          <td>{{ $item->kode_pembelian }}</td>
+                          <td>{{ $item->name }}</td>
+                          <td>{{ $item->nama_merchant }}</td>
+                          <td>Bukti Pembayaran Telah Dikirim. SILAHKAN KONFIRMASI.</td>
+                          <td>{{ $item->created_at }}</td>
+                          <td><button data-purchaseID="{{ $item->purchase_id }}" class="btn-detail btn btn-info">Lihat Detail</button></td>
+                          <td><a href="./update_status_pembelian/{{$item->purchase_id}}" class="btn btn-block btn-info">Konfirmasi Pembayaran</a></td>
+                        </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+
+        <div class="modal" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Detail Pemesanan</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                <ul id="list-products"></ul>
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      
+      <!-- <div class="row">
         <section class="col-lg-7 connectedSortable">
           <div class="card">
             <div class="card-header">
@@ -514,9 +635,145 @@
             
           </div>
         </section>
-      </div>
+      </div> -->
     </div>
   </section>
-</div> -->
+</div>
 @endsection
 
+
+@section("custom_script")
+<script>
+  $(".btn-detail").on( "click", function() {
+    function format_rupiah(nominal){
+        var  reverse = nominal.toString().split('').reverse().join(''),
+              ribuan = reverse.match(/\d{1,3}/g);
+          return ribuan	= ribuan.join('.').split('').reverse().join('');
+    }
+    
+    let data = $(this).data("purchaseid");
+
+    $.ajax({url:`/purchase/detail/${data}`, success: function(result){
+      $("#list-products").empty();
+      console.log(result)
+      result.products.forEach(product => {
+        if(product.harga_pembelian_produk == null){
+          harga_pembelian_produk = product.price * product.jumlah_pembelian_produk;
+        }
+        
+        else if(product.harga_pembelian_produk != null){
+          harga_pembelian_produk = product.harga_pembelian_produk;
+        }
+
+        if(result.claim_pembelian_voucher){
+          result.target_kategori.forEach(get_target_kategori => {
+            potongan_subtotal_perproduk = harga_pembelian_produk * result.claim_pembelian_voucher.potongan / 100;
+
+            if(result.jumlah_potongan_subtotal < result.claim_pembelian_voucher.maksimal_pemotongan){
+                if(product.category_id == get_target_kategori){
+                    potongan_harga_barang = potongan_subtotal_perproduk;
+                }
+
+                else{
+                    potongan_harga_barang = 0;
+                }
+            }
+
+            else if(result.jumlah_potongan_subtotal >= result.claim_pembelian_voucher.maksimal_pemotongan){
+                if(product.category_id == get_target_kategori){
+                    potongan_harga_barang = harga_pembelian_produk / result.subtotal_harga_produk_terkait_seluruh * result.claim_pembelian_voucher.maksimal_pemotongan;
+                }
+
+                else{
+                    potongan_harga_barang = 0;
+                }
+            }
+
+            harga_pembelian_produk_terpotong = harga_pembelian_produk - potongan_harga_barang;
+
+            if(harga_pembelian_produk_terpotong < 0){
+              harga_pembelian_produk_terpotong = 0;
+            }
+          
+            if(result.claim_pembelian_voucher){
+              get_harga_pembelian_produk_terpotong = "Rp." + format_rupiah(harga_pembelian_produk_terpotong) + " dari ";
+            }
+
+            else{
+              get_harga_pembelian_produk_terpotong = "";
+            }
+
+            if(product.category_id == get_target_kategori){
+              cek_target_kategori = product.category_id;
+              
+              total_harga_pembelian_keseluruhan_beli = result.semua_total_harga_pembelian - result.jumlah_potongan_subtotal;
+
+              $("#list-products").append(`<li>Product ID: ${product.product_id} | Nama Produk: ${product.product_name} |  Jumlah Pembelian: ${product.jumlah_pembelian_produk}  | Harga: ${get_harga_pembelian_produk_terpotong} Rp.${format_rupiah(harga_pembelian_produk)}</li>`)
+            }
+          });
+        }
+        
+        else if(!result.claim_pembelian_voucher){
+          $("#list-products").append(`<li>Product ID: ${product.product_id} | Nama Produk: ${product.product_name} |  Jumlah Pembelian: ${product.jumlah_pembelian_produk}  | Harga: Rp.${format_rupiah(harga_pembelian_produk)}</li>`)
+        }
+      });
+
+      if(!result.claim_pembelian_voucher){
+        $("#list-products").append(`<br><center><a>TOTAL HARGA PEMBELIAN: Rp.${format_rupiah(result.semua_total_harga_pembelian)}</a></center><br>`)
+
+        if(result.purchase.courier_code != null && result.purchase.service != null){
+          if(result.claim_ongkos_kirim_voucher){
+            total_bayar = parseInt(result.semua_total_harga_pembelian) + parseInt(result.ongkir_get_voucher);
+            
+            $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir_get_voucher)} dari Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
+          }
+          else if(!result.claim_ongkos_kirim_voucher){
+            total_bayar = parseInt(result.semua_total_harga_pembelian) + parseInt(result.ongkir);
+            
+            $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
+          }
+          total_bayar_ke_penjual = parseInt(result.semua_total_harga_pembelian) + parseInt(result.ongkir);
+          $("#list-products").append(`<center><a>TOTAL PEMBAYARAN PEMBELI: Rp.${format_rupiah(total_bayar)}</a></center><br>`)
+          $("#list-products").append(`<center><a>TOTAL PEMBAYARAN KE PENJUAL: Rp.${format_rupiah(total_bayar_ke_penjual)}</a></center><br>`)
+        }
+      }
+
+      else if(result.claim_pembelian_voucher){
+        $("#list-products").append(`<br><center><a>TOTAL HARGA PEMBELIAN: Rp.${format_rupiah(total_harga_pembelian_keseluruhan_beli)}</a></center><br>`)
+        $("#list-products").append(`<center><a>TOTAL HARGA PEMBELIAN SEBELUM PEMOTONGAN: Rp.${format_rupiah(result.semua_total_harga_pembelian)}</a></center><br>`)
+
+        if(result.purchase.courier_code != null && result.purchase.service != null){
+          if(result.claim_ongkos_kirim_voucher){
+            total_bayar = parseInt(total_harga_pembelian_keseluruhan_beli) + parseInt(result.ongkir_get_voucher);
+            
+            $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir_get_voucher)} dari Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
+          }
+          else if(!result.claim_ongkos_kirim_voucher){
+            total_bayar = parseInt(result.total_harga_pembelian_keseluruhan_beli) + parseInt(result.ongkir);
+            
+            $("#list-products").append(`<center><a>KURIR yang digunakan: ${result.courier_name} - ${result.purchase.service} dengan biaya ONGKOS KIRIM Rp.${format_rupiah(result.ongkir)}</a></center><br>`)
+          }
+          total_bayar_ke_penjual = parseInt(result.semua_total_harga_pembelian) + parseInt(result.ongkir);
+          $("#list-products").append(`<center><a>TOTAL PEMBAYARAN PEMBELI: Rp.${format_rupiah(total_bayar)}</a></center><br>`)
+          $("#list-products").append(`<center><a>TOTAL PEMBAYARAN KE PENJUAL: Rp.${format_rupiah(total_bayar_ke_penjual)}</a></center><br>`)
+        }
+      }
+
+      if(result.purchase.no_resi != null){
+        $("#list-products").append(`<center><a>Slahkan <a href="https://cekresi.com/?noresi=${result.purchase.no_resi}" target="_blank"><b>CEK</b></a> nomor resi: ${result.purchase.no_resi} [${result.courier_name}]</a></center><br>`)
+      }
+
+      if(result.proof_of_payment){
+        $("#list-products").append(`<center><a href="./asset/u_file/proof_of_payment_image/${result.proof_of_payment.proof_of_payment_image}" target="_blank">Lihat Foto Bukti Pembayaran</a></center>`)
+      }
+      
+      else if(!result.proof_of_payment){
+        $("#list-products").append(`<center><a>Belum dapat dikonfirmasi. MENUNGGU PEMBAYARAN</a></center>`)
+      }
+
+      $('#myModal').modal('show');
+    }});
+
+  });
+</script>
+@endsection
