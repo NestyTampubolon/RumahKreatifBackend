@@ -30,38 +30,47 @@
                 </div><!-- End .row -->
                 
                 <div class="mb-1"></div>
-                
-                <div class="row" align="left">
-                    <table class="col-lg-5">
-                        <tr><td colspan="3"><img src="{{ URL::asset('asset/Image/logo_rkt.png') }}" alt="RKT Logo" width="100"></td></tr>
-                        <tr><td colspan="3">DITERBITKAN ATAS NAMA</td></tr>
-                        <tr>
-                            <td><b>Toko</b></td>
-                            <td align="center" width="10px"><b>:</b></td>
-                            <td>{{$merchant->nama_merchant}}</td>
+
+                <div class="row">
+                    <table class="col-sm-5">
+                        <tr valign="top" height="100px">
+                            <td colspan="3">
+                                <img src="../asset/Image/logo_rkt.png" alt="RKT Logo" width="80">
+                            </td>
                         </tr>
-                        @if($purchases->alamat_purchase != null || $purchases->alamat_purchase != "")
-                            @if($cek_merchant_address > 0)
-                                <tr>
-                                    <td><b>Alamat Pengiriman</b></td>
-                                    <td><b>:</b></td>
-                                    <td>
-                                        {{$merchant->nama_merchant}} 
-                                        @if($purchases->status_pembelian != "status1" || $purchases->status_pembelian != "status1_ambil")
-                                            ({{$merchant->kontak_toko}})
-                                        @endif
-                                        , {{$merchant_address->merchant_street_address}}, {{$lokasi_toko["subdistrict_name"]}}
-                                        , {{$lokasi_toko["city"]}}, {{$lokasi_toko["province"]}}
-                                    </td>
-                                </tr>
-                            @endif
+                        <tr valign="top" valign="top"><td colspan="3">DITERBITKAN ATAS NAMA</td></tr>
+                        <tr valign="top">
+                            <td width="100px"><b>Toko</b></td>
+                            <td align="center" width="10px"><b>:</b></td>
+                            <td> {{$merchant->nama_merchant}}</td>
+                        </tr>
+                        @if($cek_merchant_address > 0)
+                            <tr valign="top">
+                                <td width="100px"><b>Alamat Toko</b></td>
+                                <td><b>:</b></td>
+                                <td>
+                                    {{$merchant->nama_merchant}} 
+                                    @if($purchases->status_pembelian != "status1" || $purchases->status_pembelian != "status1_ambil")
+                                        ({{$merchant->kontak_toko}})
+                                    @endif
+                                    , {{$merchant_address->merchant_street_address}}, {{$lokasi_toko["subdistrict_name"]}}
+                                    , {{$lokasi_toko["city"]}}, {{$lokasi_toko["province"]}}
+                                </td>
+                            </tr>
                         @endif
                     </table>
-                    <div class="col-lg-2"></div>
-                    <table class="col-lg-5">
-                        <tr align="center"><td colspan="3"><b>Untuk</b></td></tr>
-                        <tr>
-                            <td><b>Pembeli</b></td>
+
+                    <div class="col-sm-1"></div>
+                    
+                    <table class="col-sm-6">
+                        <tr style="font-size:22.5px" height="100px">
+                            <td width="195px"><b>Kode Pembelian</b></td>
+                            <td align="center" width="10px"><b>:</b></td>
+                            <td> {{$purchases->kode_pembelian}}</td>
+                        </tr>
+                        <tr><td colspan="3" valign="top">UNTUK</td></tr>
+                        <tr valign="top">
+                            <td width="145px"><b>Pembeli</b></td>
                             <td><b>:</b></td>
                             <td>
                                 @if($profile->id == $purchases->user_id)
@@ -69,15 +78,15 @@
                                 @endif
                             </td>
                         </tr>
-                        <tr>
-                            <td><b>Tanggal Pembelian</b></td>
+                        <tr valign="top">
+                            <td width="145px"><b>Tanggal Pembelian</b></td>
                             <td align="center" width="10px"><b>:</b></td>
-                            <td>{{$purchases->created_at}}</td>
+                            <td> {{$purchases->created_at}}</td>
                         </tr>
                         @if($purchases->alamat_purchase != null || $purchases->alamat_purchase != "")
                             @if($cek_user_address > 0)
-                                <tr>
-                                    <td><b>Alamat Pengiriman</b></td>
+                                <tr valign="top">
+                                    <td width="145px"><b>Alamat Pengiriman</b></td>
                                     <td><b>:</b></td>
                                     <td>
                                         @if($profile->id == $purchases->user_id)
@@ -410,8 +419,12 @@
                             </script>
                         @endif
                     @endforeach
-                    </div><!-- End .row -->
+                </div><!-- End .row -->
             </div><!-- .End .tab-pane -->
         </center>
     </body>
 </html>
+
+<script>
+  window.addEventListener("load", window.print());
+</script>
