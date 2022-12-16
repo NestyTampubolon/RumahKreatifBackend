@@ -184,9 +184,9 @@ class InvoiceController extends Controller
 
         return view('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'merchant', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-        $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'merchant', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
+        // $pdf = PDF::loadview('user.pembelian.invoice_pembelian', compact(['claim_pembelian_voucher', 'claim_ongkos_kirim_voucher', 'merchant', 'product_purchases', 'purchases', 'product_specifications', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-    	return $pdf->download("invoice_pembelian_$purchases->kode_pembelian.pdf");
+    	// return $pdf->download("invoice_pembelian_$purchases->kode_pembelian.pdf");
     }
 
 
@@ -361,8 +361,8 @@ class InvoiceController extends Controller
 
         return view('user.toko.invoice_penjualan', compact(['merchant', 'product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-        $pdf = PDF::loadview('user.toko.invoice_penjualan', compact(['merchant', 'product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
+        // $pdf = PDF::loadview('user.toko.invoice_penjualan', compact(['merchant', 'product_purchases', 'purchases', 'product_specifications', 'total_harga', 'profile', 'cek_user_address', 'user_address', 'lokasi_pembeli', 'cek_merchant_address', 'merchant_address', 'lokasi_toko', 'ongkir', 'courier_name', 'service_name']));
 
-    	return $pdf->download("invoice_penjualan_$purchases->kode_pembelian.pdf");
+    	// return $pdf->download("invoice_penjualan_$purchases->kode_pembelian.pdf");
     }
 }
