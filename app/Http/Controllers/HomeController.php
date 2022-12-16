@@ -26,14 +26,14 @@ class HomeController extends Controller
                     })
                 ->leftJoin("proof_of_payments as ppp", "ppp.purchase_id", "=", "p.purchase_id")
                 ->select("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian","ppp.proof_of_payment_image")
-                ->where('p.is_cancelled', 0)->where("p.status_pembelian", "status1")->orwhere("p.status_pembelian", "status1_ambil")->where("ppp.proof_of_payment_image", "!=", null)
+                ->where('p.is_cancelled', 0)->where("ppp.proof_of_payment_image", "!=", null)->where("p.status_pembelian", "status1")->orwhere("p.status_pembelian", "status1_ambil")->where("ppp.proof_of_payment_image", "!=", null)
                 ->groupBy("p.purchase_id", "profiles.name", "p.kode_pembelian", "mp.nama_merchant", "p.created_at", "p.updated_at", "p.status_pembelian", "ppp.proof_of_payment_image")
                 ->get();
             
             $jumlah_pesanan = DB::table('purchases')->where('is_cancelled', 0)->count();
             $jumlah_pesanan_perlu_konfirmasi = DB::table('purchases')
             ->leftJoin("proof_of_payments", "proof_of_payments.purchase_id", "=", "purchases.purchase_id")
-            ->where('is_cancelled', 0)->where("status_pembelian", "status1")
+            ->where('is_cancelled', 0)->where("proof_of_payment_image", "!=", null)->where("status_pembelian", "status1")
             ->orwhere("status_pembelian", "status1_ambil")->where("proof_of_payment_image", "!=", null)->count();
 
             $jumlah_pengguna = DB::table('profiles')->count();
@@ -57,8 +57,6 @@ class HomeController extends Controller
                 "jumlah_toko_perlu_verifikasi"=> $toko_perlu_verifikasi,
 
             ]);
-
-            // return view('admin.index');
         }
  
         if(Session::get('toko')){

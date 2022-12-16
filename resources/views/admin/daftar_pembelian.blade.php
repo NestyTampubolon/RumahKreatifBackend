@@ -94,10 +94,10 @@
                           <td><button data-purchaseID="{{ $item->purchase_id }}" class="btn-detail btn btn-info">Lihat Detail</button></td>
                           <td>
                             @if($item->status_pembelian == "status1" || $item->status_pembelian == "status1_ambil")
-                                  @if($item->proof_of_payment_image)
-                                  <a href="./update_status_pembelian/{{$item->purchase_id}}" class="btn btn-block btn-info">Konfirmasi Pembayaran</a>
-                                  @endif
-                              @endif
+                                @if($item->proof_of_payment_image)
+                                <a href="./update_status_pembelian/{{$item->purchase_id}}" class="btn btn-block btn-info">Konfirmasi Pembayaran</a>
+                                @endif
+                            @endif
                           </td>
                         </tr>
                     @endforeach
