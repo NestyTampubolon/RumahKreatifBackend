@@ -63,8 +63,18 @@ class AutentikasiController extends Controller
         $password = $request->password;
 
         if(Auth::attempt(['username' => $username_email, 'password' => $password]) || Auth::attempt(['email' => $username_email, 'password' => $password])){
+            $id = Auth::user()->id;
+            $cek_admin_id = DB::table('users')->where('id', $id)->where('is_admin', 1)->first();
+
             $user = Auth::user();
-            return redirect()->back();
+            
+            if(isset($cek_admin_id)){
+                return redirect('./');
+            }
+
+            else{
+                return redirect()->back();
+            }
         }
         
         else{

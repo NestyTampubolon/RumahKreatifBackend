@@ -41,6 +41,9 @@
                         <th align="center">Username</th>
                         <th align="center">Email</th>
                         <th align="center">Nama</th>
+                        <th align="center">No Handphone</th>
+                        <th align="center">Tanggal Lahir</th>
+                        <th align="center">Jenis Kelamin</th>
                         <th align="center">Status</th>
                         <th align="center">Action</th>
                     </tr>
@@ -52,6 +55,17 @@
                           <td>{{$profile_user->username}}</td>
                           <td>{{$profile_user->email}}</td>
                           <td>{{$profile_user->name}}</td>
+                          <td>{{$profile_user->no_hp}}</td>
+                          <td>{{$profile_user->birthday}}</td>
+                          <?php
+                              if($profile_user->gender == "L"){
+                                $jenis_kelamin = "Laki-Laki";
+                              }
+                              else if($profile_user->gender == "P"){
+                                $jenis_kelamin = "Perempuan";
+                              }
+                          ?>
+                          <td>{{$jenis_kelamin}}</td>
                           
                           <?php $verify_user = DB::table('verify_users')->where('user_id', $profile_user->user_id)->first(); ?>
                           @if($verify_user)
@@ -81,13 +95,6 @@
                                     @if($verify_user)
                                       <center><a href="./asset/u_file/foto_ktp/{{$verify_user->foto_ktp}}" target="_blank">Lihat Foto KTP</a></center>
                                       <center><a href="./asset/u_file/foto_ktp_selfie/{{$verify_user->ktp_dan_selfie}}" target="_blank">Lihat Foto Selfie bersama KTP</a></center>
-                                    @endif
-                                    <center><a>{{$profile_user->no_hp}}</a></center>
-                                    <center><a>{{$profile_user->birthday}}</a></center>
-                                    @if($profile_user->gender == "L")
-                                      <center><a>Laki Laki</a></center>
-                                    @elseif($profile_user->gender == "P")
-                                      <center><a>Perempuan</a></center>
                                     @endif
                                 </div>
                                 <div class="modal-footer justify-content-between">

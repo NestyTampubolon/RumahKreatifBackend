@@ -37,14 +37,13 @@ class HomeController extends Controller
             ->orwhere("status_pembelian", "status1_ambil")->where("proof_of_payment_image", "!=", null)->count();
 
             $jumlah_pengguna = DB::table('profiles')->count();
-            $jumlah_pengguna_perlu_verifikasi = DB::table('profiles')
-            ->leftJoin("verify_users", "verify_users.user_id", "=", "profiles.user_id")
-            ->where('is_verified', "!=", 1)->groupBy("profiles.user_id",)
+            $jumlah_pengguna_perlu_verifikasi = DB::table('verify_users')
+            ->where('is_verified', "!=", 1)->orwhere('is_verified', null)->groupBy("user_id",)
             ->count();
 
             $toko = DB::table('merchants')->count();
             $toko_perlu_verifikasi = DB::table('merchants')
-            ->where('is_verified', "!=", 1)
+            ->where('is_verified', "!=", 1)->orwhere('is_verified', null)
             ->count();
 
             return view('admin.index', [
