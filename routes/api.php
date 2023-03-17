@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ProdukController;
-
+use App\Http\Controllers\API\CartController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/produkjson', [ProdukController::class, 'index']);
-Route::get('/lihat_produk/{product_id}', [ProdukController::class, 'lihat_produk']);
+Route::get('/produkjson/{product_id}', [ProdukController::class, 'lihat_produk']);
+Route::get('/keranjang', [CartController::class, 'keranjang']);
+
