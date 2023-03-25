@@ -29,7 +29,7 @@ Route::get('/keranjang', [CartController::class, 'keranjang']);
 
 Route::post('register', [AutentikasiController::class, 'Register']);
 Route::post('login', [AutentikasiController::class, 'PostLogin']);
-Route::get('/user', [UserController::class, 'index']);
+Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum');;
 Route::group(['middleware' => 'auth:api'], function(){
     
 });

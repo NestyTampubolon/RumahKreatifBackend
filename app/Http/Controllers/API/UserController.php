@@ -23,16 +23,10 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // Get the authenticated user's ID
-        $userId = $request->user()->id;
+        $user = $request->user();
 
-        // Retrieve the user's data from the database
-        $user = User::find($userId);
 
-        // Return the user's data as a JSON response
-        return response()->json([
-            'user' => $user
-        ]);
+        return response()->json($user,200);
     }
 
 }

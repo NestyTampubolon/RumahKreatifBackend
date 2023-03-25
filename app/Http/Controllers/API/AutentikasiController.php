@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Validation\ValidationException;
 class AutentikasiController extends Controller
 {
     //
@@ -45,10 +45,13 @@ class AutentikasiController extends Controller
             $data_profiles->no_hp = $request->no_hp;
             $data_profiles->birthday = $request->birthday;
             $data_profiles->gender = $request->gender;
+
+            $token = $data_users->createToken('MyApp')->plainTextToken;
+
             if ($data_profiles->save()) {
                 return response()->json([
-                    'token' => "sukses",
-                ]);
+                    'token' => $token,
+                ],200);
             }
         }
     }
@@ -66,22 +69,35 @@ class AutentikasiController extends Controller
             return response()->json(['message' => $val[0]], 400);
         }
 
+        // $user = User::where('username', $request->username)->first();
+
+        // if ($user) {
+
+        //     if (password_verify($request->password, $user->password)) {
+        //         $randomString = Str::random(30);
+        //         $users = DB::table('users')
+        //         ->where('id', $user->id)
+        //         ->join('profiles', 'users.id', '=', 'profiles.user_id')->get();
+        //         return response()->json([
+        //             'token' => $randomString,
+        //             'user' => $users
+        //         ]);
+        //     }
+
+        // }
+
         $user = User::where('username', $request->username)->first();
 
-        if ($user) {
-
-            if (password_verify($request->password, $user->password)) {
-                $randomString = Str::random(30);
-                $users = DB::table('users')
-                ->where('id', $user->id)
-                ->join('profiles', 'users.id', '=', 'profiles.user_id')->get();
-                return response()->json([
-                    'token' => (string)$user->id,
-                    'user' => $users
-                ]);
-            }
-            
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'username' => ['The provided credentials are incorrect.'],
+            ]);
         }
+
+        $token =  $user->createToken('MyApp')->plainTextToken;
+        return response()->json([
+            'token' => $token,
+        ], 200);
         
     }
 }
