@@ -141,6 +141,7 @@ class PengirimanController extends Controller
         $user_id = $request->user_id;
         $purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
             ->whereNotIn('status_pembelian', ["status1_ambil"])
+            ->where('is_cancelled', 0)
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->groupBy('kode_pembelian')
             ->select('kode_pembelian', DB::raw('MAX(purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'))
@@ -163,10 +164,20 @@ class PengirimanController extends Controller
     {
         setlocale(LC_TIME, 'id_ID');
         $user_id = $request->user_id;
+            $kode_pembelian = DB::table('purchases')
+                ->select('kode_pembelian')
+                ->where('user_id', $user_id)
+                ->where('is_cancelled', 0)
+                ->orderBy('kode_pembelian', 'desc')
+                ->get();
+
         $purchases = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
             ->where('status_pembelian', ["status1_ambil"])
+            ->where('is_cancelled', 0)
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'purchases.purchase_id', '=', 'proof_of_payments.purchase_id')
+            ->leftjoin('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+            ->leftjoin('products', 'product_purchases.product_id', '=', 'products.product_id')
             ->whereNull('proof_of_payments.purchase_id')
             ->groupBy('kode_pembelian')
             ->select('kode_pembelian', DB::raw('MAX(purchases.purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'))
@@ -176,9 +187,7 @@ class PengirimanController extends Controller
                 return $item;
             });
 
-        return response()->json(
-            $purchases
-        );
+        return response()->json($purchases);
     }
 
     public function detail_pesanan(Request $request)
@@ -211,25 +220,21 @@ class PengirimanController extends Controller
         ]);
     }
 
+    public function hapus(Request $request)
+    {
+        if (DB::table('purchases')
+            ->where('kode_pembelian', '=', $request->kode_pembelian)
+            ->update(['is_cancelled' => 1])
+        ) {
+
+            return response()->json(
+                200
+            );
+        }
+    }
+
     public function PostBuktiPembayaran(Request $request)
     {
-
-        // $proof_of_payment_image = $request->file('image');
-        // $proof_of_payment_image_name = time() . '_' . $proof_of_payment_image->getClientOriginalName();
-        // $tujuan_upload = './asset/u_file/proof_of_payment_image';
-        // $proof_of_payment_image->move($tujuan_upload, $proof_of_payment_image_name);
-
-        // foreach ($request->purchase_id as $purchase_id) {
-
-        // }
-        //  DB::table('proof_of_payments')->insert([
-        //         'purchase_id' => $purchase_id,
-        //         'proof_of_payment_image' => $proof_of_payment_image_name,
-        //     ]);
-        // return response()->json([
-        //     200
-        // ]);
-
         if ($request->hasFile('proof_of_payment_image')) {
             $proof_of_payment_image = $request->file('proof_of_payment_image');
             $proof_of_payment_image_name = time() . '_' . $proof_of_payment_image->getClientOriginalName();
