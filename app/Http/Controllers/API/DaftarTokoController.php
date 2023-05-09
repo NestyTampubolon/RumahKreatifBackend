@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Hash;
 use function PHPUnit\Framework\isEmpty;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 class DaftarTokoController extends Controller
 {
     //
+    
     public function PostVerifikasi(Request $request)
     {
         $foto_ktp = $request->file('foto_ktp');
@@ -156,6 +158,48 @@ class DaftarTokoController extends Controller
                 'id' => ['The provided credentials are incorrect.'],
             ]);
         }
+        return response()->json(
+            200
+        );
+    }
+
+    public function ubahToko(Request $request)
+    {
+        $toko = $request->merchant_id;
+        $nama_merchant = $request->nama_merchant;
+        $deskripsi_toko = $request->deskripsi_toko;
+        $kontak_toko = $request->kontak_toko;
+        $foto_merchant = $request->file('foto_merchant');
+
+        if (!$foto_merchant) {
+            DB::table('merchants')->where('merchant_id', $toko)->update([
+                'nama_merchant' => $nama_merchant,
+                'deskripsi_toko' => $deskripsi_toko,
+                'kontak_toko' => $kontak_toko,
+            ]);
+        }
+
+        if ($foto_merchant) {
+            $merchant_lama = DB::table('merchants')->where('merchant_id', $toko)->first();
+            $asal_gambar = 'asset/u_file/foto_merchant/';
+            $foto_merchant_lama = public_path($asal_gambar . $merchant_lama->foto_merchant);
+
+            if (File::exists($foto_merchant_lama)) {
+                File::delete($foto_merchant_lama);
+            }
+
+            $nama_foto_merchant = time() . '_' . $foto_merchant->getClientOriginalName();
+            $tujuan_upload = './asset/u_file/foto_merchant';
+            $foto_merchant->move($tujuan_upload, $nama_foto_merchant);
+
+            DB::table('merchants')->where('merchant_id', $toko)->update([
+                'nama_merchant' => $nama_merchant,
+                'deskripsi_toko' => $deskripsi_toko,
+                'kontak_toko' => $kontak_toko,
+                'foto_merchant' => $nama_foto_merchant,
+            ]);
+        }
+
         return response()->json(
             200
         );
