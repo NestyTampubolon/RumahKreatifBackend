@@ -20,13 +20,12 @@ class AlamatController extends Controller{
 
         
     // }    
-    public function AlamatPengguna($id)
+    public function AlamatPengguna(Request $request)
     {
-            $alamats = DB::table('user_address')->where('user_id', $id)->get();
-            $response = [
-                $alamats
-            ];
-            return response()->json($response);
+        $alamat = DB::table('user_address')->select('*')->where('user_id', '=', $request->user_id)->get();
+        return response()->json([
+            'alamat' => $alamat,
+        ]);
     }
-}
+}   
 ?>

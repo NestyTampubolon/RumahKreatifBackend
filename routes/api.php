@@ -90,4 +90,5 @@ Route::post('daftarpembelian', [PembelianController::class, 'daftar_pembelian'])
 Route::post('detailpembelian', [PembelianController::class, 'detail_pembelian']);
 Route::post('updatestatuspembelian', [PembelianController::class, 'update_status_pembelian']);
 
-Route::post('alamatpengguna/{id}', [AlamatController::class, 'AlamatPengguna']);
+Route::post('alamatpengguna ', [AlamatController::class, 'AlamatPengguna']);
+    
