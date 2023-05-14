@@ -59,6 +59,16 @@ class AlamatController extends Controller{
         ], 200);
     }
 
+    public function HapusAlamat(Request $request)
+    {
+
+        if (DB::table('user_address')->where('user_address_id', $request->user_address_id)->delete()) {
+            return response()->json(
+                200
+            );
+        }
+    }
+
 
 }   
 ?>
