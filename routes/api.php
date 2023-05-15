@@ -13,6 +13,8 @@ use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\MerchantController;
 use App\Http\Controllers\API\RekeningController;
 use App\Http\Controllers\API\PembelianController;
+use App\Http\Controllers\API\AlamatController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -88,4 +90,8 @@ Route::post('daftarpembelian', [PembelianController::class, 'daftar_pembelian'])
 Route::post('detailpembelian', [PembelianController::class, 'detail_pembelian']);
 Route::post('updatestatuspembelian', [PembelianController::class, 'update_status_pembelian']);
 
+Route::post('alamatpengguna ', [AlamatController::class, 'AlamatPengguna']);
+Route::post('tambahalamat ', [AlamatController::class, 'TambahAlamat']);
+Route::post('hapusalamat ', [AlamatController::class, 'HapusAlamat']);
 
+    
