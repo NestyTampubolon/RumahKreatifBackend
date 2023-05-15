@@ -16,14 +16,14 @@ class PembelianController extends Controller
         $purchases = DB::table('product_purchases')
             ->whereNotIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
-            ->select('product_purchases.purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
+            ->select('product_purchases.purchase_id', 'kode_pembelian', 'status_pembelian', 'products.product_id', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
             ->where('merchant_id', $toko->merchant_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian')->get()
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id')->get()
             ->map(function ($item) {
                 if ($item->status_pembelian == 'status2_ambil' || $item->status_pembelian == 'status2') {
                     $item->status_pembelian = 'Perlu Dikemas';

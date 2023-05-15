@@ -19,6 +19,7 @@ class UserController extends Controller
         $user = DB::table('users')
             ->where('users.id', '=', $user_id)
             ->join('profiles', 'profiles.user_id', '=', 'users.id')
+            ->leftjoin('merchants', 'users.id', '=', 'merchants.user_id')
             ->get()
             ->map(function ($item) {
                 $item->birthday = \Carbon\Carbon::createFromFormat('Y-m-d', $item->birthday)->format('d-m-Y');

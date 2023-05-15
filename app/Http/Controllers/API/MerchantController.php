@@ -13,7 +13,7 @@ class MerchantController extends Controller
     public function index(Request $request){
         $toko = DB::table('merchants')
         ->where('user_id', $request->user_id)
-        ->get();
+        ->first();
 
         return response()->json(
             $toko

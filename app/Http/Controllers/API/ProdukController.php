@@ -24,11 +24,13 @@ class ProdukController extends Controller
             'products.merchant_id',
             'nama_merchant',
             'products.price',
+            'merchant_address.subdistrict_name'
         )->where('is_deleted', 0)
         ->where('products.category_id', 1)
         ->orwhere('products.category_id', 7)
         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+        ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
         ->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->groupBy(
             'product_purchases.product_id',
@@ -38,6 +40,7 @@ class ProdukController extends Controller
             'products.merchant_id',
             'nama_merchant',
             'products.price',
+            'merchant_address.subdistrict_name'
         )->orderBy('count_product_purchases', 'desc')->limit(10)->get();
 
         $product_images = DB::table('product_images')
@@ -48,6 +51,7 @@ class ProdukController extends Controller
 
         $products = DB::table('products')->where('is_deleted', 0)->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+            ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
             ->join('stocks', 'stocks.product_id', '=', 'products.product_id')
             ->inRandomOrder()->get();
 
@@ -60,11 +64,13 @@ class ProdukController extends Controller
             'nama_kategori',
             'products.merchant_id',
             'nama_merchant',
-            'products.price'
+            'products.price',
+            'merchant_address.subdistrict_name'
         )
         ->where('is_deleted', 0)->where('products.category_id', 2)
         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+        ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
         ->join('categories', 'products.category_id', '=', 'categories.category_id')
         ->groupBy(
             'product_purchases.product_id',
@@ -74,6 +80,7 @@ class ProdukController extends Controller
             'products.merchant_id',
             'nama_merchant',
             'products.price',
+            'merchant_address.subdistrict_name'
         )
         ->orderBy('count_product_purchases', 'desc')->limit(10)->get();
 
@@ -100,6 +107,7 @@ class ProdukController extends Controller
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('product_images', 'product_images.product_id', '=', 'products.product_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+            ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
             ->join('stocks', 'stocks.product_id', '=', 'products.product_id')
             ->get();
 
@@ -120,10 +128,31 @@ class ProdukController extends Controller
         }
 
         $products = DB::table('products')->where('is_deleted', 0)
+            ->select(
+                DB::raw('SUM(jumlah_pembelian_produk) as count_product_purchases'),
+                'product_purchases.product_id',
+                'products.product_name',
+                'products.category_id',
+                'nama_kategori',
+                'products.merchant_id',
+                'nama_merchant',
+                'products.price',
+                'merchant_address.subdistrict_name')
             ->where('categories.nama_kategori', '=', $request->nama_kategori)
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+            ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
+            ->join('product_purchases', 'product_purchases.product_id', '=', 'products.product_id')
             ->join('stocks', 'stocks.product_id', '=', 'products.product_id')
+            ->groupBy(
+                'product_purchases.product_id',
+                'products.product_name',
+                'products.category_id',
+                'nama_kategori',
+                'products.merchant_id',
+                'nama_merchant',
+                'products.price',
+                'merchant_address.subdistrict_name')
             ->inRandomOrder()->get();
 
         return response()->json(

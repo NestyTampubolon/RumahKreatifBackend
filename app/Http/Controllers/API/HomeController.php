@@ -51,9 +51,9 @@ class HomeController extends Controller
         }
 
         return response()->json([
-            'jumlah_pesanan_sedang_berlangsung' => json_encode($jumlah_pesanan_sedang_berlangsung),
-            'jumlah_pesanan_berhasil_belum_dibayar' => json_encode($jumlah_pesanan_berhasil_belum_dibayar),
-            'jumlah_pesanan_berhasil_telah_dibayar' => json_encode($jumlah_pesanan_berhasil_telah_dibayar),
+            'jumlah_pesanan_sedang_berlangsung' => $jumlah_pesanan_sedang_berlangsung,
+            'jumlah_pesanan_berhasil_belum_dibayar' => $jumlah_pesanan_berhasil_belum_dibayar,
+            'jumlah_pesanan_berhasil_telah_dibayar' => $jumlah_pesanan_berhasil_telah_dibayar,
         ]);
         
     }

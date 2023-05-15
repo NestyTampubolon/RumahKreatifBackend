@@ -239,7 +239,7 @@ class PengirimanController extends Controller
         $purchases = DB::table('product_purchases')
             ->whereNotIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
-            ->select('product_purchases.purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
+            ->select('product_purchases.purchase_id','products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
             ->where('purchases.user_id', $user_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
@@ -247,7 +247,7 @@ class PengirimanController extends Controller
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian')->get()
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id')->get()
             ->map(function ($item) {
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && DB::raw('COUNT(proof_of_payment_id) as proof_of_payment_id') != 0) {
                     $item->status_pembelian = 'Pembayaran Belum Dikonfirmasi';
@@ -289,6 +289,7 @@ class PengirimanController extends Controller
             ->where('is_cancelled', 0)
             ->select(
                 'product_purchases.purchase_id',
+                'products.product_id',
                 'kode_pembelian',
                 'status_pembelian',
                 'name',
@@ -305,7 +306,7 @@ class PengirimanController extends Controller
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'product_purchases.purchase_id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian')
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian','products.product_id')
             ->get()
             ->map(function ($item) {
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && $item->proof_of_payment_count != 0) {
