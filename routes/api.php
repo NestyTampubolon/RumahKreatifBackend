@@ -94,4 +94,8 @@ Route::post('alamatpengguna ', [AlamatController::class, 'AlamatPengguna']);
 Route::post('tambahalamat ', [AlamatController::class, 'TambahAlamat']);
 Route::post('hapusalamat ', [AlamatController::class, 'HapusAlamat']);
 
+Route::post('alamattoko ', [AlamatController::class, 'AlamatToko']);
+Route::post('tambahalamattoko', [AlamatController::class, 'TambahAlamatToko']);
+Route::post('hapusalamattoko ', [AlamatController::class, 'HapusAlamatToko']);
+
     
