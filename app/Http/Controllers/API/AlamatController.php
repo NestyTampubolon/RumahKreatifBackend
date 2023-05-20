@@ -117,5 +117,13 @@ class AlamatController extends Controller{
         }
     }
 
+    public function AlamatPenggunaPilih(Request $request)
+    {
+        $alamat = DB::table('user_address')->select('*')->where('user_address_id', '=', $request->user_address_id)->get();
+        return response()->json([
+            'alamat' => $alamat,
+        ]);
+    }
+
 }   
 ?>
