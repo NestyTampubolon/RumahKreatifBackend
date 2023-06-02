@@ -28,7 +28,7 @@ class PengirimanController extends Controller
 
         $alamat_purchase = $request->alamat_purchase;
 
-        $courier_code = $request->courier;
+        $courier_code = $request->courier_code;
         $service = $request->service;
 
         DB::table('checkouts')->insert([
@@ -140,7 +140,7 @@ class PengirimanController extends Controller
 
         $alamat_purchase = $request->alamat_purchase;
 
-        $courier_code = $request->courier;
+        $courier_code = $request->courier_code;
         $service = $request->service;
 
         DB::table('checkouts')->insert([
@@ -239,7 +239,7 @@ class PengirimanController extends Controller
         $purchases = DB::table('product_purchases')
             ->whereNotIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
-            ->select('product_purchases.purchase_id',DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"),'products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
+            ->select('product_purchases.purchase_id',DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"),'products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'ongkir', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
             ->where('purchases.user_id', $user_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
@@ -247,7 +247,7 @@ class PengirimanController extends Controller
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id', 'purchases.created_at')->get()
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id', 'purchases.created_at', 'ongkir')->get()
             ->map(function ($item) {
                 $item->created_at = \Carbon\Carbon::createFromFormat('Y-m-d', $item->created_at)->format('d M Y');
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && DB::raw('COUNT(proof_of_payment_id) as proof_of_payment_id') != 0) {
@@ -288,6 +288,7 @@ class PengirimanController extends Controller
                 'status_pembelian',
                 'name',
                 'harga_pembelian',
+                'ongkir',
                 DB::raw('MIN(product_name) as product_name'),
                 DB::raw('MIN(price) as price'),
                 DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'),
@@ -300,7 +301,7 @@ class PengirimanController extends Controller
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'product_purchases.purchase_id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian','products.product_id')
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian','products.product_id','ongkir')
             ->get()
             ->map(function ($item) {
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && $item->proof_of_payment_count != 0) {
