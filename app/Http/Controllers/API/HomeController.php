@@ -50,10 +50,17 @@ class HomeController extends Controller
             $jumlah_pesanan_berhasil_telah_dibayar += DB::table('purchases')->where('purchase_id', $count->purchase_id)->whereIn('status_pembelian', ['status5', 'status5_ambil'])->count();
         }
 
+        $jumlah_produk = DB::table('products')
+        ->join('merchants', 'merchants.merchant_id', '=', 'products.merchant_id')
+        ->where('products.is_deleted', 0)
+        ->where('user_id', $request->user_id)
+        ->count();
+
         return response()->json([
             'jumlah_pesanan_sedang_berlangsung' => $jumlah_pesanan_sedang_berlangsung,
             'jumlah_pesanan_berhasil_belum_dibayar' => $jumlah_pesanan_berhasil_belum_dibayar,
             'jumlah_pesanan_berhasil_telah_dibayar' => $jumlah_pesanan_berhasil_telah_dibayar,
+            'jumlah_produk' => $jumlah_produk
         ]);
         
     }

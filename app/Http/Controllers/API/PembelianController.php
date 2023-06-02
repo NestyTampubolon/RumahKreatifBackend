@@ -53,7 +53,7 @@ class PembelianController extends Controller
         setlocale(LC_TIME, 'id_ID');
         $purchasesdetail = DB::table('purchases')
             ->where('is_cancelled', 0)
-            ->where('kode_pembelian', $request->kode_pembelian)
+            ->where('purchases.purchase_id', $request->purchase_id)
             ->leftjoin('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->leftjoin('products', 'product_purchases.product_id', '=', 'products.product_id')
             ->orderBy('purchases.kode_pembelian', 'desc')->get()

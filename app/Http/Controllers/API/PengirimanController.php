@@ -239,7 +239,7 @@ class PengirimanController extends Controller
         $purchases = DB::table('product_purchases')
             ->whereNotIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
-            ->select('product_purchases.purchase_id','products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
+            ->select('product_purchases.purchase_id',DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"),'products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
             ->where('purchases.user_id', $user_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
@@ -247,8 +247,9 @@ class PengirimanController extends Controller
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id')->get()
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id', 'purchases.created_at')->get()
             ->map(function ($item) {
+                $item->created_at = \Carbon\Carbon::createFromFormat('Y-m-d', $item->created_at)->format('d M Y');
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && DB::raw('COUNT(proof_of_payment_id) as proof_of_payment_id') != 0) {
                     $item->status_pembelian = 'Pembayaran Belum Dikonfirmasi';
                 } else if ($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') {
@@ -277,15 +278,8 @@ class PengirimanController extends Controller
     {
         setlocale(LC_TIME, 'id_ID');
         $user_id = $request->user_id;
-        $kode_pembelian = DB::table('purchases')
-            ->select('kode_pembelian')
-            ->where('user_id', $user_id)
-            ->where('is_cancelled', 0)
-            ->orderBy('kode_pembelian', 'desc')
-            ->get();
-
         $purchases = DB::table('product_purchases')
-            ->where('status_pembelian', ["status1_ambil", "status1"])
+            ->whereIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
             ->select(
                 'product_purchases.purchase_id',

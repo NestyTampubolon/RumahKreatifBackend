@@ -109,9 +109,18 @@ class DaftarTokoController extends Controller
             'atas_nama' => $atas_nama,
         ]);
 
-        return response()->json(
-            200
-        );
+        $cek_toko = DB::table('merchants')->where('user_id', $request->user_id)->get();
+        //belum mendaftarkan toko
+        if ($cek_toko->count() == 0) {
+            return response()->json(
+                1
+            );
+            //sudah mendaftarkan toko dan menunggu konfirmasi 
+        } elseif ($cek_toko->count() > 0) {
+            return response()->json(
+                2
+            );
+        }
     }
 
     public function PostTambahToko(Request $request)
@@ -154,9 +163,9 @@ class DaftarTokoController extends Controller
         $user = User::where('id', $request->user_id)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'id' => ['The provided credentials are incorrect.'],
-            ]);
+            return response()->json([
+                'message' => 'Password tidak sesuai',
+            ], 200);
         }
         return response()->json(
             200

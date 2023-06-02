@@ -41,7 +41,7 @@ class ProdukController extends Controller
             'nama_merchant',
             'products.price',
             'merchant_address.subdistrict_name'
-        )->orderBy('count_product_purchases', 'desc')->limit(10)->get();
+        )->orderBy('count_product_purchases', 'desc')->limit(20)->get();
 
         $product_images = DB::table('product_images')
         ->select('product_id', DB::raw('MIN(product_image_name) AS product_image_name'))
@@ -82,13 +82,13 @@ class ProdukController extends Controller
             'products.price',
             'merchant_address.subdistrict_name'
         )
-        ->orderBy('count_product_purchases', 'desc')->limit(10)->get();
+        ->orderBy('count_product_purchases', 'desc')->limit(20)->get();
 
 
         $new_products = DB::table('products')->where('is_deleted', 0)
         ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
         ->join('categories', 'products.category_id', '=', 'categories.category_id')
-        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->limit(10)->get();
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')->orderBy('product_id', 'desc')->limit(20)->get();
 
 
         return response()->json([

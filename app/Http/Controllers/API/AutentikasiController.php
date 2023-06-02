@@ -89,9 +89,9 @@ class AutentikasiController extends Controller
         $user = User::where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'username' => ['The provided credentials are incorrect.'],
-            ]);
+            return response()->json([
+                'message' => 'Username atau password tidak sesuai',
+            ], 200);
         }
 
         $token =  $user->createToken('MyApp')->plainTextToken;
