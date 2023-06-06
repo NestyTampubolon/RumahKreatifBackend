@@ -335,12 +335,14 @@ class PengirimanController extends Controller
         $user_id = $request->user_id;
 
 
-        $purchasesdetail = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
+        $purchasesdetail = DB::table('purchases')->where('purchases.user_id', $user_id)->where('is_cancelled', 0)
             ->where('kode_pembelian', $request->kode_pembelian)
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
-            ->groupBy('kode_pembelian')
-            ->select('kode_pembelian', DB::raw('COUNT(proof_of_payments.proof_of_payment_id) as proof_of_payment_count'), DB::raw('MAX(purchases.purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'), DB::raw('MAX(ongkir) as ongkir'))
+            ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
+            ->leftjoin('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')
+            ->groupBy('kode_pembelian', 'no_resi', 'courier_code','service','user_address.province_name', 'user_address.city_name', 'user_address.subdistrict_name', 'user_address.user_street_address', 'profiles.no_hp')
+            ->select('kode_pembelian', 'no_resi', 'courier_code', 'service','user_address.province_name', 'user_address.city_name', 'user_address.subdistrict_name', 'user_address.user_street_address', 'profiles.no_hp', DB::raw('COUNT(proof_of_payments.proof_of_payment_id) as proof_of_payment_count'), DB::raw('MAX(purchases.purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'), DB::raw('MAX(ongkir) as ongkir'))
             ->orderBy('kode_pembelian', 'desc')->get()
             ->map(function ($item) {
                 $item->created_at = \Carbon\Carbon::createFromFormat('Y-m-d', $item->created_at)->format('d M Y');
@@ -361,11 +363,18 @@ class PengirimanController extends Controller
                 } else {
                     $item->status_pembelian = 'Dibatalkan';
                 }
+                if ($item->courier_code == "pos") {
+                    $item->courier_code = "POS Indonesia (POS)";
+                } else if ($item->courier_code == "jne") {
+                    $item->courier_code = "Jalur Nugraha Eka (JNE)";
+                } else {
+                    $item->courier_code = '';
+                }
                 return $item;
             });
 
         $purchases = DB::table('purchases')
-            ->where('user_id', $user_id)
+            ->where('purchases.user_id', $user_id)
             ->where('kode_pembelian', $request->kode_pembelian)
             ->leftjoin('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->leftjoin('products', 'product_purchases.product_id', '=', 'products.product_id')

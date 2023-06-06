@@ -62,13 +62,13 @@ class UserController extends Controller
         $user = User::where('id', $request->user_id)->first();
         $password = Hash::make($request->password_baru);
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid user ID or password'], 400);
+            return response()->json(['message' => 'Password lama salah'], 400);
         }
 
         DB::table('users')->where('id', $request->user_id)->update([
             'password' => $password,
         ]);
 
-        return response()->json(200);
+        return response()->json(['message' => 200]);
     }
 }
