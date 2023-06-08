@@ -61,14 +61,19 @@ class UserController extends Controller
 
         $user = User::where('id', $request->user_id)->first();
         $password = Hash::make($request->password_baru);
+
+        if($request->password == $request->password_baru){
+            return response()->json(['message' => 'Password lama dan password baru sama. Silahkan isi password baru yang berbeda!'], 400);
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Password lama salah'], 400);
+            return response()->json(['message' => 'Password lama salah. Silahkan isi kembali password Anda!'], 400);
         }
 
         DB::table('users')->where('id', $request->user_id)->update([
             'password' => $password,
         ]);
 
-        return response()->json(['message' => 200]);
+        return response()->json(['message' => "Password berhasil diganti"]);
     }
 }

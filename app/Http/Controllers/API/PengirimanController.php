@@ -54,6 +54,7 @@ class PengirimanController extends Controller
         $merchant_ids = $request->merchant_id;
         $metodes = $request->metode_pembelian;
         $harga_pembelians = $request->harga_pembelian;
+        $purchase_id = null;
 
         // your code here
         if ($metodes == 1) {
@@ -119,10 +120,11 @@ class PengirimanController extends Controller
 
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_purchase->product_id)->delete();
             }
+
+            return response()->json(
+                $purchase_id
+            );
         }
-        return response()->json(
-            200
-        );
     }
 
     public function belilangsung(Request $request)
@@ -226,7 +228,7 @@ class PengirimanController extends Controller
         }
 
         return response()->json(
-            200
+            $purchase_id
         );
     }
 
@@ -336,7 +338,7 @@ class PengirimanController extends Controller
 
 
         $purchasesdetail = DB::table('purchases')->where('purchases.user_id', $user_id)->where('is_cancelled', 0)
-            ->where('kode_pembelian', $request->kode_pembelian)
+            ->where('purchases.purchase_id', $request->purchase_id)
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')

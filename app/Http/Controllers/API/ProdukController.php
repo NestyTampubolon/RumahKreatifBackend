@@ -231,7 +231,9 @@ class ProdukController extends Controller
 
     public function produk(Request $request)
     {
-        $toko = DB::table('merchants')->where('user_id', $request->user_id)->value('merchant_id');
+        $toko = DB::table('merchants')
+        ->where('user_id', $request->user_id)
+        ->value('merchant_id');
         $products = DB::table('products')
             ->where('merchant_id', $toko)
             ->where('is_deleted', 0)

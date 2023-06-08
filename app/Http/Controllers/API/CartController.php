@@ -15,6 +15,7 @@ class CartController extends Controller
             ->where('carts.user_id', $request->user_id)
             ->join('products', 'carts.product_id', '=', 'products.product_id')
             ->join('merchants', 'merchants.merchant_id', '=', 'products.merchant_id')
+            ->join('merchant_address', 'merchants.merchant_id', '=', 'merchant_address.merchant_id')
             ->join('users', 'carts.user_id', '=', 'users.id')
             ->orderBy('carts.created_at', 'desc')
             ->get();
