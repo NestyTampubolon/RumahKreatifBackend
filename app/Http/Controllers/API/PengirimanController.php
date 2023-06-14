@@ -28,7 +28,7 @@ class PengirimanController extends Controller
 
         $alamat_purchase = $request->alamat_purchase;
 
-        $courier_code = $request->courier;
+        $courier_code = $request->courier_code;
         $service = $request->service;
 
         DB::table('checkouts')->insert([
@@ -54,6 +54,7 @@ class PengirimanController extends Controller
         $merchant_ids = $request->merchant_id;
         $metodes = $request->metode_pembelian;
         $harga_pembelians = $request->harga_pembelian;
+        $purchase_id = null;
 
         // your code here
         if ($metodes == 1) {
@@ -119,10 +120,11 @@ class PengirimanController extends Controller
 
                 DB::table('carts')->where('user_id', $user_id)->where('product_id', $product_purchase->product_id)->delete();
             }
+
+            return response()->json(
+                $purchase_id
+            );
         }
-        return response()->json(
-            200
-        );
     }
 
     public function belilangsung(Request $request)
@@ -140,7 +142,7 @@ class PengirimanController extends Controller
 
         $alamat_purchase = $request->alamat_purchase;
 
-        $courier_code = $request->courier;
+        $courier_code = $request->courier_code;
         $service = $request->service;
 
         DB::table('checkouts')->insert([
@@ -226,7 +228,7 @@ class PengirimanController extends Controller
         }
 
         return response()->json(
-            200
+            $purchase_id
         );
     }
 
@@ -239,7 +241,7 @@ class PengirimanController extends Controller
         $purchases = DB::table('product_purchases')
             ->whereNotIn('status_pembelian', ["status1_ambil", "status1"])
             ->where('is_cancelled', 0)
-            ->select('product_purchases.purchase_id',DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"),'products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
+            ->select('product_purchases.purchase_id',DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"),'products.product_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'ongkir', DB::raw('MIN(product_name) as product_name'), DB::raw('MIN(price) as price'), DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'))
             ->where('purchases.user_id', $user_id)
             ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->join('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
@@ -247,7 +249,7 @@ class PengirimanController extends Controller
             ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id', 'purchases.created_at')->get()
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian', 'products.product_id', 'purchases.created_at', 'ongkir')->get()
             ->map(function ($item) {
                 $item->created_at = \Carbon\Carbon::createFromFormat('Y-m-d', $item->created_at)->format('d M Y');
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && DB::raw('COUNT(proof_of_payment_id) as proof_of_payment_id') != 0) {
@@ -288,6 +290,7 @@ class PengirimanController extends Controller
                 'status_pembelian',
                 'name',
                 'harga_pembelian',
+                'ongkir',
                 DB::raw('MIN(product_name) as product_name'),
                 DB::raw('MIN(price) as price'),
                 DB::raw('MIN(jumlah_pembelian_produk) as jumlah_pembelian_produk'),
@@ -300,7 +303,7 @@ class PengirimanController extends Controller
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'product_purchases.purchase_id')
             ->orderBy('product_purchases.purchase_id', 'desc')
-            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian','products.product_id')
+            ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'harga_pembelian','products.product_id','ongkir')
             ->get()
             ->map(function ($item) {
                 if (($item->status_pembelian == 'status1' || $item->status_pembelian == 'status1_ambil') && $item->proof_of_payment_count != 0) {
@@ -334,12 +337,14 @@ class PengirimanController extends Controller
         $user_id = $request->user_id;
 
 
-        $purchasesdetail = DB::table('purchases')->where('user_id', $user_id)->where('is_cancelled', 0)
-            ->where('kode_pembelian', $request->kode_pembelian)
+        $purchasesdetail = DB::table('purchases')->where('purchases.user_id', $user_id)->where('is_cancelled', 0)
+            ->where('purchases.purchase_id', $request->purchase_id)
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->leftJoin('proof_of_payments', 'proof_of_payments.purchase_id', '=', 'purchases.purchase_id')
-            ->groupBy('kode_pembelian')
-            ->select('kode_pembelian', DB::raw('COUNT(proof_of_payments.proof_of_payment_id) as proof_of_payment_count'), DB::raw('MAX(purchases.purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'), DB::raw('MAX(ongkir) as ongkir'))
+            ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
+            ->leftjoin('user_address', 'purchases.alamat_purchase', '=', 'user_address.user_address_id')
+            ->groupBy('kode_pembelian', 'no_resi', 'courier_code','service','user_address.province_name', 'user_address.city_name', 'user_address.subdistrict_name', 'user_address.user_street_address', 'profiles.no_hp')
+            ->select('kode_pembelian', 'no_resi', 'courier_code', 'service','user_address.province_name', 'user_address.city_name', 'user_address.subdistrict_name', 'user_address.user_street_address', 'profiles.no_hp', DB::raw('COUNT(proof_of_payments.proof_of_payment_id) as proof_of_payment_count'), DB::raw('MAX(purchases.purchase_id) as purchase_id'), DB::raw('CAST(SUM(harga_pembelian) AS UNSIGNED) as harga_pembelian'), DB::raw("DATE_FORMAT(MAX(purchases.created_at), '%Y-%m-%d') as created_at"), DB::raw('MAX(status_pembelian) as status_pembelian'), DB::raw('MAX(ongkir) as ongkir'))
             ->orderBy('kode_pembelian', 'desc')->get()
             ->map(function ($item) {
                 $item->created_at = \Carbon\Carbon::createFromFormat('Y-m-d', $item->created_at)->format('d M Y');
@@ -360,11 +365,18 @@ class PengirimanController extends Controller
                 } else {
                     $item->status_pembelian = 'Dibatalkan';
                 }
+                if ($item->courier_code == "pos") {
+                    $item->courier_code = "POS Indonesia (POS)";
+                } else if ($item->courier_code == "jne") {
+                    $item->courier_code = "Jalur Nugraha Eka (JNE)";
+                } else {
+                    $item->courier_code = '';
+                }
                 return $item;
             });
 
         $purchases = DB::table('purchases')
-            ->where('user_id', $user_id)
+            ->where('purchases.user_id', $user_id)
             ->where('kode_pembelian', $request->kode_pembelian)
             ->leftjoin('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->leftjoin('products', 'product_purchases.product_id', '=', 'products.product_id')
