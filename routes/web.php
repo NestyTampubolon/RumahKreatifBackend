@@ -157,3 +157,5 @@ Route::post('/PostTinjauan/{product_id}', 'App\Http\Controllers\TinjauanControll
 Route::get('/panduan_penggunaan', function () {
     return view('user.panduan_penggunaan');
 });
+
+Route::get('/privacy', 'App\Http\Controllers\PrivacyController@privacy');
