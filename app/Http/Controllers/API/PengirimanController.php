@@ -377,7 +377,7 @@ class PengirimanController extends Controller
 
         $purchases = DB::table('purchases')
             ->where('purchases.user_id', $user_id)
-            ->where('kode_pembelian', $request->kode_pembelian)
+            ->where('purchases.purchase_id', $request->purchase_id)
             ->leftjoin('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
             ->leftjoin('products', 'product_purchases.product_id', '=', 'products.product_id')
             ->get();

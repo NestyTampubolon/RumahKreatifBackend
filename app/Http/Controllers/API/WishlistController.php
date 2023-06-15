@@ -38,6 +38,7 @@ class WishlistController extends Controller
             ->where('wishlists.user_id', '=', $request->user_id)
             ->join('products', 'wishlists.product_id', '=', 'products.product_id')
             ->join('merchants', 'merchants.merchant_id', '=', 'products.merchant_id')
+            ->join("merchant_address", 'merchant_address.merchant_id', "=", "products.merchant_id")
             ->get();
 
         return response()->json(
