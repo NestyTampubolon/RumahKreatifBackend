@@ -100,4 +100,5 @@ Route::post('tambahalamattoko', [AlamatController::class, 'TambahAlamatToko']);
 Route::post('hapusalamattoko ', [AlamatController::class, 'HapusAlamatToko']);
 
 Route::post('alamatpengguna_now ', [AlamatController::class, 'AlamatPenggunaPilih']);
-    
+
+Route::get('/pembelian', [PembelianController::class, 'daftarPembelianApi']);
