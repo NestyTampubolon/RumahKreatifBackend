@@ -19,4 +19,11 @@ class MerchantController extends Controller
             $toko
         );
     }
+    public function daftartenant()
+    {
+        $banks = DB::table('merchants')->orderBy('nama_merchant', 'asc')->get();
+        return response()->json(
+            $banks
+        );
+    }
 }
