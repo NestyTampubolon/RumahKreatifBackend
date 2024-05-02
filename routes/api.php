@@ -103,3 +103,8 @@ Route::post('alamatpengguna_now ', [AlamatController::class, 'AlamatPenggunaPili
 
 Route::get('/pembelian', [PembelianController::class, 'daftarPembelianApi']);
 Route::get('/daftartenant', [MerchantController::class, 'daftartenant']);
+
+Route::get('/listdaftarproduk', [ProdukController::class, 'daftarproduk']);
+
+
+

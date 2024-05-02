@@ -42,6 +42,7 @@
                         <th>Email</th>
                         <th>Status</th>
                         <th>Action</th>
+                        <th>NoHP</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -58,6 +59,7 @@
                         <td align="center">
                           <button type="button" class="btn btn-block btn-info" data-toggle="modal" data-target="#modal-cek-{{$merchants->user_id}}">Cek</button>
                         </td>
+                        <td>{{$merchants->kontak_toko}}</td>
                     </tr>
                     
                     <div class="modal fade" id="modal-cek-{{$merchants->user_id}}">

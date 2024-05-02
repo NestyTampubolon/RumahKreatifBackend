@@ -322,4 +322,12 @@ class ProdukController extends Controller
             200
         );
     }
+
+    public function daftarproduk()
+    {
+        $banks = DB::table('products')->orderBy('product_name', 'asc')->get();
+        return response()->json(
+            $banks
+        );
+    }
 }
