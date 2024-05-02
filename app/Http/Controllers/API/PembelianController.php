@@ -167,60 +167,39 @@ class PembelianController extends Controller
     }
 
     public function daftarPembelianApi()
-    {
-            // Ambil semua data pembelian dari database
-            $purchases = DB::table('product_purchases')
-                ->select(
-                    'product_purchases.purchase_id',
-                    'kode_pembelian',
-                    'status_pembelian',
-                    'name',
-                    'username'
-                )
-                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
-                ->join('users', 'purchases.user_id', '=', 'users.id')
-                ->orderBy('product_purchases.purchase_id', 'desc')
-                ->groupBy('purchase_id', 'kode_pembelian', 'status_pembelian', 'name', 'username')
-                ->get();
-    
-            // Jumlah pembelian
-            $jumlah_purchases = DB::table('product_purchases')
-                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                ->groupBy('purchase_id')
-                ->count();
-    
-            // Detail pembelian produk
-            $product_purchases = DB::table('product_purchases')
-                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
-                ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
-                ->orderBy('product_purchases.product_purchase_id', 'desc')
-                ->get();
-    
-            // Spesifikasi produk
-            $product_specifications = DB::table('product_specifications')
-                ->join('products', 'product_specifications.product_id', '=', 'products.product_id')
-                ->join('specifications', 'product_specifications.specification_id', '=', 'specifications.specification_id')
-                ->join('specification_types', 'specifications.specification_type_id', '=', 'specification_types.specification_type_id')
-                ->get();
-    
-            // Jumlah bukti pembayaran
-            $count_proof_of_payment = DB::table('proof_of_payments')->count();
-    
-            // Bukti pembayaran
-            $proof_of_payments = DB::table('proof_of_payments')->get();
-    
-            // Return data dalam format JSON
-            return response()->json([
-                'purchases' => $purchases,
-                'jumlah_purchases' => $jumlah_purchases,
-                'product_purchases' => $product_purchases,
-                'product_specifications' => $product_specifications,
-                'proof_of_payments' => $proof_of_payments,
-                'count_proof_of_payment' => $count_proof_of_payment
-            ]);
-        
-    }
+{
+    // Ambil data pembelian dari database dengan kolom yang dipilih
+    $purchases = DB::table('product_purchases')
+        ->select(
+            'product_purchases.purchase_id',
+            'purchases.kode_pembelian',
+            'purchases.status_pembelian',
+            'profiles.name',
+            'users.username'
+        )
+        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+        ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
+        ->join('users', 'purchases.user_id', '=', 'users.id')
+        ->orderBy('product_purchases.purchase_id', 'desc')
+        ->groupBy('product_purchases.purchase_id', 'purchases.kode_pembelian', 'purchases.status_pembelian', 'profiles.name', 'users.username')
+        ->get();
+
+    // Detail pembelian produk
+    $product_purchases = DB::table('product_purchases')
+        ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.purchase_id')
+        ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
+        ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
+        ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
+        ->select('product_purchases.purchase_id','purchases.kode_pembelian', 'products.product_name', 'merchants.nama_merchant', 'product_purchases.jumlah_pembelian_produk', 'purchases.status_pembelian','profiles.name',)
+        ->orderBy('product_purchases.product_purchase_id', 'desc')
+        ->get();
+
+    // Return data dalam format JSON
+    return response()->json([
+        'purchases' => $purchases,
+        'product_purchases' => $product_purchases
+    ]);
+}
+
 
 }
