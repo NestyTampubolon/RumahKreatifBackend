@@ -190,11 +190,10 @@ class PembelianController extends Controller
         ->join('products', 'product_purchases.product_id', '=', 'products.product_id')
         ->join('profiles', 'purchases.user_id', '=', 'profiles.user_id')
         ->join('merchants', 'products.merchant_id', '=', 'merchants.merchant_id')
-        ->select('product_purchases.purchase_id','purchases.kode_pembelian', 'products.product_name', 'merchants.nama_merchant', 'product_purchases.jumlah_pembelian_produk', 'purchases.status_pembelian','profiles.name',)
+        ->join('user_address','purchases.user_id', '=', 'user_address.user_id')
+        ->select('product_purchases.purchase_id','purchases.kode_pembelian', 'products.product_name', 'merchants.nama_merchant', 'product_purchases.jumlah_pembelian_produk', 'purchases.status_pembelian','profiles.name','user_address.user_street_address','user_address.subdistrict_name','user_address.city_name','user_address.province_name')
         ->orderBy('product_purchases.product_purchase_id', 'desc')
         ->get();
-
-    // Return data dalam format JSON
     return response()->json([
         'purchases' => $purchases,
         'product_purchases' => $product_purchases
