@@ -53,6 +53,8 @@ Route::post('tambah', [CartController::class, 'tambah']);
 
 Route::post('register', [AutentikasiController::class, 'Register']);
 Route::post('login', [AutentikasiController::class, 'PostLogin']);
+Route::post('postlogin', [AutentikasiController::class, 'cekLogin']);
+
 
 Route::post('pengiriman', [PengirimanController::class, 'PostBeliProduk']);
 Route::post('belilangsung', [PengirimanController::class, 'belilangsung']);

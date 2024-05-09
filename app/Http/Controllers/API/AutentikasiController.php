@@ -110,4 +110,32 @@ class AutentikasiController extends Controller
         ], 200);
         
     }
+
+    public function cekLogin(Request $request)
+{
+    $validasi = Validator::make($request->all(), [
+        'username' => 'required',
+        'password' => 'required',
+    ]);
+
+    if ($validasi->fails()) {
+        $val = $validasi->errors()->all();
+        return response()->json(['message' => $val[0]], 400);
+    }
+
+    $user = User::where('username', $request->username)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Username atau password salah.'], 401);
+    }
+
+    // Periksa apakah pengguna adalah admin
+    if ($user->is_admin != 1) {
+        return response()->json(['message' => 'Hanya admin yang diizinkan untuk login.'], 403);
+    }
+
+    // Jika pengguna adalah admin, buat token dan kembalikan respons
+    $token = $user->createToken('MyApp')->plainTextToken;
+    return response()->json(['token' => $token], 200);
+}
 }
