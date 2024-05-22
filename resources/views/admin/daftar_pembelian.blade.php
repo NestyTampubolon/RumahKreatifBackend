@@ -42,7 +42,7 @@
                         <th>Tanggal Pemesanan</th>
                         <th>Tanggal Update Terakhir</th>
                         <th>Detail</th>
-                        <th>Update Status </th>
+                        <th>Total </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -99,6 +99,7 @@
                                 @endif
                             @endif
                           </td>
+                          <td></td>
                         </tr>
                     @endforeach
                   </tbody>

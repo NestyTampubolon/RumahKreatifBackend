@@ -202,6 +202,13 @@
                                         </td>
                                         <td></td>
                                     </tr>
+                                    <tr id="tr_pesanan_diitdel">
+                                        <td id="tr_pesanan_diitdel">
+                                            <input type="radio" id="pesanan_warehouse" name="metode_pembelian" value="pesanan_warehouse" required>
+                                            <label for="pesanan_warehouse">Pesanan Di IT Del</label>
+                                        </td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
 

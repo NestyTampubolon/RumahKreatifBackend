@@ -147,7 +147,7 @@
                         <th>Status Pesanan</th>
                         <th>Tanggal Pemesanan</th>
                         <th>Detail</th>
-                        <th>Update Status </th>
+                        <th>Harga </th>
                     </tr>
                   </thead>
                   <tbody>

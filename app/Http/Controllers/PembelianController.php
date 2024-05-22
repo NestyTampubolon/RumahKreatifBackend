@@ -275,6 +275,22 @@ class PembelianController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
         }
+
+        // if($metode_pembelian == "pemesanan_warehouse"){
+        //     DB::table('purchases')->insert([
+        //         'kode_pembelian' => $kode_pembelian,
+        //         'user_id' => $user_id,
+        //         'checkout_id' => $checkout_id->checkout_id,
+        //         'alamat_purchase' => "",
+        //         'harga_pembelian' => $harga_pembelian,
+        //         'potongan_pembelian' => $potongan_pembelian,
+        //         'status_pembelian' => "status1_ambil",
+        //         'ongkir' => 0,
+        //         'is_cancelled' => 0,
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now(),
+        //     ]);
+        // }
         
         if($metode_pembelian == "pesanan_dikirim"){
             $ongkir = $request -> ongkir;

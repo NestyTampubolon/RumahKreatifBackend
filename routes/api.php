@@ -44,6 +44,8 @@ Route::post('/daftarproduk', [ProdukController::class, 'produk']);
 Route::post('/hapusproduk', [ProdukController::class, 'hapusProduk']);
 Route::post('/produkdetail', [ProdukController::class, 'produk_detail']);
 Route::post('/editproduk', [ProdukController::class, 'editProduk']);
+Route::get('/getstock/{product_id}', [ProdukController::class, 'getStock']);
+Route::post('/updatestock', [ProdukController::class, 'updateStock']);
 
 Route::post('keranjang', [CartController::class, 'keranjang']);
 Route::post('tambahkeranjang', [CartController::class, 'masuk_keranjang']);
@@ -107,6 +109,5 @@ Route::get('/pembelian', [PembelianController::class, 'daftarPembelianApi']);
 Route::get('/daftartenant', [MerchantController::class, 'daftartenant']);
 
 Route::get('/listdaftarproduk', [ProdukController::class, 'daftarproduk']);
-
 
 

@@ -330,4 +330,47 @@ class ProdukController extends Controller
             $banks
         );
     }
+
+    public function getStock($productId)
+    {
+        try {
+            if (!is_numeric($productId) || intval($productId) <= 0) {
+                throw new \Exception('Product ID is invalid');
+            }
+            
+            $stock = DB::table('stocks')->where('product_id', $productId)->first();
+            
+            if (!$stock) {
+                return response()->json(['error' => 'Stock not found'], 404);
+            }
+            
+            return response()->json($stock);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateStock(Request $request)
+    {
+        try {
+            $request->validate([
+                'product_id' => 'required|numeric',
+                'stok' => 'required|numeric',
+            ]);
+
+            $product = DB::table('products')->where('product_id', $request->input('product_id'))->first();
+
+            if (!$product) {
+                return response()->json(['error' => 'Product not found'], 404);
+            }
+
+            DB::table('stocks')
+                ->where('product_id', $request->input('product_id'))
+                ->update(['stok' => $request->input('stok')]);
+
+            return response()->json(['message' => 'Stock updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
